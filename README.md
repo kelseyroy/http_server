@@ -15,8 +15,12 @@ A user should be able to interact with the echo server as follows:
 * The echo server should be covered by a robust suite of ExUnit tests.
 * The echo server will be built using Elixir.
 
+## Dependencies
+* Elixir 1.14.x
+* Erlang/OTP 25
+
 ## Setup
 1. [Clone the repository](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository) to your local computer.
-2. Use your terminal to navigate into your new wordle folder and install project dependencies by running `mix compile`.
+2. Use your terminal to navigate into your new http_server folder and install project dependencies by running `mix compile`.
 3. To start the Echo Server, call `mix start` from within the http_server folder.
 4. To run the tests, call `mix test` from within the http_server folder.
