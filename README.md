@@ -1,21 +1,22 @@
 # HTTPServer
 
-**TODO: Add description**
+Build an echo server that can accept a message from a client and send back the same message it was sent.
 
-## Installation
+## Functional Requirements
+A user should be able to interact with the echo server as follows:
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `http_server` to your list of dependencies in `mix.exs`:
+* When a client sends a message to the server, the server sends a response back to the client containing the original message.
+* A client can send multiple messages to the server and get the echoed response back each time.
+* Multiple clients can send messages to server and get back their proper responses.
 
-```elixir
-def deps do
-  [
-    {:http_server, "~> 0.1.0"}
-  ]
-end
-```
+## Implementation Requirements
+* The server should establish a socket connection with the client using a low-level socket library. The goal of this exercise is to work with sockets directly.
+* The server should accept and return streams of data rather than raw strings.
+* The echo server should be covered by a robust suite of ExUnit tests.
+* The echo server will be built using Elixir.
 
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at <https://hexdocs.pm/http_server>.
-
+## Setup
+1. [Clone the repository](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository) to your local computer.
+2. Use your terminal to navigate into your new wordle folder and install project dependencies by running `mix compile`.
+3. To start the Echo Server, call `mix start` from within the http_server folder.
+4. To run the tests, call `mix test` from within the http_server folder.
