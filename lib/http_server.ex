@@ -10,7 +10,7 @@ defmodule HTTPServer do
 
   defp listen(socket) do
     {:ok, client} = :gen_tcp.accept(socket)
-    serve(client)
+    spawn(fn -> serve(client) end)
     listen(socket)
   end
 
