@@ -27,7 +27,7 @@ defmodule HTTPServer do
     data
   end
 
-  defp write_line(line, socket) do
-    :gen_tcp.send(socket, line)
+  defp write_line(data, socket) do
+    :gen_tcp.send(socket, data)
   end
 end
