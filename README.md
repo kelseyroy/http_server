@@ -23,4 +23,5 @@ A user should be able to interact with the echo server as follows:
 1. [Clone the repository](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository) to your local computer.
 2. Use your terminal to navigate into your new http_server folder and install project dependencies by running `mix compile`.
 3. To start the Echo Server, call `mix start` from within the http_server folder.
-4. To run the tests, call `mix test` from within the http_server folder.
+4. To connect to the Server as a client, [install telnet](https://formulae.brew.sh/formula/telnet) and call `telnet 127.0.0.1 4040` in a local terminal.
+5. To run the tests, call `mix test` from within the http_server folder.
