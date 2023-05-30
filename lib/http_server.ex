@@ -3,9 +3,9 @@ defmodule HTTPServer do
 
   def accept(port) do
     tcp_options = [:binary, {:packet, 0}, {:active, false}, reuseaddr: true]
-    {:ok, socket} = :gen_tcp.listen(port, tcp_options)
+    {:ok, listen_socket} = :gen_tcp.listen(port, tcp_options)
     Logger.info("Accepting connections on port #{port}")
-    listen(socket)
+    listen(listen_socket)
   end
 
   defp listen(listen_socket) do
