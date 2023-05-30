@@ -18,8 +18,7 @@ defmodule HTTPServer do
     socket
     |> read_line()
     |> write_line(socket)
-
-    serve(socket)
+    |> serve()
   end
 
   defp read_line(socket) do
@@ -29,5 +28,6 @@ defmodule HTTPServer do
 
   defp write_line(data, socket) do
     :gen_tcp.send(socket, data)
+    socket
   end
 end
