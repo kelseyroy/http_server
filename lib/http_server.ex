@@ -1,4 +1,7 @@
 defmodule HTTPServer do
+  alias HTTPServer.Request
+  require Record
+  require Logger
   require Logger
 
   def accept(port) do
@@ -17,17 +20,48 @@ defmodule HTTPServer do
   defp serve(socket) do
     socket
     |> read_line()
+    # |> parse()
     |> write_line(socket)
     |> serve()
   end
 
   defp read_line(socket) do
     {:ok, data} = :gen_tcp.recv(socket, 0)
-    data
+    URI.decode(data)
   end
 
   defp write_line(data, socket) do
     :gen_tcp.send(socket, data)
     socket
   end
+
+  def parse(message) do
+    [request_data | body] = message |> String.split("\r\n\r\n")
+    [first | headers] = request_data |> String.split("\r\n")
+    [method, path, resource] = first |> String.split(" ")
+
+    req = %Request{
+      method: method,
+      path: path,
+      resource: resource,
+      headers: format_headers(headers, %{}),
+      body: hd(body)
+    }
+
+    case method do
+      "" ->
+        req
+
+      "POST" ->
+        %{req | method: :post}
+    end
+  end
+
+  defp format_headers([head | tail], headers) do
+    [key, value] = head |> String.split(": ")
+    headers = Map.put(headers, key, value)
+    format_headers(tail, headers)
+  end
+
+  defp format_headers([], headers), do: headers
 end
