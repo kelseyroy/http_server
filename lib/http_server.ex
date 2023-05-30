@@ -8,10 +8,10 @@ defmodule HTTPServer do
     listen(socket)
   end
 
-  defp listen(socket) do
-    {:ok, client} = :gen_tcp.accept(socket)
-    spawn(fn -> serve(client) end)
-    listen(socket)
+  defp listen(listen_socket) do
+    {:ok, accept_socket} = :gen_tcp.accept(listen_socket)
+    spawn(fn -> serve(accept_socket) end)
+    listen(listen_socket)
   end
 
   defp serve(socket) do
