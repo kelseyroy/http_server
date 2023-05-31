@@ -24,7 +24,7 @@ A user should be able to interact with the echo server as follows:
 2. Use your terminal to navigate into your new http_server folder and install project dependencies by running `mix compile`.
 3. You may notice that the `test/http_server_spec` submodule exists, but has no files. Use your terminal to navigate into the `test/http_server_spec` folder and call `git submodule init` and `git submodule update` to initialize your local git modules configuration file and fetch all data from the [http_server_spec](https://github.com/8thlight/http_server_spec) project.
 4. To start the Echo Server, call `mix start` from within the http_server folder.
-5. To connect to the Server as a client, [install telnet](https://formulae.brew.sh/formula/telnet) and call `telnet 127.0.0.1 5000` in a local terminal.
+5. To connect to the Server as a client, [install telnet](https://formulae.brew.sh/formula/telnet) and call `telnet 127.0.0.1 4000` in a local terminal.
 
 ## Testing
 ### Running the ExUnit Test Suite:
