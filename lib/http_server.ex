@@ -38,8 +38,11 @@ defmodule HTTPServer do
       {:ok, data} ->
         data
 
+      {:error, :econnrefused} ->
+        exit(:normal)
+
       {:error, :closed} ->
-        :ok
+        exit(:normal)
     end
   end
 
