@@ -3,7 +3,6 @@ defmodule HTTPServer do
   alias HTTPServer.Request
   require Record
   require Logger
-  require Logger
 
   def accept(port) do
     tcp_options = [:binary, {:packet, 0}, {:active, false}, reuseaddr: true]
@@ -22,35 +21,26 @@ defmodule HTTPServer do
     request =
       socket
       |> read_line()
-      |> decode()
       |> parse()
 
     response =
       request
-      |> encode()
+      |> build_response()
+      |> text()
 
     socket
     |> write_line(response)
     |> serve()
-
-    # socket
-    # |> read_line()
-    # # |> parse()
-    # |> write_line(socket)
-    # |> serve()
   end
 
   defp read_line(socket) do
-    {:ok, data} = :gen_tcp.recv(socket, 0)
-    data
-  end
+    case :gen_tcp.recv(socket, 0) do
+      {:ok, data} ->
+        data
 
-  defp decode(req) do
-    URI.decode(req)
-  end
-
-  defp encode(res) do
-    inspect(res) |> URI.encode()
+      {:error, :closed} ->
+        :ok
+    end
   end
 
   defp write_line(socket, data) do
