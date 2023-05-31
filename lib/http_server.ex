@@ -1,4 +1,5 @@
 defmodule HTTPServer do
+  alias HTTPServer.Response
   alias HTTPServer.Request
   require Record
   require Logger
@@ -18,19 +19,41 @@ defmodule HTTPServer do
   end
 
   defp serve(socket) do
+    request =
+      socket
+      |> read_line()
+      |> decode()
+      |> parse()
+
+    response =
+      request
+      |> encode()
+
     socket
-    |> read_line()
-    # |> parse()
-    |> write_line(socket)
+    |> write_line(response)
     |> serve()
+
+    # socket
+    # |> read_line()
+    # # |> parse()
+    # |> write_line(socket)
+    # |> serve()
   end
 
   defp read_line(socket) do
     {:ok, data} = :gen_tcp.recv(socket, 0)
-    URI.decode(data)
+    data
   end
 
-  defp write_line(data, socket) do
+  defp decode(req) do
+    URI.decode(req)
+  end
+
+  defp encode(res) do
+    inspect(res) |> URI.encode()
+  end
+
+  defp write_line(socket, data) do
     :gen_tcp.send(socket, data)
     socket
   end
@@ -50,11 +73,32 @@ defmodule HTTPServer do
 
     case method do
       "" ->
-        req
+        hd(body)
 
       "POST" ->
         %{req | method: :post}
     end
+  end
+
+  def build_response(req) do
+    %Response{
+      status_code: 200,
+      status_message: :ok,
+      resource: req.resource,
+      headers: req.headers,
+      body: req.body
+    }
+  end
+
+  def text(res) do
+    "#{res.resource} #{res.status_code} OK\r\n" <>
+      "#{response_headers(res.headers)}" <>
+      "\r\n" <>
+      "#{res.body}"
+  end
+
+  def response_headers(headers) do
+    for {key, val} <- headers, into: "", do: "#{key}: #{val}\r\n"
   end
 
   defp format_headers([head | tail], headers) do
