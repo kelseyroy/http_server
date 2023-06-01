@@ -36,8 +36,10 @@ jobs:
         otp-version: ${{matrix.otp}}
         elixir-version: ${{matrix.elixir}}
     # Step: Check out the code.   
-    - name: Checkout code
-      uses: actions/checkout@v3
+    - name: Checkout repository and submodules
+      uses: actions/checkout@v2
+      with:
+        submodules: recursive
  # Step: Define how to cache deps. Restores existing cache if present.
     - name: Cache deps
       id: cache-deps
@@ -89,15 +91,11 @@ jobs:
         ruby-version: '2.7.6'
         # bundler-cache: true # runs 'bundle install' and caches installed gems automatically
     - name: Install dependencies
-      # working-directory: ./test/http_server_spec
       run: |
         cd test/http_server_spec
-        git submodule init
-        git submodule update
         gem install bundler
         bundle install
     - name: Run Acceptance Tests
-      # working-directory: ./test/http_server_spec
       run: |
         cd test/http_server_spec
         rake test 
