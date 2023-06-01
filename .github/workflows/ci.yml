@@ -92,6 +92,8 @@ jobs:
       # working-directory: ./test/http_server_spec
       run: |
         cd test/http_server_spec
+        git submodule init
+        git submodule update
         gem install bundler
         bundle install
     - name: Run Acceptance Tests
