@@ -22,7 +22,7 @@ defmodule HTTPServerTest do
           "\r\n" <>
           "some body"
 
-      expected = %HTTPServer.Request{
+      expected_parsed_request = %HTTPServer.Request{
         method: :post,
         path: "/echo_body",
         resource: "HTTP/1.1",
@@ -36,13 +36,13 @@ defmodule HTTPServerTest do
         body: "some body"
       }
 
-      assert HTTPServer.parse(message) == expected
+      assert HTTPServer.parse(message) == expected_parsed_request
     end
   end
 
   describe "build_response/1" do
     test "returns properly formatted successful HTTP response" do
-      request_struct = %HTTPServer.Request{
+      request = %HTTPServer.Request{
         method: :post,
         path: "/echo_body",
         resource: "HTTP/1.1",
@@ -56,7 +56,7 @@ defmodule HTTPServerTest do
         body: "some body"
       }
 
-      expected = %HTTPServer.Response{
+      expected_response = %HTTPServer.Response{
         status_code: 200,
         status_message: :ok,
         resource: "HTTP/1.1",
@@ -70,11 +70,11 @@ defmodule HTTPServerTest do
         body: "some body"
       }
 
-      assert HTTPServer.build_response(request_struct) == expected
+      assert HTTPServer.build_response(request) == expected_response
     end
 
     test "returns response as text" do
-      response_struct = %HTTPServer.Response{
+      response = %HTTPServer.Response{
         status_code: 200,
         status_message: :ok,
         resource: "HTTP/1.1",
@@ -88,7 +88,7 @@ defmodule HTTPServerTest do
         body: "some body"
       }
 
-      expected =
+      expected_response_as_text =
         "HTTP/1.1 200 OK\r\n" <>
           "Accept: */*\r\n" <>
           "Content-Length: 9\r\n" <>
@@ -98,7 +98,7 @@ defmodule HTTPServerTest do
           "\r\n" <>
           "some body"
 
-      assert HTTPServer.text(response_struct) == expected
+      assert HTTPServer.format_response(response) == expected_response_as_text
     end
   end
 end

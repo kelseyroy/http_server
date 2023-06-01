@@ -26,7 +26,7 @@ defmodule HTTPServer do
     response =
       request
       |> build_response()
-      |> text()
+      |> format_response()
 
     socket
     |> write_line(response)
@@ -60,7 +60,7 @@ defmodule HTTPServer do
       method: method,
       path: path,
       resource: resource,
-      headers: format_headers(headers, %{}),
+      headers: parse_headers(headers, %{}),
       body: hd(body)
     }
 
@@ -83,7 +83,7 @@ defmodule HTTPServer do
     }
   end
 
-  def text(res) do
+  def format_response(res) do
     "#{res.resource} #{res.status_code} OK\r\n" <>
       "#{response_headers(res.headers)}" <>
       "\r\n" <>
@@ -94,11 +94,11 @@ defmodule HTTPServer do
     for {key, val} <- headers, into: "", do: "#{key}: #{val}\r\n"
   end
 
-  defp format_headers([head | tail], headers) do
+  defp parse_headers([head | tail], headers) do
     [key, value] = head |> String.split(": ")
     headers = Map.put(headers, key, value)
-    format_headers(tail, headers)
+    parse_headers(tail, headers)
   end
 
-  defp format_headers([], headers), do: headers
+  defp parse_headers([], headers), do: headers
 end
