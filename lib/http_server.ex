@@ -21,7 +21,7 @@ defmodule HTTPServer do
     request =
       socket
       |> read_line()
-      |> parse()
+      |> parse_request()
 
     response =
       request
@@ -51,7 +51,7 @@ defmodule HTTPServer do
     socket
   end
 
-  def parse(message) do
+  def parse_request(message) do
     [request_data | body] = message |> String.split("\r\n\r\n")
     [first | headers] = request_data |> String.split("\r\n")
     [method, path, resource] = first |> String.split(" ")
@@ -65,11 +65,11 @@ defmodule HTTPServer do
     }
 
     case method do
-      "" ->
-        hd(body)
-
       "POST" ->
         %{req | method: :post}
+
+      _ ->
+        {:error, :unknown_command}
     end
   end
 
@@ -84,13 +84,16 @@ defmodule HTTPServer do
   end
 
   def format_response(res) do
-    "#{res.resource} #{res.status_code} OK\r\n" <>
-      "#{response_headers(res.headers)}" <>
-      "\r\n" <>
+    carriage_return = "\r\n"
+
+    "#{res.resource} #{res.status_code} OK" <>
+      carriage_return <>
+      "#{format_response_headers(res.headers)}" <>
+      carriage_return <>
       "#{res.body}"
   end
 
-  def response_headers(headers) do
+  def format_response_headers(headers) do
     for {key, val} <- headers, into: "", do: "#{key}: #{val}\r\n"
   end
 

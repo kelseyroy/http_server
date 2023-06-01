@@ -2,7 +2,7 @@ defmodule HTTPServerTest do
   use ExUnit.Case
   doctest HTTPServer
 
-  describe "parse/1" do
+  describe "parse_request/1" do
     #  TODO: expect an error here instead of trying to handle
     # test "returns an empty request when and empty message is given" do
     #   message = ""
@@ -36,7 +36,7 @@ defmodule HTTPServerTest do
         body: "some body"
       }
 
-      assert HTTPServer.parse(message) == expected_parsed_request
+      assert HTTPServer.parse_request(message) == expected_parsed_request
     end
   end
 
