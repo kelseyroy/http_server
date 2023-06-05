@@ -84,9 +84,6 @@ jobs:
     # Step: Execute the tests.  
     - name: Run tests
       run: mix test
-    # Step: Start Server for acceptance testing
-    - name: Start Server
-      run: mix start
     # Step: Set Up Ruby
     - name: Set up Ruby
       uses: ruby/setup-ruby@v1
@@ -100,5 +97,6 @@ jobs:
         bundle install
     - name: Run Acceptance Tests
       run: |
+        mix start &
         cd test/http_server_spec
         rake test 
