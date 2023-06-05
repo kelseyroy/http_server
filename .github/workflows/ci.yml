@@ -84,6 +84,9 @@ jobs:
     # Step: Execute the tests.  
     - name: Run tests
       run: mix test
+    # Step: Start Server for acceptance testing
+    - name: Start Server
+      run: mix start
     # Step: Set Up Ruby
     - name: Set up Ruby
       uses: ruby/setup-ruby@v1
