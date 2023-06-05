@@ -1,6 +1,7 @@
 defmodule HTTPServer do
-  alias HTTPServer.Response
+  # alias HTTPServer.Response
   alias HTTPServer.Request
+  alias HTTPServer.Router
   require Record
   require Logger
 
@@ -25,7 +26,7 @@ defmodule HTTPServer do
 
     response =
       request
-      |> build_response()
+      |> Router.route()
       |> format_response()
 
     socket
@@ -73,15 +74,15 @@ defmodule HTTPServer do
     end
   end
 
-  def build_response(req) do
-    %Response{
-      status_code: 200,
-      status_message: :ok,
-      resource: req.resource,
-      headers: req.headers,
-      body: req.body
-    }
-  end
+  # def build_response(req) do
+  #   %Response{
+  #     status_code: 200,
+  #     status_message: :ok,
+  #     resource: req.resource,
+  #     headers: req.headers,
+  #     body: req.body
+  #   }
+  # end
 
   def format_response(res) do
     carriage_return = "\r\n"

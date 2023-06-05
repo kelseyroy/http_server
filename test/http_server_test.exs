@@ -1,5 +1,8 @@
 defmodule HTTPServerTest do
   use ExUnit.Case
+  alias HTTPServer.Response
+  alias HTTPServer.Request
+  alias HTTPServer.Router
   doctest HTTPServer
 
   describe "parse_request/1" do
@@ -22,7 +25,7 @@ defmodule HTTPServerTest do
           "\r\n" <>
           "some body"
 
-      expected_parsed_request = %HTTPServer.Request{
+      expected_parsed_request = %Request{
         method: :post,
         path: "/echo_body",
         resource: "HTTP/1.1",
@@ -58,7 +61,7 @@ defmodule HTTPServerTest do
 
       expected_response = %HTTPServer.Response{
         status_code: 200,
-        status_message: :ok,
+        status_message: "OK",
         resource: "HTTP/1.1",
         headers: %{
           "Accept" => "*/*",
@@ -70,13 +73,13 @@ defmodule HTTPServerTest do
         body: "some body"
       }
 
-      assert HTTPServer.build_response(request) == expected_response
+      assert Router.route(request) == expected_response
     end
 
     test "returns response as text" do
       response = %HTTPServer.Response{
         status_code: 200,
-        status_message: :ok,
+        status_message: "OK",
         resource: "HTTP/1.1",
         headers: %{
           "Accept" => "*/*",
