@@ -6,7 +6,6 @@ defmodule HTTPServerTest do
   doctest HTTPServer
 
   describe "Request/1" do
-
     test "returns properly formatted HTTP GET request without body" do
       message =
         "GET /simple_get HTTP/1.1\r\n" <>

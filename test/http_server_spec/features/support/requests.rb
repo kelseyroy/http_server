@@ -1,9 +1,9 @@
 require "http"
 
 module Requests
-  def self.get(path, headers = {})
+  def self.get(path, body="", headers = {})
     base_url = "#{PROTOCOL}://#{HOSTNAME}:#{PORT}"
-    Response.new(HTTP.get("#{base_url}#{path}", headers: headers))
+    Response.new(HTTP.get("#{base_url}#{path}", body: body, headers: headers))
   end
 
   def self.head(path, headers = {})
