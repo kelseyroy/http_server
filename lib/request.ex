@@ -1,11 +1,6 @@
 defmodule HTTPServer.Request do
   defstruct method: "", path: "", resource: "", headers: %{}, body: ""
-  # @type method :: String.t()
-  # @type path :: String.t()
-  # @type resource :: String.t()
-  # @type headers :: %{} | %{optional(key_type) => value_type}
 
-  # @type t(method, path, resource, headers, body) :: %Request{method: method, path: path, resource: resource, headers: headers, body: body}
   @type t :: %__MODULE__{
           method: String.t(),
           path: String.t(),

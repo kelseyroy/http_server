@@ -61,6 +61,7 @@ defmodule HTTPServerTest do
 
       assert Request.parse_request(message) == expected_parsed_request
     end
+
   end
 
   describe "Router/1" do
@@ -135,7 +136,7 @@ defmodule HTTPServerTest do
         resource: "HTTP/1.1",
         headers: %{
           "Accept" => "*/*",
-          "Content-Length" => "9",
+          "Content-Length" => "0",
           "Content-Type" => "text/plain",
           "Host" => "127.0.0.1 4000",
           "User-Agent" => "ExampleBrowser/1.0"
@@ -149,7 +150,7 @@ defmodule HTTPServerTest do
         resource: "HTTP/1.1",
         headers: %{
           "Accept" => "*/*",
-          "Content-Length" => "9",
+          "Content-Length" => "0",
           "Content-Type" => "text/plain",
           "Host" => "127.0.0.1 4000",
           "User-Agent" => "ExampleBrowser/1.0"
@@ -163,16 +164,16 @@ defmodule HTTPServerTest do
     test "returns properly formatted successful response to GET request at /simple_get_with_body" do
       request = %Request{
         method: "GET",
-        path: "/simple_get",
+        path: "/simple_get_with_body",
         resource: "HTTP/1.1",
         headers: %{
           "Accept" => "*/*",
-          "Content-Length" => "9",
+          "Content-Length" => "0",
           "Content-Type" => "text/plain",
           "Host" => "127.0.0.1 4000",
           "User-Agent" => "ExampleBrowser/1.0"
         },
-        body: "Hello world"
+        body: ""
       }
 
       expected_response = %Response{
@@ -181,7 +182,7 @@ defmodule HTTPServerTest do
         resource: "HTTP/1.1",
         headers: %{
           "Accept" => "*/*",
-          "Content-Length" => "9",
+          "Content-Length" => "11",
           "Content-Type" => "text/plain",
           "Host" => "127.0.0.1 4000",
           "User-Agent" => "ExampleBrowser/1.0"

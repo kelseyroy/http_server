@@ -8,7 +8,7 @@ class Spinach::Features::SimpleGet < Spinach::FeatureSteps
   end
 
   step 'I make a GET request to "/simple_get_with_body"' do
-    @response = Requests.get("/simple_get_with_body", "Hello world")
+    @response = Requests.get("/simple_get_with_body")
   end
 
   step 'my response should have a body with the text "Hello world"' do
