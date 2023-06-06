@@ -35,9 +35,9 @@ jobs:
       with:
         otp-version: ${{matrix.otp}}
         elixir-version: ${{matrix.elixir}}
-    # Step: Check out the code.  
-    - name: Checkout code
-      uses: actions/checkout@v3
+    # Step: Check out the code.   
+    - name: Checkout repository
+      uses: actions/checkout@v2
  # Step: Define how to cache deps. Restores existing cache if present.
     - name: Cache deps
       id: cache-deps
@@ -82,3 +82,18 @@ jobs:
     # Step: Execute the tests.  
     - name: Run tests
       run: mix test
+    # Step: Set Up Ruby
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: '2.7.6'
+    # Step: Run Acceptance tests
+    - name: Run Acceptance Tests
+      run: |
+        mix start &
+        echo "Starting server..."
+        cd test/http_server_spec
+        gem install bundler
+        bundle install
+        echo "Running Acceptance Tests..."
+        rake test
