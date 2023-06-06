@@ -19,7 +19,7 @@ defmodule HTTPServer.Response do
     }
   end
 
-  def status_message(status_code) do
+  defp status_message(status_code) do
     %{
       200 => "OK",
       404 => "NOT FOUND"
@@ -36,7 +36,7 @@ defmodule HTTPServer.Response do
       "#{res.body}"
   end
 
-  def format_response_headers(headers) do
+  defp format_response_headers(headers) do
     for {key, val} <- headers, into: "", do: "#{key}: #{val}\r\n"
   end
 end
