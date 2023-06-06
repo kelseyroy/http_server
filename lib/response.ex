@@ -8,6 +8,17 @@ defmodule HTTPServer.Response do
           headers: %{optional(String.t()) => any},
           body: String.t()
         }
+
+  def build_response(req, status_code) do
+    %__MODULE__{
+      status_code: status_code,
+      status_message: status_message(status_code),
+      resource: req.resource,
+      headers: req.headers,
+      body: req.body
+    }
+  end
+
   def status_message(status_code) do
     %{
       200 => "OK",
