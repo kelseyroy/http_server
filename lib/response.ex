@@ -2,12 +2,12 @@ defmodule HTTPServer.Response do
   defstruct status_code: nil, status_message: "", resource: nil, headers: %{}, body: ""
 
   @type t :: %__MODULE__{
-          status_code: 200 | 404,
-          status_message: String.t(),
-          resource: String.t(),
-          headers: %{optional(String.t()) => any},
-          body: String.t()
-        }
+    status_code: 200 | 404,
+    status_message: String.t(),
+    resource: String.t(),
+    headers: %{optional(String.t()) => any},
+    body: String.t()
+  }
 
   def build_response(req, status_code) do
     %__MODULE__{
