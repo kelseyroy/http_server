@@ -9,14 +9,24 @@ defmodule HTTPServer.Response do
     body: String.t()
   }
 
-  def build_response(req, status_code) do
+  def send_resp(status_code, body \\ "") do
     %__MODULE__{
       status_code: status_code,
       status_message: status_message(status_code),
-      resource: req.resource,
-      headers: req.headers,
-      body: req.body
+      resource: "HTTP/1.1",
+      headers: %{
+        "Content-length" => "#{String.length(body)}",
+        "Content-Type" => "text/plain",
+        "Host" => "127.0.0.1:4000",
+        "Date" => "#{datetime("Etc/UTC")}"
+        },
+      body: body
     }
+  end
+
+  defp datetime(time_zone) do
+    {:ok, datetime} = DateTime.now(time_zone)
+    datetime
   end
 
   defp status_message(status_code) do

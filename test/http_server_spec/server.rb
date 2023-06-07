@@ -30,7 +30,7 @@ get "/simple_get" do
 end
 
 get "/simple_get_with_body" do
-  request.body
+  "Hello world"
 end
 
 get "/text_response" do
