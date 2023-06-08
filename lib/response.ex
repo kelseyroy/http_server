@@ -9,25 +9,27 @@ defmodule HTTPServer.Response do
     body: String.t()
   }
 
+  @carriage_return "\r\n"
+
   def send_resp(status_code, body \\ "") do
     %__MODULE__{
       status_code: status_code,
       status_message: status_message(status_code),
       resource: "HTTP/1.1",
       headers: %{
-        "Content-length" => "#{String.length(body)}",
+        "Content-Length" => "#{String.length(body)}",
         "Content-Type" => "text/plain",
-        "Host" => "127.0.0.1:4000",
-        "Date" => "#{datetime("Etc/UTC")}"
+        "Host" => "127.0.0.1:4000"
+        # "Date" => "#{datetime("Etc/UTC")}"
         },
       body: body
     }
   end
 
-  defp datetime(time_zone) do
-    {:ok, datetime} = DateTime.now(time_zone)
-    datetime
-  end
+  # defp datetime(time_zone) do
+  #   {:ok, datetime} = DateTime.now(time_zone)
+  #   datetime
+  # end
 
   defp status_message(status_code) do
     %{
@@ -37,16 +39,15 @@ defmodule HTTPServer.Response do
   end
 
   def format_response(res) do
-    carriage_return = "\r\n"
 
     "#{res.resource} #{res.status_code} #{res.status_message}" <>
-      carriage_return <>
+      @carriage_return <>
       "#{format_response_headers(res.headers)}" <>
-      carriage_return <>
+      @carriage_return <>
       "#{res.body}"
   end
 
   defp format_response_headers(headers) do
-    for {key, val} <- headers, into: "", do: "#{key}: #{val}\r\n"
+    for {key, val} <- headers, into: "", do: "#{key}: #{val}#{@carriage_return}"
   end
 end

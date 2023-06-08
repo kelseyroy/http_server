@@ -6,6 +6,7 @@ defmodule HTTPServerFixture.Handler.SimplePost do
   def handle(%Request{method: "POST"} = req) do
     {200, req.body}
   end
+
   def handle(%Request{method: _method} = _req) do
     {404, ""}
   end

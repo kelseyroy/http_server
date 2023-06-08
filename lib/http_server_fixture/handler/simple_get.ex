@@ -6,6 +6,7 @@ defmodule HTTPServerFixture.Handler.SimpleGet do
   def handle(%Request{method: "GET"} = _req) do
     {200, ""}
   end
+
   def handle(%Request{method: _method} = _req) do
     {404, ""}
   end
