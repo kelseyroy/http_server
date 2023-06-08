@@ -2,6 +2,7 @@ defmodule HTTPServer do
   alias HTTPServer.Response
   alias HTTPServer.Request
   alias HTTPServer.Router
+  alias HTTPServerFixture.Routes
   require Record
   require Logger
 
@@ -26,7 +27,7 @@ defmodule HTTPServer do
 
     response =
       request
-      |> Router.route()
+      |> Router.router(&(Routes.route(&1)))
       |> Response.format_response()
 
     socket

@@ -65,6 +65,8 @@ defmodule HTTPServerTest do
 
   # describe "Router/1" do
   #   test "returns properly formatted successful response to POST request at /echo-body" do
+  #     test_router = HTTPServer.Router
+  #
   #     request = %Request{
   #       method: "POST",
   #       path: "/echo_body",
