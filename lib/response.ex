@@ -20,16 +20,10 @@ defmodule HTTPServer.Response do
         "Content-Length" => "#{String.length(body)}",
         "Content-Type" => "text/plain",
         "Host" => "127.0.0.1:4000"
-        # "Date" => "#{datetime("Etc/UTC")}"
         },
       body: body
     }
   end
-
-  # defp datetime(time_zone) do
-  #   {:ok, datetime} = DateTime.now(time_zone)
-  #   datetime
-  # end
 
   defp status_message(status_code) do
     %{
