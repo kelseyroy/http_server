@@ -1,8 +1,8 @@
-defmodule HTTPServerFixture.Handler.SimplePost do
+defmodule HTTPServerFixture.SimplePost do
   alias HTTPServer.Request
-  @behaviour HTTPServerFixture.Handler
+  @behaviour HTTPServer.Handler
 
-  @impl HTTPServerFixture.Handler
+  @impl HTTPServer.Handler
   def handle(%Request{method: "POST"} = req) do
     {200, req.body}
   end

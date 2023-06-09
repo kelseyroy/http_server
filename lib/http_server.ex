@@ -5,8 +5,9 @@ defmodule HTTPServer do
   alias HTTPServerFixture.Routes
   require Record
   require Logger
-
+  @routes &Routes.route(&1)
   def accept(port) do
+    # @routes routes
     tcp_options = [:binary, {:packet, 0}, {:active, false}, reuseaddr: true]
     {:ok, listen_socket} = :gen_tcp.listen(port, tcp_options)
     Logger.info("Accepting connections on port #{port}")
@@ -27,7 +28,7 @@ defmodule HTTPServer do
 
     response =
       request
-      |> Router.router(&(Routes.route(&1)))
+      |> Router.router(@routes)
       |> Response.format_response()
 
     socket

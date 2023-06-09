@@ -1,14 +1,25 @@
 defmodule HTTPServerTest.Router do
   use ExUnit.Case
   alias HTTPServer.Router
-  alias HTTPServer.MockRoutes
   alias HTTPServer.Request
   alias HTTPServer.Response
-  doctest HTTPServer
+  # doctest HTTPServer
+
+  defmodule HttpRouterTest.MockRoutes do
+    alias HTTPServer.Request
+    alias HTTPServerFixture.SimpleGet
+    alias HTTPServerFixture.TestGetWithBody
+    alias HTTPServerFixture.SimplePost
+    def route(%Request{path: "/post_test"} = req), do: SimplePost.handle(req)
+    def route(%Request{path: "/get_test"} = req), do: SimpleGet.handle(req)
+
+    def route(%Request{path: "/get_test_with_body"} = req),
+      do: TestGetWithBody.handle(req)
+  end
 
   describe "Router/2" do
     test "returns properly formatted successful response to GET request at /get_test" do
-      mock_routes = &MockRoutes.route(&1)
+      mock_routes = &HttpRouterTest.MockRoutes.route(&1)
 
       request = %Request{
         method: "GET",
@@ -38,7 +49,7 @@ defmodule HTTPServerTest.Router do
     end
 
     test "returns properly formatted successful response to POST request at /post_test" do
-      mock_routes = &MockRoutes.route(&1)
+      mock_routes = &HttpRouterTest.MockRoutes.route(&1)
 
       request = %Request{
         method: "POST",
@@ -70,7 +81,7 @@ defmodule HTTPServerTest.Router do
     end
 
     test "returns properly formatted successful response to GET request at /get_test_with_body" do
-      mock_routes = &MockRoutes.route(&1)
+      mock_routes = &HttpRouterTest.MockRoutes.route(&1)
 
       request = %Request{
         method: "GET",

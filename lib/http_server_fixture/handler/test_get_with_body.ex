@@ -1,8 +1,8 @@
-defmodule HTTPServerFixture.Handler.TestGetWithBody do
+defmodule HTTPServerFixture.TestGetWithBody do
   alias HTTPServer.Request
-  @behaviour HTTPServerFixture.Handler
+  @behaviour HTTPServer.Handler
 
-  @impl HTTPServerFixture.Handler
+  @impl HTTPServer.Handler
   def handle(%Request{method: "GET"} = _req) do
     {200, "Body-ody-ody-ody-ody-ody-ody-ody-ody-ody-ody-ody-ody-ody-ody"}
   end
