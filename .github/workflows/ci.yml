@@ -90,7 +90,7 @@ jobs:
     # Step: Run Acceptance tests
     - name: Run Acceptance Tests
       run: |
-        mix start &
+        MIX_ENV=test mix start &
         echo "Starting server..."
         cd test/http_server_spec
         gem install bundler
