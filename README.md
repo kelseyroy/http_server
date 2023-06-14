@@ -35,7 +35,7 @@ To run the ExUnit test suite, call `mix test` from within the http_server folder
 * Ruby 2.7.6
 
 #### Running the Acceptance Test Suite:
-1. Start your HTTP server by calling `MIX_ENV=test mix start` from within the http_server folder.
+1. Start your HTTP server by calling `MIX_ENV=integration_test mix start` from within the http_server folder.
 2. Use your terminal to navigate into the `test/http_server_spec` folder and install project dependencies by running `bundle install`.
 3. Once the server is running, call `rake test` from within the http_server_spec folder.
 4. You can also run the tests from a specific section of the features:
