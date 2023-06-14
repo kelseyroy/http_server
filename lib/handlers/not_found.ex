@@ -1,4 +1,4 @@
-defmodule HTTPServer.NotFound do
+defmodule HTTPServer.Handlers.NotFound do
   alias HTTPServer.Request
   @behaviour HTTPServer.Handler
 

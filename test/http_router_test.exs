@@ -3,23 +3,14 @@ defmodule HTTPServerTest.Router do
   alias HTTPServer.Router
   alias HTTPServer.Request
   alias HTTPServer.Response
+  alias HTTPServerTestFixture.Routes
+
   # doctest HTTPServer
-
-  defmodule HttpRouterTest.MockRoutes do
-    alias HTTPServer.Request
-    alias HTTPServerFixture.SimpleGet
-    alias HTTPServerFixture.TestGetWithBody
-    alias HTTPServerFixture.SimplePost
-    def route(%Request{path: "/post_test"} = req), do: SimplePost.handle(req)
-    def route(%Request{path: "/get_test"} = req), do: SimpleGet.handle(req)
-
-    def route(%Request{path: "/get_test_with_body"} = req),
-      do: TestGetWithBody.handle(req)
-  end
 
   describe "Router/2" do
     test "returns properly formatted successful response to GET request at /get_test" do
-      mock_routes = &HttpRouterTest.MockRoutes.route/1
+      # mock_routes = &HttpRouterTest.MockRoutes.route/1
+      mock_routes = &Routes.route/1
 
       request = %Request{
         method: "GET",
@@ -49,7 +40,7 @@ defmodule HTTPServerTest.Router do
     end
 
     test "returns properly formatted successful response to POST request at /post_test" do
-      mock_routes = &HttpRouterTest.MockRoutes.route/1
+      mock_routes = &Routes.route/1
 
       request = %Request{
         method: "POST",
@@ -81,11 +72,11 @@ defmodule HTTPServerTest.Router do
     end
 
     test "returns properly formatted successful response to GET request at /get_test_with_body" do
-      mock_routes = &HttpRouterTest.MockRoutes.route/1
+      mock_routes = &Routes.route/1
 
       request = %Request{
         method: "GET",
-        path: "/get_test_with_body",
+        path: "/test_get_with_body",
         resource: "HTTP/1.1",
         headers: %{
           "Accept" => "*/*",
@@ -100,11 +91,11 @@ defmodule HTTPServerTest.Router do
         status_message: "OK",
         resource: "HTTP/1.1",
         headers: %{
-          "Content-Length" => "60",
+          "Content-Length" => "32",
           "Content-Type" => "text/plain",
           "Host" => "127.0.0.1:4000"
         },
-        body: "Body-ody-ody-ody-ody-ody-ody-ody-ody-ody-ody-ody-ody-ody-ody"
+        body: "this is a mocked get with a body"
       }
 
       assert Router.router(mock_routes, request) == expected_response

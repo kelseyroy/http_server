@@ -57,6 +57,7 @@ defmodule HTTPServer do
     env = Mix.env()
 
     case env do
+      :unit_test -> &HTTPServerTestFixture.Routes.route/1
       :test -> &HTTPServerFixture.Routes.route/1
       _ -> &Routes.route/1
     end
