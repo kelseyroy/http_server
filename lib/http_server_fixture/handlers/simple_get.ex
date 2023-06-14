@@ -7,6 +7,10 @@ defmodule HTTPServerFixture.SimpleGet do
     {200, ""}
   end
 
+  def handle(%Request{method: "HEAD"} = _req) do
+    {200, ""}
+  end
+
   def handle(%Request{method: _method} = _req) do
     {404, ""}
   end
