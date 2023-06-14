@@ -1,4 +1,4 @@
-defmodule HTTPServerTestFixture.Handlers.GetWithBody do
+defmodule HTTPServerTestFixture.Handlers.MockGet do
   alias HTTPServer.Request
   @behaviour HTTPServer.Handler
 
