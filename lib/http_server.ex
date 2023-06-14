@@ -2,12 +2,14 @@ defmodule HTTPServer do
   alias HTTPServer.Response
   alias HTTPServer.Request
   alias HTTPServer.Router
-  alias HTTPServerFixture.Routes
+  alias HTTPServer.Routes
   require Record
   require Logger
-  @routes &Routes.route(&1)
+
+  # @routes determine_routes()
+
   def accept(port) do
-    # @routes routes
+    Logger.info(Mix.env())
     tcp_options = [:binary, {:packet, 0}, {:active, false}, reuseaddr: true]
     {:ok, listen_socket} = :gen_tcp.listen(port, tcp_options)
     Logger.info("Accepting connections on port #{port}")
@@ -27,8 +29,8 @@ defmodule HTTPServer do
       |> Request.parse_request()
 
     response =
-      request
-      |> Router.router(@routes)
+      determine_routes()
+      |> Router.router(request)
       |> Response.format_response()
 
     socket
@@ -52,5 +54,14 @@ defmodule HTTPServer do
   defp write_line(socket, data) do
     :gen_tcp.send(socket, data)
     socket
+  end
+
+  def determine_routes do
+    env = Mix.env()
+
+    case env do
+      :test -> &HTTPServerFixture.Routes.route/1
+      _ -> &Routes.route/1
+    end
   end
 end
