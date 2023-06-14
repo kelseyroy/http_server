@@ -19,7 +19,7 @@ defmodule HTTPServerTest.Router do
 
   describe "Router/2" do
     test "returns properly formatted successful response to GET request at /get_test" do
-      mock_routes = &HttpRouterTest.MockRoutes.route(&1)
+      mock_routes = &HttpRouterTest.MockRoutes.route/1
 
       request = %Request{
         method: "GET",
@@ -45,11 +45,11 @@ defmodule HTTPServerTest.Router do
         body: ""
       }
 
-      assert Router.router(request, mock_routes) == expected_response
+      assert Router.router(mock_routes, request) == expected_response
     end
 
     test "returns properly formatted successful response to POST request at /post_test" do
-      mock_routes = &HttpRouterTest.MockRoutes.route(&1)
+      mock_routes = &HttpRouterTest.MockRoutes.route/1
 
       request = %Request{
         method: "POST",
@@ -77,11 +77,11 @@ defmodule HTTPServerTest.Router do
         body: "testing testing 123"
       }
 
-      assert Router.router(request, mock_routes) == expected_response
+      assert Router.router(mock_routes, request) == expected_response
     end
 
     test "returns properly formatted successful response to GET request at /get_test_with_body" do
-      mock_routes = &HttpRouterTest.MockRoutes.route(&1)
+      mock_routes = &HttpRouterTest.MockRoutes.route/1
 
       request = %Request{
         method: "GET",
@@ -107,7 +107,7 @@ defmodule HTTPServerTest.Router do
         body: "Body-ody-ody-ody-ody-ody-ody-ody-ody-ody-ody-ody-ody-ody-ody"
       }
 
-      assert Router.router(request, mock_routes) == expected_response
+      assert Router.router(mock_routes, request) == expected_response
     end
   end
 end
