@@ -6,10 +6,7 @@ defmodule HTTPServer do
   require Record
   require Logger
 
-  # @routes determine_routes()
-
   def accept(port) do
-    Logger.info(Mix.env())
     tcp_options = [:binary, {:packet, 0}, {:active, false}, reuseaddr: true]
     {:ok, listen_socket} = :gen_tcp.listen(port, tcp_options)
     Logger.info("Accepting connections on port #{port}")
