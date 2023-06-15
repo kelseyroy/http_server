@@ -98,4 +98,36 @@ defmodule HTTPServerTest.Router do
 
     assert Router.router(mock_routes, request) == expected_response
   end
+
+  test "returns a 404 Page Not Found when making a request to a path that doesn't exist" do
+    mock_routes = &MockRoutes.route/1
+
+    request = %Request{
+      method: "GET",
+      path: "/test-not-found",
+      resource: "HTTP/1.1",
+      headers: %{
+        "Accept" => "*/*",
+        "Content-Length" => "9",
+        "Content-Type" => "text/plain",
+        "Host" => "127.0.0.1 4000",
+        "User-Agent" => "ExampleBrowser/1.0"
+      },
+      body: ""
+    }
+
+    expected_response = %Response{
+      status_code: 404,
+      status_message: "NOT FOUND",
+      resource: "HTTP/1.1",
+      headers: %{
+        "Content-Length" => "70",
+        "Content-Type" => "text/plain",
+        "Host" => "127.0.0.1:4000"
+      },
+      body: "The requested URL /test-not-found was not found on this server. Sorry!"
+    }
+
+    assert Router.router(mock_routes, request) == expected_response
+  end
 end
