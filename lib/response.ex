@@ -11,17 +11,21 @@ defmodule HTTPServer.Response do
 
   @carriage_return "\r\n"
 
-  def send_resp(status_code, body \\ "") do
+  def send_resp(status_code, body \\ "", headers) do
     %__MODULE__{
       status_code: status_code,
       status_message: status_message(status_code),
       resource: "HTTP/1.1",
-      headers: %{
-        "Content-Length" => "#{String.length(body)}",
-        "Content-Type" => "text/plain",
-        "Host" => "127.0.0.1:4000"
-        },
+      headers: headers,
       body: body
+    }
+  end
+
+  def build_headers(body) do
+    %{
+      "Content-Length" => "#{String.length(body)}",
+      "Content-Type" => "text/plain",
+      "Host" => "127.0.0.1:4000"
     }
   end
 
@@ -33,7 +37,6 @@ defmodule HTTPServer.Response do
   end
 
   def format_response(res) do
-
     "#{res.resource} #{res.status_code} #{res.status_message}" <>
       @carriage_return <>
       "#{format_response_headers(res.headers)}" <>
