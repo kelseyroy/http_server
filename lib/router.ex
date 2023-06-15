@@ -16,6 +16,12 @@ defmodule HTTPServer.Router do
     end
   end
 
+  defp router(req = %Request{method: "OPTIONS"}, handler) do
+    {status_code, body} = handler.(%{req | method: "GET"})
+    headers = Response.build_headers(body)
+    Response.send_resp(status_code, "", headers)
+  end
+
   defp router(req = %Request{method: "HEAD"}, handler) do
     {status_code, body} = handler.(%{req | method: "GET"})
     headers = Response.build_headers(body)

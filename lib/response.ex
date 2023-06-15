@@ -29,6 +29,13 @@ defmodule HTTPServer.Response do
     }
   end
 
+    def build_options_headers(methods) do
+    %{
+      "Allow" => "#{methods}",
+      "Host" => "127.0.0.1:4000"
+    }
+  end
+
   defp status_message(status_code) do
     %{
       200 => "OK",
