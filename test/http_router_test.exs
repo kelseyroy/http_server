@@ -121,11 +121,12 @@ defmodule HTTPServerTest.Router do
       status_message: "NOT FOUND",
       resource: "HTTP/1.1",
       headers: %{
-        "Content-Length" => "70",
+        "Content-Length" => "128",
         "Content-Type" => "text/plain",
         "Host" => "127.0.0.1:4000"
       },
-      body: "The requested URL /test-not-found was not found on this server. Sorry!"
+      body:
+        "The requested URL /test-not-found was not found on this server. See the README for instructions on how to customize your routes!"
     }
 
     assert Router.router(mock_routes, request) == expected_response

@@ -5,11 +5,11 @@ defmodule HTTPServerFixture.Routes do
   alias HTTPServerFixture.SimpleGetWithBody
   alias HTTPServerFixture.SimplePost
   alias HTTPServerFixture.SimpleHead
-  alias HTTPServerFixture.PageNotFound
+  alias HTTPServer.Handlers.NotFound
 
   def route(%Request{path: "/echo_body"} = req), do: SimplePost.handle(req)
   def route(%Request{path: "/simple_get"} = req), do: SimpleGet.handle(req)
   def route(%Request{path: "/simple_get_with_body"} = req), do: SimpleGetWithBody.handle(req)
   def route(%Request{path: "/head_request"} = req), do: SimpleHead.handle(req)
-  def route(%Request{path: _path} = req), do: PageNotFound.handle(req)
+  def route(%Request{path: _path} = req), do: NotFound.handle(req)
 end
