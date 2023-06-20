@@ -1,6 +1,7 @@
 defmodule HTTPServer.Routes do
   alias HTTPServer.Request
-  alias HTTPServer.Handlers.NotFound
 
-  def route(%Request{path: _path} = req), do: NotFound.handle(req)
+  @callback fetch_route(path :: String.t()) :: {:ok, methods :: list()} | {:error}
+
+  @callback route(req :: %Request{}) :: {status_code :: integer(), body :: term()}
 end
