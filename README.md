@@ -52,14 +52,17 @@ Right now, all requests sent to the server should receive a response back with a
 Each route takes the following structure:
 
 ```
-def route(%Request{path: PATH} = req), do: HandlerModule.handle(req)
+def routes, 
+  do: %{
+    "/PATH" => &HandlerModule.handle/1
+  }
 ```
 
-* `route/1` is a function that accepts a request object and pattern matches on a specific path.
-* `PATH` is a path on the server.
-* `HandlerModule.handle(req)` is the function that is executed when the route is matched.
+* `routes/0` is a function that holds the routes in a Map data structure. The server path acts as the routes key, with the handler functionality as the value.
+* `/PATH` is a path on the server.
+* `&HandlerModule.handle/1` is the function that is executed when the route is matched.
 
-It's important to note that any custom routes you create should be added *above* the default route in the `HTTPServer.Routes` module in `lib/routes.ex`. It can also be helpful to setup the full name of your `HandlerModule` as an `alias/2` at the top of the `HTTPServer.Routes` module.
+It's important to note that any custom routes you create should be added to the existing `routes/0` map in the `HTTPServer.Routes` module in `lib/routes.ex`. It can also be helpful to setup the full name of your `HandlerModule` as an `alias/2` at the top of the `HTTPServer.Routes` module, but that's not strictly necessary.
 
 #### Anatomy of Handlers:
 
@@ -106,12 +109,12 @@ Next I'll update the `lib/routes.ex` file to include the new route and it's corr
 
 ```
 defmodule HTTPServer.Routes do
-  alias HTTPServer.Request
-  alias HTTPServer.Handlers.NotFound
   alias HTTPServer.Handlers.HelloWorld
-
-  def route(%Request{path: "/"} = req), do: HelloWorld.handle(req)
-  def route(%Request{path: _path} = req), do: NotFound.handle(req)
+  
+  def routes, 
+    do: %{
+      "/PATH" => &HelloWorld.handle/1
+    }
 end
 ```
 

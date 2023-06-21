@@ -3,12 +3,10 @@ defmodule HTTPServerTest.Router do
   alias HTTPServer.Router
   alias HTTPServer.Request
   alias HTTPServer.Response
-  alias HTTPServerTestFixture.MockRoutes
 
   doctest HTTPServer
 
   test "returns properly formatted successful response to POST request at /test_post" do
-    mock_routes = &MockRoutes.route/1
 
     request = %Request{
       method: "POST",
@@ -36,11 +34,10 @@ defmodule HTTPServerTest.Router do
       body: "testing testing 123"
     }
 
-    assert Router.router(mock_routes, request) == expected_response
+    assert Router.router(request) == expected_response
   end
 
   test "returns properly formatted successful response to GET request" do
-    mock_routes = &MockRoutes.route/1
 
     request = %Request{
       method: "GET",
@@ -66,11 +63,10 @@ defmodule HTTPServerTest.Router do
       body: "this is a mocked get with a body"
     }
 
-    assert Router.router(mock_routes, request) == expected_response
+    assert Router.router(request) == expected_response
   end
 
   test "returns properly formatted successful response to HEAD request at /test_get" do
-    mock_routes = &MockRoutes.route/1
 
     request = %Request{
       method: "HEAD",
@@ -96,6 +92,38 @@ defmodule HTTPServerTest.Router do
       body: ""
     }
 
-    assert Router.router(mock_routes, request) == expected_response
+    assert Router.router(request) == expected_response
+  end
+
+  test "returns a 404 Page Not Found when making a request to a path that doesn't exist" do
+
+    request = %Request{
+      method: "GET",
+      path: "/test-not-found",
+      resource: "HTTP/1.1",
+      headers: %{
+        "Accept" => "*/*",
+        "Content-Length" => "9",
+        "Content-Type" => "text/plain",
+        "Host" => "127.0.0.1 4000",
+        "User-Agent" => "ExampleBrowser/1.0"
+      },
+      body: ""
+    }
+
+    expected_response = %Response{
+      status_code: 404,
+      status_message: "NOT FOUND",
+      resource: "HTTP/1.1",
+      headers: %{
+        "Content-Length" => "128",
+        "Content-Type" => "text/plain",
+        "Host" => "127.0.0.1:4000"
+      },
+      body:
+        "The requested URL /test-not-found was not found on this server. See the README for instructions on how to customize your routes!"
+    }
+
+    assert Router.router(request) == expected_response
   end
 end

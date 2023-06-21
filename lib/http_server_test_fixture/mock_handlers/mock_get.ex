@@ -6,8 +6,4 @@ defmodule HTTPServerTestFixture.Handlers.MockGet do
   def handle(%Request{method: "GET"} = _req) do
     {200, "this is a mocked get with a body"}
   end
-
-  def handle(%Request{method: _method} = _req) do
-    {404, ""}
-  end
 end

@@ -1,19 +1,36 @@
 defmodule HTTPServer.Router do
   alias HTTPServer.Response
+  alias HTTPServer.Request
+  alias HTTPServer.Handlers.NotFound
+  alias HTTPServer.Routes.ClientRoutes
 
-  def router(routes_fn, req) do
+  @routes Application.compile_env(:http_server, :routes, ClientRoutes)
 
-    case req.method do
-      "HEAD" ->
-        get_req = %{req | method: "GET"}
-        {status_code, body} = routes_fn.(get_req)
-        headers = Response.build_headers(body)
-        Response.send_resp(status_code, "", headers)
+  def router(req) do
+    case Map.fetch(@routes.routes, req.path) do
+      {:ok, handler} ->
+        router(req, handler)
 
       _ ->
-        {status_code, body} = routes_fn.(req)
-        headers = Response.build_headers(body)
-        Response.send_resp(status_code, body, headers)
+        route_not_found(req)
     end
+  end
+
+  defp router(req = %Request{method: "HEAD"}, handler) do
+    {status_code, body} = handler.(%{req | method: "GET"})
+    headers = Response.build_headers(body)
+    Response.send_resp(status_code, "", headers)
+  end
+
+  defp router(req, handler) do
+    {status_code, body} = handler.(req)
+    headers = Response.build_headers(body)
+    Response.send_resp(status_code, body, headers)
+  end
+
+  defp route_not_found(req) do
+    {status_code, body} = NotFound.handle(req)
+    headers = Response.build_headers(body)
+    Response.send_resp(status_code, body, headers)
   end
 end

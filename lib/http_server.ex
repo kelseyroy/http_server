@@ -2,11 +2,8 @@ defmodule HTTPServer do
   alias HTTPServer.Response
   alias HTTPServer.Request
   alias HTTPServer.Router
-  alias HTTPServer.HTTPConfig
   require Record
   require Logger
-
-  @routes HTTPConfig.determine_routes()
 
   def accept(port) do
     tcp_options = [:binary, {:packet, 0}, {:active, false}, reuseaddr: true]
@@ -28,8 +25,8 @@ defmodule HTTPServer do
       |> Request.parse_request()
 
     response =
-      @routes
-      |> Router.router(request)
+      request
+      |> Router.router()
       |> Response.format_response()
 
     socket
