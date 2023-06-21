@@ -5,7 +5,6 @@ defmodule HTTPServer do
   require Record
   require Logger
 
-  @spec accept(char) :: no_return
   def accept(port) do
     tcp_options = [:binary, {:packet, 0}, {:active, false}, reuseaddr: true]
     {:ok, listen_socket} = :gen_tcp.listen(port, tcp_options)
@@ -26,7 +25,6 @@ defmodule HTTPServer do
       |> Request.parse_request()
 
     response =
-      # @routes
       request
       |> Router.router()
       |> Response.format_response()
