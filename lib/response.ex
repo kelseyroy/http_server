@@ -31,7 +31,7 @@ defmodule HTTPServer.Response do
 
     def build_options_headers(methods) do
     %{
-      "Allow" => "#{methods}",
+      "Allow" => "#{Enum.join(methods, ", ")}",
       "Host" => "127.0.0.1:4000"
     }
   end
