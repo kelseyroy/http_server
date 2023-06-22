@@ -54,13 +54,17 @@ Each route takes the following structure:
 ```
 def routes, 
   do: %{
-    "/PATH" => &HandlerModule.handle/1
+    "/PATH" => %{
+        handler: &HandlerModule,
+        methods: ["METHOD"]
+      }
   }
 ```
 
 * `routes/0` is a function that holds the routes in a Map data structure. The server path acts as the routes key, with the handler functionality as the value.
 * `/PATH` is a path on the server.
-* `&HandlerModule.handle/1` is the function that is executed when the route is matched.
+* `HandlerModule` is the module that is executed when the route is matched.
+* `methods: ["METHOD"]` is a list of [HTTP request method](https://en.wikipedia.org/wiki/HTTP#Request_methods) that the path can respond to. The methods are represented as a string in all capital letters. Possible methods you can include are: ["GET", "POST", "PUT", "DELETE"]. "HEAD" and "OPTIONS" methods should not be specified, as their functionality is already handled by the server itself.
 
 It's important to note that any custom routes you create should be added to the existing `routes/0` map in the `HTTPServer.Routes` module in `lib/routes.ex`. It can also be helpful to setup the full name of your `HandlerModule` as an `alias/2` at the top of the `HTTPServer.Routes` module, but that's not strictly necessary.
 
@@ -113,7 +117,10 @@ defmodule HTTPServer.Routes do
   
   def routes, 
     do: %{
-      "/PATH" => &HelloWorld.handle/1
+      "/PATH" => %{
+        handler: HandlerModule,
+        methods: ["GET"]
+      } 
     }
 end
 ```
@@ -135,7 +142,21 @@ defmodule HTTPServer.Handlers.HelloWorld do
 end
 ```
 
-And the `HTTPServer.Routes` module can remain the same!
+And finally update the `HTTPServer.Routes` module to reflect the newly added method:
+
+```
+defmodule HTTPServer.Routes do
+  alias HTTPServer.Handlers.HelloWorld
+  
+  def routes, 
+    do: %{
+      "/PATH" => %{
+        handler: HandlerModule,
+        methods: ["GET", "POST"]
+      } 
+    }
+end
+```
 
 ## Testing
 ### Running the ExUnit Test Suite:
