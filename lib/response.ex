@@ -21,9 +21,9 @@ defmodule HTTPServer.Response do
     }
   end
 
-  def build_headers(method, body, methods \\ [])
+  # def build_headers(method, body, methods \\ [])
 
-  def build_headers(_method = "OPTIONS", body, methods) do
+  def build_headers(body, methods) do
     %{
       "Content-Length" => "#{String.length(body)}",
       "Content-Type" => "text/plain",
@@ -32,7 +32,7 @@ defmodule HTTPServer.Response do
     }
   end
 
-  def build_headers(_method, body, _methods) do
+  def build_headers(body) do
     %{
       "Content-Length" => "#{String.length(body)}",
       "Content-Type" => "text/plain",
