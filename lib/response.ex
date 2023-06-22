@@ -11,7 +11,7 @@ defmodule HTTPServer.Response do
 
   @carriage_return "\r\n"
 
-  def send_resp(status_code, body \\ "", headers) do
+  def send_resp(status_code, body \\ "", headers \\ %{}) do
     %__MODULE__{
       status_code: status_code,
       status_message: status_message(status_code),

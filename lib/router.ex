@@ -54,7 +54,7 @@ defmodule HTTPServer.Router do
     if(Enum.member?(methods, "GET")) do
       methods ++ ["HEAD", "OPTIONS"]
     else
-      methods ++ "OPTIONS"
+      methods ++ ["OPTIONS"]
     end
   end
 end
