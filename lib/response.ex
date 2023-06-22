@@ -21,7 +21,18 @@ defmodule HTTPServer.Response do
     }
   end
 
-  def build_headers(body) do
+  def build_headers(method, body, methods \\ [])
+
+  def build_headers(_method = "OPTIONS", body, methods) do
+    %{
+      "Content-Length" => "#{String.length(body)}",
+      "Content-Type" => "text/plain",
+      "Host" => "127.0.0.1:4000",
+      "Allow" => "#{Enum.join(methods, ", ")}"
+    }
+  end
+
+  def build_headers(_method, body, _methods) do
     %{
       "Content-Length" => "#{String.length(body)}",
       "Content-Type" => "text/plain",
