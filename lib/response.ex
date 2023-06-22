@@ -2,7 +2,7 @@ defmodule HTTPServer.Response do
   defstruct status_code: nil, status_message: "", resource: nil, headers: %{}, body: ""
 
   @type t :: %__MODULE__{
-    status_code: 200 | 404,
+    status_code: 200 | 204 | 404,
     status_message: String.t(),
     resource: String.t(),
     headers: %{optional(String.t()) => any},
@@ -29,16 +29,10 @@ defmodule HTTPServer.Response do
     }
   end
 
-    def build_options_headers(methods) do
-    %{
-      "Allow" => "#{Enum.join(methods, ", ")}",
-      "Host" => "127.0.0.1:4000"
-    }
-  end
-
   defp status_message(status_code) do
     %{
       200 => "OK",
+      204 => "NO CONTENT",
       404 => "NOT FOUND"
     }[status_code]
   end

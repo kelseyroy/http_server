@@ -141,8 +141,10 @@ defmodule HTTPServerTest.Router do
       status_message: "OK",
       resource: "HTTP/1.1",
       headers: %{
+        "Content-Length" => "0",
+        "Content-Type" => "text/plain",
+        "Host" => "127.0.0.1:4000",
         "Allow" => "GET, HEAD, OPTIONS",
-        "Host" => "127.0.0.1:4000"
       },
       body: ""
     }

@@ -17,16 +17,10 @@ defmodule HTTPServer.Router do
   end
 
   defp router(_req = %Request{method: "OPTIONS"}, handler) do
-    methods = handler.methods
-    headers = Response.build_options_headers(methods)
-    Response.send_resp(200, "", headers)
+    methods = get_methods(handler)
+    headers = Response.build_headers("")
+    Response.send_resp(200, "", Map.put(headers, "Allow", "#{Enum.join(methods, ", ")}"))
   end
-
-  # defp router(_req = %Request{method: "OPTIONS"}, handler) do
-  #   methods = get_methods(handler)
-  #   headers = Response.build_options_headers(methods)
-  #   Response.send_resp(200, "", headers)
-  # end
 
   defp router(req = %Request{method: "HEAD"}, handler) do
     {status_code, body} = handler.handle(%{req | method: "GET"})
@@ -46,17 +40,21 @@ defmodule HTTPServer.Router do
     Response.send_resp(status_code, body, headers)
   end
 
-  # defp get_methods(handler) do
-  #   possible_methods = ["POST", "GET", "PUT", "PATCH", "DELETE"]
+  defp get_methods(handler) do
+    possible_methods = ["GET", "POST", "PUT", "PATCH", "DELETE"]
 
-  #   methods =
-  #     Enum.flat_map(possible_methods, fn method ->
-  #       case handler.handle(%Request{method: method}) do
-  #         {200, _body} -> [method]
-  #         _ -> []
-  #       end
-  #     end)
+    methods =
+      Enum.flat_map(possible_methods, fn method ->
+        case handler.handle(%Request{method: method}) do
+          {200, _body} -> [method]
+          {:error} -> []
+        end
+      end)
 
-  #   [methods | ["HEAD", "OPTIONS"]]
-  # end
+    if(Enum.member?(methods, "GET")) do
+      methods ++ ["HEAD", "OPTIONS"]
+    else
+      methods ++ "OPTIONS"
+    end
+  end
 end
