@@ -7,7 +7,6 @@ defmodule HTTPServerTest.Router do
   doctest HTTPServer
 
   test "returns properly formatted successful response to POST request at /test_post" do
-
     request = %Request{
       method: "POST",
       path: "/test_post",
@@ -38,7 +37,6 @@ defmodule HTTPServerTest.Router do
   end
 
   test "returns properly formatted successful response to GET request" do
-
     request = %Request{
       method: "GET",
       path: "/test_get",
@@ -67,7 +65,6 @@ defmodule HTTPServerTest.Router do
   end
 
   test "returns properly formatted successful response to HEAD request at /test_get" do
-
     request = %Request{
       method: "HEAD",
       path: "/test_get",
@@ -96,7 +93,6 @@ defmodule HTTPServerTest.Router do
   end
 
   test "returns a 404 Page Not Found when making a request to a path that doesn't exist" do
-
     request = %Request{
       method: "GET",
       path: "/test-not-found",
@@ -122,6 +118,35 @@ defmodule HTTPServerTest.Router do
       },
       body:
         "The requested URL /test-not-found was not found on this server. See the README for instructions on how to customize your routes!"
+    }
+
+    assert Router.router(request) == expected_response
+  end
+
+  test "returns properly formatted successful response to OPTIONS request at /test_get" do
+    request = %Request{
+      method: "OPTIONS",
+      path: "/test_get",
+      resource: "HTTP/1.1",
+      headers: %{
+        "Accept" => "*/*",
+        "Host" => "127.0.0.1 4000",
+        "User-Agent" => "ExampleBrowser/1.0"
+      },
+      body: ""
+    }
+
+    expected_response = %Response{
+      status_code: 200,
+      status_message: "OK",
+      resource: "HTTP/1.1",
+      headers: %{
+        "Content-Length" => "0",
+        "Content-Type" => "text/plain",
+        "Host" => "127.0.0.1:4000",
+        "Allow" => "GET, HEAD, OPTIONS"
+      },
+      body: ""
     }
 
     assert Router.router(request) == expected_response
