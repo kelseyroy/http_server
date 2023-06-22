@@ -6,8 +6,4 @@ defmodule HTTPServerFixture.SimpleHead do
   def handle(%Request{method: "GET"} = _req) do
     {200, "This body does not show up in a HEAD request"}
   end
-
-  def handle(%Request{method: _method} = _req) do
-    {:error}
-  end
 end
