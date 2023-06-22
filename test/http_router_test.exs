@@ -144,7 +144,7 @@ defmodule HTTPServerTest.Router do
         "Content-Length" => "0",
         "Content-Type" => "text/plain",
         "Host" => "127.0.0.1:4000",
-        "Allow" => "GET, HEAD, OPTIONS",
+        "Allow" => "GET, HEAD, OPTIONS"
       },
       body: ""
     }

@@ -2,12 +2,12 @@ defmodule HTTPServer.Request do
   defstruct method: "", path: "", resource: "", headers: %{}, body: ""
 
   @type t :: %__MODULE__{
-    method: String.t(),
-    path: String.t(),
-    resource: String.t(),
-    headers: %{optional(String.t()) => any},
-    body: String.t()
-  }
+          method: String.t(),
+          path: String.t(),
+          resource: String.t(),
+          headers: %{optional(String.t()) => any},
+          body: String.t()
+        }
 
   @carriage_return "\r\n"
 
