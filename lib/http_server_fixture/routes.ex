@@ -3,27 +3,27 @@ defmodule HTTPServerFixture.Routes do
     do: %{
       "/echo_body" => %{
         handler: HTTPServerFixture.SimplePost,
-        methods: ["POST", "OPTIONS"]
+        methods: ["POST"]
       },
       "/simple_get" => %{
         handler: HTTPServerFixture.SimpleGet,
-        methods: ["GET", "HEAD", "OPTIONS"]
+        methods: ["GET"]
       },
       "/simple_get_with_body" => %{
         handler: HTTPServerFixture.SimpleGetWithBody,
-        methods: ["GET", "HEAD", "OPTIONS"]
+        methods: ["GET"]
       },
       "/head_request" => %{
         handler: HTTPServerFixture.SimpleHead,
-        methods: ["GET", "HEAD", "OPTIONS"]
+        methods: ["GET"]
       },
       "/method_options" => %{
         handler: HTTPServerFixture.Options,
-        methods: ["GET", "HEAD", "OPTIONS"]
+        methods: ["GET"]
       },
       "/method_options2" => %{
         handler: HTTPServerFixture.OptionsTwo,
-        methods: ["GET", "POST", "PUT", "HEAD", "OPTIONS"]
+        methods: ["GET", "POST", "PUT"]
       }
     }
 end
