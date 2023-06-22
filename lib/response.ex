@@ -21,8 +21,6 @@ defmodule HTTPServer.Response do
     }
   end
 
-  # def build_headers(method, body, methods \\ [])
-
   def build_headers(body, methods) do
     %{
       "Content-Length" => "#{String.length(body)}",
