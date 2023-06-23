@@ -3,11 +3,11 @@ defmodule HTTPServerTestFixture.MockRoutes do
     do: %{
       "/test_post" => %{
         handler: HTTPServerTestFixture.Handlers.MockPost,
-        methods: ["POST", "OPTIONS"]
+        methods: ["POST"]
       },
       "/test_get" => %{
         handler: HTTPServerTestFixture.Handlers.MockGet,
-        methods: ["GET", "HEAD", "OPTIONS"]
+        methods: ["GET"]
       }
     }
 end
