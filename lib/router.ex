@@ -18,27 +18,25 @@ defmodule HTTPServer.Router do
 
   defp router(_req = %Request{method: "OPTIONS"}, path_info) do
     {:ok, methods} = Map.fetch(path_info, :methods)
-    headers = Response.build_headers("", methods)
+    allow_header = Response.build_allow_header(methods)
+    headers = Response.build_headers("", allow_header)
     Response.send_resp(200, "", headers)
   end
 
   defp router(req = %Request{method: "HEAD"}, path_info) do
     {:ok, handler} = Map.fetch(path_info, :handler)
-    {status_code, body} = handler.handle(%{req | method: "GET"})
-    headers = Response.build_headers(body)
+    {status_code, _body, headers} = handler.handle(%{req | method: "GET"})
     Response.send_resp(status_code, "", headers)
   end
 
   defp router(req, path_info) do
     {:ok, handler} = Map.fetch(path_info, :handler)
-    {status_code, body} = handler.handle(req)
-    headers = Response.build_headers(body)
+    {status_code, body, headers} = handler.handle(req)
     Response.send_resp(status_code, body, headers)
   end
 
   defp route_not_found(req) do
-    {status_code, body} = NotFound.handle(req)
-    headers = Response.build_headers(body)
+    {status_code, body, headers} = NotFound.handle(req)
     Response.send_resp(status_code, body, headers)
   end
 end
