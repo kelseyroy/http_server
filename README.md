@@ -55,7 +55,7 @@ Each route takes the following structure:
 def routes, 
   do: %{
     "/PATH" => %{
-        handler: &HandlerModule,
+        handler: HandlerModule,
         methods: ["METHOD"]
       }
   }
@@ -79,7 +79,7 @@ defmodule HTTPServer.Handlers.MODULE_NAME do
 
   @impl HTTPServer.Handler
   def handle(%Request{method: METHOD} = req) do
-    {STATUS_CODE, RESPONSE_BODY}
+    {STATUS_CODE, RESPONSE_BODY, %{HEADER_NAME => HEADER_CONTENT}}
   end
 end
 ```
@@ -90,6 +90,63 @@ end
 * `METHOD` is an [HTTP request method](https://en.wikipedia.org/wiki/HTTP#Request_methods) as a string in all capital letters.
 * `STATUS_CODE` is an [HTTP response status code](https://en.wikipedia.org/wiki/List_of_HTTP_status_codes) as an integer.
 * `RESPONSE_BODY` is the body of the response object that will be sent back to the client.
+* `%{HEADER_NAME => HEADER_CONTENT}` are the headers of the response object, represented as key value pairs in an Elixir map, that will be sent back to the client.
+
+If you do not want to build a custom headers map, the server application has a default `build_headers/1` function that automatically builds headers for Content-Length, Content-Type and Host:
+
+```
+defmodule HTTPServer.Handlers.MODULE_NAME do
+  alias HTTPServer.Request
+  alias HTTPServer.Response
+  @behaviour HTTPServer.Handler
+
+  @impl HTTPServer.Handler
+  def handle(%Request{method: METHOD} = req) do
+    {STATUS_CODE, RESPONSE_BODY, Response.build_headers(RESPONSE_BODY)}
+  end
+end
+```
+
+If you want to use those headers but need further cutomization, `build_headers/2` allows you to add additional headers to the 3 default headers provided:
+
+```
+defmodule HTTPServer.Handlers.MODULE_NAME do
+  alias HTTPServer.Request
+  alias HTTPServer.Response
+  @behaviour HTTPServer.Handler
+
+  @impl HTTPServer.Handler
+  def handle(%Request{method: METHOD} = req) do
+    {STATUS_CODE, RESPONSE_BODY, Response.build_headers(RESPONSE_BODY, %{"HEADER_NAME" => "HEADER_CONTENT"})}
+  end
+end
+```
+
+### Handling Redirects
+
+Luckily, the server already has built in handling to accomodate URL redirection/forwarding responses! Redirects allow a user to preserve an existing path while assigning it a new and premanent endpoint. All necessary changes needed to setup URI redirection happen in the `HTTPServer.Routes` module in `lib/routes.ex`:
+
+```
+def routes, 
+  do: %{
+    "/FROM" => %{
+        handler: HTTPServer.Handlers.Redirect,
+        methods: ["METHOD"],
+        location: "/TO"
+      },
+      "/TO" => %{
+        handler: HandlerModule,
+        methods: ["METHOD"]
+      }
+  }
+```
+
+* `/FROM` is the original path on the server you are redirecting the client away from. This path will respond to the HTTP Client with a 301 status code, which will send the request to the path specified in the `location:` field.
+* `HTTPServer.Handlers.Redirect` is the module that lets you redirect the user to a different URL by sending an HTTP response with status 301.
+* `methods: ["METHOD"]` is a list of [HTTP request methods](https://en.wikipedia.org/wiki/HTTP#Request_methods) that the `/TO` path can respond to.
+* `location: "/TO"` is the path on the server you are redirecting the client towards. After receiving a response with a 301 status code at the `/FROM` endpoint, the `Location` response header will point toward this path as the new endpoint that will respond to the request.
+
+Please be sure that the `/TO` route and it's handler module is properly setup before redirecting the clients to that path.
 
 ### An Example
 
@@ -100,11 +157,13 @@ First, I'll create a new file called `hello_world.ex` in the `lib/handlers` fold
 ```
 defmodule HTTPServer.Handlers.HelloWorld do
   alias HTTPServer.Request
+  alias HTTPServer.Response
   @behaviour HTTPServer.Handler
 
   @impl HTTPServer.Handler
   def handle(%Request{method: "GET"} = _req) do
-    {200, "Hello World!"}
+    body = "Hello World!"
+    {200, body, Response.build_headers(body)}
   end
 end
 ```
@@ -134,10 +193,11 @@ defmodule HTTPServer.Handlers.HelloWorld do
 
   @impl HTTPServer.Handler
   def handle(%Request{method: "GET"} = _req) do
-    {200, "Hello World!"}
+    body = "Hello World!"
+    {200, body, Response.build_headers(body)}
   end
   def handle(%Request{method: "POST"} = req) do
-    {200, req.body}
+    {200, req.body, Response.build_headers(req.body)}
   end
 end
 ```
