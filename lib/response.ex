@@ -10,6 +10,7 @@ defmodule HTTPServer.Response do
         }
 
   @carriage_return "\r\n"
+  @host "0.0.0.0:4000"
 
   def send_resp(status_code, body \\ "", headers \\ %{}) do
     %__MODULE__{
@@ -25,7 +26,7 @@ defmodule HTTPServer.Response do
     %{
       "Content-Length" => "#{String.length(body)}",
       "Content-Type" => "text/plain",
-      "Host" => "0.0.0.0:4000"
+      "Host" => @host
     }
   end
 
@@ -46,11 +47,18 @@ defmodule HTTPServer.Response do
     }
   end
 
+  def build_location_header(path) do
+    %{
+      "Location" => "http://#{@host}#{path}"
+    }
+  end
+
   defp status_message(status_code) do
     %{
       200 => "OK",
       204 => "NO CONTENT",
-      404 => "NOT FOUND"
+      404 => "NOT FOUND",
+      301 => "MOVED PERMANENTLY"
     }[status_code]
   end
 
