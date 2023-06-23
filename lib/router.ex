@@ -2,9 +2,9 @@ defmodule HTTPServer.Router do
   alias HTTPServer.Response
   alias HTTPServer.Request
   alias HTTPServer.Handlers.NotFound
-  alias HTTPServer.Routes.ClientRoutes
+  alias HTTPServer.Routes
 
-  @routes Application.compile_env(:http_server, :routes, ClientRoutes)
+  @routes Application.compile_env(:http_server, :routes, Routes)
 
   def router(req) do
     case Map.fetch(@routes.routes, req.path) do
