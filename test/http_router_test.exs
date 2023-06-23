@@ -15,7 +15,7 @@ defmodule HTTPServerTest.Router do
         "Accept" => "*/*",
         "Content-Length" => "9",
         "Content-Type" => "text/plain",
-        "Host" => "127.0.0.1 4000",
+        "Host" => "0.0.0.0:4000",
         "User-Agent" => "ExampleBrowser/1.0"
       },
       body: "testing testing 123"
@@ -28,7 +28,7 @@ defmodule HTTPServerTest.Router do
       headers: %{
         "Content-Length" => "19",
         "Content-Type" => "text/plain",
-        "Host" => "127.0.0.1:4000"
+        "Host" => "0.0.0.0:4000"
       },
       body: "testing testing 123"
     }
@@ -43,7 +43,7 @@ defmodule HTTPServerTest.Router do
       resource: "HTTP/1.1",
       headers: %{
         "Accept" => "*/*",
-        "Host" => "127.0.0.1 4000",
+        "Host" => "0.0.0.0:4000",
         "User-Agent" => "ExampleBrowser/1.0"
       },
       body: ""
@@ -56,7 +56,7 @@ defmodule HTTPServerTest.Router do
       headers: %{
         "Content-Length" => "32",
         "Content-Type" => "text/plain",
-        "Host" => "127.0.0.1:4000"
+        "Host" => "0.0.0.0:4000"
       },
       body: "this is a mocked get with a body"
     }
@@ -71,7 +71,7 @@ defmodule HTTPServerTest.Router do
       resource: "HTTP/1.1",
       headers: %{
         "Accept" => "*/*",
-        "Host" => "127.0.0.1 4000",
+        "Host" => "0.0.0.0:4000",
         "User-Agent" => "ExampleBrowser/1.0"
       },
       body: ""
@@ -84,7 +84,7 @@ defmodule HTTPServerTest.Router do
       headers: %{
         "Content-Length" => "32",
         "Content-Type" => "text/plain",
-        "Host" => "127.0.0.1:4000"
+        "Host" => "0.0.0.0:4000"
       },
       body: ""
     }
@@ -101,7 +101,7 @@ defmodule HTTPServerTest.Router do
         "Accept" => "*/*",
         "Content-Length" => "9",
         "Content-Type" => "text/plain",
-        "Host" => "127.0.0.1 4000",
+        "Host" => "0.0.0.0:4000",
         "User-Agent" => "ExampleBrowser/1.0"
       },
       body: ""
@@ -114,7 +114,7 @@ defmodule HTTPServerTest.Router do
       headers: %{
         "Content-Length" => "128",
         "Content-Type" => "text/plain",
-        "Host" => "127.0.0.1:4000"
+        "Host" => "0.0.0.0:4000"
       },
       body:
         "The requested URL /test-not-found was not found on this server. See the README for instructions on how to customize your routes!"
@@ -130,7 +130,7 @@ defmodule HTTPServerTest.Router do
       resource: "HTTP/1.1",
       headers: %{
         "Accept" => "*/*",
-        "Host" => "127.0.0.1 4000",
+        "Host" => "0.0.0.0:4000",
         "User-Agent" => "ExampleBrowser/1.0"
       },
       body: ""
@@ -143,7 +143,7 @@ defmodule HTTPServerTest.Router do
       headers: %{
         "Content-Length" => "0",
         "Content-Type" => "text/plain",
-        "Host" => "127.0.0.1:4000",
+        "Host" => "0.0.0.0:4000",
         "Allow" => "GET, HEAD, OPTIONS"
       },
       body: ""

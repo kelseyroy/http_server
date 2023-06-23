@@ -12,7 +12,7 @@ defmodule HTTPServerTest.Response do
     headers = %{
       "Content-Length" => "15",
       "Content-Type" => "text/plain",
-      "Host" => "127.0.0.1:4000"
+      "Host" => "0.0.0.0:4000"
     }
 
     expected_parsed_response = %Response{
@@ -22,7 +22,7 @@ defmodule HTTPServerTest.Response do
       headers: %{
         "Content-Length" => "15",
         "Content-Type" => "text/plain",
-        "Host" => "127.0.0.1:4000"
+        "Host" => "0.0.0.0:4000"
       },
       body: "this is my body"
     }
@@ -38,7 +38,7 @@ defmodule HTTPServerTest.Response do
       headers: %{
         "Content-Length" => "15",
         "Content-Type" => "text/plain",
-        "Host" => "127.0.0.1:4000"
+        "Host" => "0.0.0.0:4000"
       },
       body: "this is my body"
     }
@@ -47,7 +47,7 @@ defmodule HTTPServerTest.Response do
       "HTTP/1.1 200 OK#{@carriage_return}" <>
         "Content-Length: 15#{@carriage_return}" <>
         "Content-Type: text/plain#{@carriage_return}" <>
-        "Host: 127.0.0.1:4000#{@carriage_return}" <>
+        "Host: 0.0.0.0:4000#{@carriage_return}" <>
         "#{@carriage_return}" <>
         "this is my body"
 

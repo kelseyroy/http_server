@@ -25,11 +25,15 @@ defmodule HTTPServer.Response do
     %{
       "Content-Length" => "#{String.length(body)}",
       "Content-Type" => "text/plain",
-      "Host" => "127.0.0.1:4000"
+      "Host" => "0.0.0.0:4000"
     }
   end
 
-  def build_headers(body, methods) do
+  def build_headers(body, headers) do
+    Map.merge(build_headers(body), headers)
+  end
+
+  def build_allow_header(methods) do
     methods =
       if Enum.member?(methods, "GET") do
         methods ++ ["HEAD", "OPTIONS"]
@@ -38,9 +42,6 @@ defmodule HTTPServer.Response do
       end
 
     %{
-      "Content-Length" => "#{String.length(body)}",
-      "Content-Type" => "text/plain",
-      "Host" => "127.0.0.1:4000",
       "Allow" => "#{Enum.join(methods, ", ")}"
     }
   end

@@ -1,17 +1,20 @@
 defmodule HTTPServerFixture.OptionsTwo do
   alias HTTPServer.Request
+  alias HTTPServer.Response
   @behaviour HTTPServer.Handler
 
   @impl HTTPServer.Handler
   def handle(%Request{method: "GET"} = _req) do
-    {200, ""}
+    {200, "", Response.build_headers("")}
   end
 
   def handle(%Request{method: "PUT"} = req) do
-    {200, req.body}
+    body = req.body
+    {200, body, Response.build_headers(body)}
   end
 
   def handle(%Request{method: "POST"} = req) do
-    {200, req.body}
+    body = req.body
+    {200, body, Response.build_headers(body)}
   end
 end
