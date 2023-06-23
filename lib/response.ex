@@ -25,7 +25,7 @@ defmodule HTTPServer.Response do
     %{
       "Content-Length" => "#{String.length(body)}",
       "Content-Type" => "text/plain",
-      "Host" => "127.0.0.1:4000"
+      "Host" => "0.0.0.0:4000"
     }
   end
 

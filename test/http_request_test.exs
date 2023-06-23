@@ -8,7 +8,7 @@ defmodule HTTPServerTest.Request do
   test "returns properly formatted HTTP GET request without body" do
     message =
       "GET /simple_get HTTP/1.1#{@carriage_return}" <>
-        "Host: 127.0.0.1 4000#{@carriage_return}" <>
+        "Host: 0.0.0.0:4000#{@carriage_return}" <>
         "User-Agent: ExampleBrowser/1.0#{@carriage_return}" <>
         "Accept: */*#{@carriage_return}" <>
         "Content-Type: text/plain#{@carriage_return}" <>
@@ -24,7 +24,7 @@ defmodule HTTPServerTest.Request do
         "Accept" => "*/*",
         "Content-Length" => "9",
         "Content-Type" => "text/plain",
-        "Host" => "127.0.0.1 4000",
+        "Host" => "0.0.0.0:4000",
         "User-Agent" => "ExampleBrowser/1.0"
       },
       body: ""
@@ -36,7 +36,7 @@ defmodule HTTPServerTest.Request do
   test "returns properly formatted HTTP POST request" do
     message =
       "POST /echo_body HTTP/1.1#{@carriage_return}" <>
-        "Host: 127.0.0.1 4000#{@carriage_return}" <>
+        "Host: 0.0.0.0:4000#{@carriage_return}" <>
         "User-Agent: ExampleBrowser/1.0#{@carriage_return}" <>
         "Accept: */*#{@carriage_return}" <>
         "Content-Type: text/plain#{@carriage_return}" <>
@@ -52,7 +52,7 @@ defmodule HTTPServerTest.Request do
         "Accept" => "*/*",
         "Content-Length" => "9",
         "Content-Type" => "text/plain",
-        "Host" => "127.0.0.1 4000",
+        "Host" => "0.0.0.0:4000",
         "User-Agent" => "ExampleBrowser/1.0"
       },
       body: "some body"
