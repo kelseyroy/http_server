@@ -8,11 +8,12 @@ defmodule HTTPServer do
   def accept(port) do
     tcp_options = [:binary, {:packet, 0}, {:active, false}, reuseaddr: true]
     {:ok, listen_socket} = :gen_tcp.listen(port, tcp_options)
-    Logger.info("Accepting connections on port #{port}")
+    log("Accepting connections on port #{port}")
     listen(listen_socket)
   end
 
   defp listen(listen_socket) do
+    log("---------- Waiting for request ----------")
     {:ok, accept_socket} = :gen_tcp.accept(listen_socket)
     spawn(fn -> serve(accept_socket) end)
     listen(listen_socket)
@@ -22,12 +23,14 @@ defmodule HTTPServer do
     request =
       socket
       |> read_line()
+      |> log("Request:")
       |> Request.parse_request()
 
     response =
       request
       |> Router.router()
       |> Response.format_response()
+      |> log("Response:")
 
     socket
     |> write_line(response)
@@ -50,5 +53,11 @@ defmodule HTTPServer do
   defp write_line(socket, data) do
     :gen_tcp.send(socket, data)
     socket
+  end
+
+  defp log(message), do: Logger.info(message)
+  defp log(data, message) do
+    Logger.info(message <> "\n\n" <> data)
+    data
   end
 end
