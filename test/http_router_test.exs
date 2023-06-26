@@ -26,9 +26,9 @@ defmodule HTTPServerTest.Router do
       status_message: "OK",
       resource: "HTTP/1.1",
       headers: %{
-        "Content-Length" => "19",
-        "Content-Type" => "text/plain",
-        "Host" => "0.0.0.0:4000"
+        content_length: "19",
+        content_type: "text/plain",
+        host: "0.0.0.0:4000"
       },
       body: "testing testing 123"
     }
@@ -54,9 +54,9 @@ defmodule HTTPServerTest.Router do
       status_message: "OK",
       resource: "HTTP/1.1",
       headers: %{
-        "Content-Length" => "32",
-        "Content-Type" => "text/plain",
-        "Host" => "0.0.0.0:4000"
+        content_length: "32",
+        content_type: "text/plain",
+        host: "0.0.0.0:4000"
       },
       body: "this is a mocked get with a body"
     }
@@ -82,9 +82,9 @@ defmodule HTTPServerTest.Router do
       status_message: "OK",
       resource: "HTTP/1.1",
       headers: %{
-        "Content-Length" => "32",
-        "Content-Type" => "text/plain",
-        "Host" => "0.0.0.0:4000"
+        content_length: "32",
+        content_type: "text/plain",
+        host: "0.0.0.0:4000"
       },
       body: ""
     }
@@ -112,9 +112,9 @@ defmodule HTTPServerTest.Router do
       status_message: "NOT FOUND",
       resource: "HTTP/1.1",
       headers: %{
-        "Content-Length" => "128",
-        "Content-Type" => "text/plain",
-        "Host" => "0.0.0.0:4000"
+        content_length: "128",
+        content_type: "text/plain",
+        host: "0.0.0.0:4000"
       },
       body:
         "The requested URL /test-not-found was not found on this server. See the README for instructions on how to customize your routes!"
@@ -141,10 +141,10 @@ defmodule HTTPServerTest.Router do
       status_message: "OK",
       resource: "HTTP/1.1",
       headers: %{
-        "Content-Length" => "0",
-        "Content-Type" => "text/plain",
-        "Host" => "0.0.0.0:4000",
-        "Allow" => "GET, HEAD, OPTIONS"
+        content_length: "0",
+        content_type: "text/plain",
+        host: "0.0.0.0:4000",
+        allow: "GET, HEAD, OPTIONS"
       },
       body: ""
     }
@@ -170,10 +170,10 @@ defmodule HTTPServerTest.Router do
       status_message: "MOVED PERMANENTLY",
       resource: "HTTP/1.1",
       headers: %{
-        "Content-Length" => "0",
-        "Content-Type" => "text/plain",
-        "Host" => "0.0.0.0:4000",
-        "Location" => "http://0.0.0.0:4000/test_get"
+        content_length: "0",
+        content_type: "text/plain",
+        host: "0.0.0.0:4000",
+        location: "http://0.0.0.0:4000/test_get"
       },
       body: ""
     }

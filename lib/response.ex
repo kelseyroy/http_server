@@ -1,56 +1,30 @@
 defmodule HTTPServer.Response do
+  alias HTTPServer.Response.Headers
   defstruct status_code: nil, status_message: "", resource: nil, headers: %{}, body: ""
 
   @type t :: %__MODULE__{
           status_code: 200 | 204 | 404,
           status_message: String.t(),
           resource: String.t(),
-          headers: %{optional(String.t()) => any},
+          headers: %Headers{},
           body: String.t()
         }
 
   @carriage_return "\r\n"
-  @host "0.0.0.0:4000"
 
-  def send_resp(status_code, body \\ "", headers \\ %{}) do
-    %__MODULE__{
+  def send_resp(status_code, body, headers) do
+    response = %__MODULE__{
       status_code: status_code,
       status_message: status_message(status_code),
       resource: "HTTP/1.1",
       headers: headers,
       body: body
     }
-  end
 
-  def build_headers(body) do
-    %{
-      "Content-Length" => "#{String.length(body)}",
-      "Content-Type" => "text/plain",
-      "Host" => @host
-    }
-  end
+    non_nil_headers =
+      for {k, v} <- Map.from_struct(response.headers), v != nil, into: %{}, do: {k, v}
 
-  def build_headers(body, headers) do
-    Map.merge(build_headers(body), headers)
-  end
-
-  def build_allow_header(methods) do
-    methods =
-      if Enum.member?(methods, "GET") do
-        methods ++ ["HEAD", "OPTIONS"]
-      else
-        methods ++ ["OPTIONS"]
-      end
-
-    %{
-      "Allow" => "#{Enum.join(methods, ", ")}"
-    }
-  end
-
-  def build_location_header(path) do
-    %{
-      "Location" => "http://#{@host}#{path}"
-    }
+    %{response | headers: non_nil_headers}
   end
 
   defp status_message(status_code) do

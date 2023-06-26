@@ -3,6 +3,7 @@ defmodule HTTPServer.Router do
   alias HTTPServer.Request
   alias HTTPServer.Handlers.NotFound
   alias HTTPServer.Routes
+  import HTTPServer.Response.HeadersBuilder
 
   @routes Application.compile_env(:http_server, :routes, Routes)
 
@@ -16,11 +17,20 @@ defmodule HTTPServer.Router do
     end
   end
 
-  defp router(_req = %Request{method: "OPTIONS"}, path_info) do
+  defp router(req = %Request{method: "OPTIONS"}, path_info) do
     {:ok, methods} = Map.fetch(path_info, :methods)
-    allow_header = Response.build_allow_header(methods)
-    headers = Response.build_headers("", allow_header)
-    Response.send_resp(200, "", headers)
+    body = ""
+
+    headers =
+      build()
+      |> content_length(body)
+      |> content_type()
+      |> host(req.headers)
+      |> allow(methods)
+
+    # allow_header = Response.build_allow_header(methods)
+    # headers = Response.build_headers("", allow_header)
+    Response.send_resp(200, body, headers)
   end
 
   defp router(req = %Request{method: "HEAD"}, path_info) do

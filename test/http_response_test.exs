@@ -1,5 +1,6 @@
 defmodule HTTPServerTest.Response do
   use ExUnit.Case
+  alias HTTPServer.Response.Headers
   alias HTTPServer.Response
   doctest HTTPServer
 
@@ -9,10 +10,10 @@ defmodule HTTPServerTest.Response do
     status_code = 200
     body = "this is my body"
 
-    headers = %{
-      "Content-Length" => "15",
-      "Content-Type" => "text/plain",
-      "Host" => "0.0.0.0:4000"
+    headers = %Headers{
+      content_length: "15",
+      content_type: "text/plain",
+      host: "0.0.0.0:4000"
     }
 
     expected_parsed_response = %Response{
@@ -20,9 +21,9 @@ defmodule HTTPServerTest.Response do
       status_message: "OK",
       resource: "HTTP/1.1",
       headers: %{
-        "Content-Length" => "15",
-        "Content-Type" => "text/plain",
-        "Host" => "0.0.0.0:4000"
+        content_length: "15",
+        content_type: "text/plain",
+        host: "0.0.0.0:4000"
       },
       body: "this is my body"
     }
