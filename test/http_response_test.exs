@@ -31,7 +31,7 @@ defmodule HTTPServerTest.Response do
     assert Response.send_resp(status_code, body, headers) == expected_parsed_response
   end
 
-  test "returns properly formatted 404 response as a string" do
+  test "returns properly formatted response as a string" do
     response_object = %Response{
       status_code: 200,
       status_message: "OK",
@@ -46,8 +46,8 @@ defmodule HTTPServerTest.Response do
 
     expected_parsed_response =
       "HTTP/1.1 200 OK#{@carriage_return}" <>
-        "Content-length: 15#{@carriage_return}" <>
-        "Content-type: text/plain#{@carriage_return}" <>
+        "Content-Length: 15#{@carriage_return}" <>
+        "Content-Type: text/plain#{@carriage_return}" <>
         "Host: 0.0.0.0:4000#{@carriage_return}" <>
         "#{@carriage_return}" <>
         "this is my body"
