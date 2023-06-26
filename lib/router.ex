@@ -47,7 +47,10 @@ defmodule HTTPServer.Router do
 
   defp is_method_allowed(req_method, path_info) do
     {:ok, methods} = Map.fetch(path_info, :methods)
-    head = req_method == "HEAD" && Enum.member?(methods, "GET")
-    Enum.member?(methods, req_method) || req_method == "OPTIONS" || head
+    is_method_in_methods = Enum.member?(methods, req_method)
+    is_head_allowed = req_method == "HEAD" && Enum.member?(methods, "GET")
+    is_options = req_method == "OPTIONS"
+
+    is_options || is_method_in_methods || is_head_allowed
   end
 end
