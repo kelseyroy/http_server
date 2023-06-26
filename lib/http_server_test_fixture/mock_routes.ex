@@ -8,6 +8,11 @@ defmodule HTTPServerTestFixture.MockRoutes do
       "/test_get" => %{
         handler: HTTPServerTestFixture.Handlers.MockGet,
         methods: ["GET"]
+      },
+      "/test_redirect" => %{
+        handler: HTTPServer.Handlers.Redirect,
+        methods: ["GET"],
+        location: "/test_get"
       }
     }
 end

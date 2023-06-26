@@ -6,6 +6,6 @@ defmodule HTTPServerTestFixture.Handlers.MockPost do
   @impl HTTPServer.Handler
   def handle(%Request{method: "POST"} = req) do
     body = req.body
-    {200, body, Response.build_headers(req.body)}
+    {200, body, Response.build_headers(body)}
   end
 end

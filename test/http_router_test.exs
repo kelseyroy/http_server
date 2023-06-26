@@ -151,4 +151,33 @@ defmodule HTTPServerTest.Router do
 
     assert Router.router(request) == expected_response
   end
+
+  test "returns 301 redirect response to GET request at /old_path" do
+    request = %Request{
+      method: "GET",
+      path: "/test_redirect",
+      resource: "HTTP/1.1",
+      headers: %{
+        "Accept" => "*/*",
+        "Host" => "0.0.0.0:4000",
+        "User-Agent" => "ExampleBrowser/1.0"
+      },
+      body: ""
+    }
+
+    expected_response = %Response{
+      status_code: 301,
+      status_message: "MOVED PERMANENTLY",
+      resource: "HTTP/1.1",
+      headers: %{
+        "Content-Length" => "0",
+        "Content-Type" => "text/plain",
+        "Host" => "0.0.0.0:4000",
+        "Location" => "http://0.0.0.0:4000/test_get"
+      },
+      body: ""
+    }
+
+    assert Router.router(request) == expected_response
+  end
 end
