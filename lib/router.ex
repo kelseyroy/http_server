@@ -1,4 +1,5 @@
 defmodule HTTPServer.Router do
+  alias HTTPServer.Handlers.MethodNotAllowed
   alias HTTPServer.Response
   alias HTTPServer.Request
   alias HTTPServer.Handlers.NotFound
@@ -8,12 +9,12 @@ defmodule HTTPServer.Router do
   @routes Application.compile_env(:http_server, :routes, Routes)
 
   def router(req) do
-    case Map.fetch(@routes.routes, req.path) do
-      {:ok, path_info} ->
-        router(req, path_info)
-
-      _ ->
-        route_not_found(req)
+    with {:ok, path_info} <- Map.fetch(@routes.routes, req.path),
+         true <- is_method_allowed(req.method, path_info) do
+      router(req, path_info)
+    else
+      :error -> route_not_found(req)
+      false -> method_not_allowed(req)
     end
   end
 
@@ -37,5 +38,16 @@ defmodule HTTPServer.Router do
   defp route_not_found(req) do
     {status_code, body, headers} = NotFound.handle(req)
     Response.send_resp(status_code, body, headers)
+  end
+
+  defp method_not_allowed(req) do
+    {status_code, body, headers} = MethodNotAllowed.handle(req)
+    Response.send_resp(status_code, body, headers)
+  end
+
+  defp is_method_allowed(req_method, path_info) do
+    {:ok, methods} = Map.fetch(path_info, :methods)
+    head = req_method == "HEAD" && Enum.member?(methods, "GET")
+    Enum.member?(methods, req_method) || req_method == "OPTIONS" || head
   end
 end
