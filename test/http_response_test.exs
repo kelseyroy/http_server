@@ -37,17 +37,17 @@ defmodule HTTPServerTest.Response do
       status_message: "OK",
       resource: "HTTP/1.1",
       headers: %{
-        "Content-Length" => "15",
-        "Content-Type" => "text/plain",
-        "Host" => "0.0.0.0:4000"
+        content_length: "15",
+        content_type: "text/plain",
+        host: "0.0.0.0:4000"
       },
       body: "this is my body"
     }
 
     expected_parsed_response =
       "HTTP/1.1 200 OK#{@carriage_return}" <>
-        "Content-Length: 15#{@carriage_return}" <>
-        "Content-Type: text/plain#{@carriage_return}" <>
+        "Content-length: 15#{@carriage_return}" <>
+        "Content-type: text/plain#{@carriage_return}" <>
         "Host: 0.0.0.0:4000#{@carriage_return}" <>
         "#{@carriage_return}" <>
         "this is my body"

@@ -45,6 +45,12 @@ defmodule HTTPServer.Response do
   end
 
   defp format_response_headers(headers) do
-    for {key, val} <- headers, into: "", do: "#{key}: #{val}#{@carriage_return}"
+    for {key, val} <- headers, into: "", do: "#{dasherize(key)}: #{val}#{@carriage_return}"
+  end
+
+  defp dasherize(key) do
+    to_string(key)
+    |> String.capitalize()
+    |> String.replace("_", "-")
   end
 end
