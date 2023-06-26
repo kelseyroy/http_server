@@ -13,7 +13,7 @@ defmodule HTTPServerTest.Router do
       resource: "HTTP/1.1",
       headers: %{
         "Accept" => "*/*",
-        "Content-Length" => "9",
+        "Content-Length" => 9,
         "Content-Type" => "text/plain",
         "Host" => "0.0.0.0:4000",
         "User-Agent" => "ExampleBrowser/1.0"
@@ -26,7 +26,7 @@ defmodule HTTPServerTest.Router do
       status_message: "OK",
       resource: "HTTP/1.1",
       headers: %{
-        content_length: "19",
+        content_length: 19,
         content_type: "text/plain",
         host: "0.0.0.0:4000"
       },
@@ -54,7 +54,7 @@ defmodule HTTPServerTest.Router do
       status_message: "OK",
       resource: "HTTP/1.1",
       headers: %{
-        content_length: "32",
+        content_length: 32,
         content_type: "text/plain",
         host: "0.0.0.0:4000"
       },
@@ -82,7 +82,7 @@ defmodule HTTPServerTest.Router do
       status_message: "OK",
       resource: "HTTP/1.1",
       headers: %{
-        content_length: "32",
+        content_length: 32,
         content_type: "text/plain",
         host: "0.0.0.0:4000"
       },
@@ -99,7 +99,7 @@ defmodule HTTPServerTest.Router do
       resource: "HTTP/1.1",
       headers: %{
         "Accept" => "*/*",
-        "Content-Length" => "9",
+        "Content-Length" => 9,
         "Content-Type" => "text/plain",
         "Host" => "0.0.0.0:4000",
         "User-Agent" => "ExampleBrowser/1.0"
@@ -112,7 +112,7 @@ defmodule HTTPServerTest.Router do
       status_message: "NOT FOUND",
       resource: "HTTP/1.1",
       headers: %{
-        content_length: "128",
+        content_length: 128,
         content_type: "text/plain",
         host: "0.0.0.0:4000"
       },
@@ -141,7 +141,7 @@ defmodule HTTPServerTest.Router do
       status_message: "OK",
       resource: "HTTP/1.1",
       headers: %{
-        content_length: "0",
+        content_length: 0,
         content_type: "text/plain",
         host: "0.0.0.0:4000",
         allow: "GET, HEAD, OPTIONS"
@@ -170,7 +170,7 @@ defmodule HTTPServerTest.Router do
       status_message: "MOVED PERMANENTLY",
       resource: "HTTP/1.1",
       headers: %{
-        content_length: "0",
+        content_length: 0,
         content_type: "text/plain",
         host: "0.0.0.0:4000",
         location: "http://0.0.0.0:4000/test_get"

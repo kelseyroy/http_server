@@ -28,8 +28,6 @@ defmodule HTTPServer.Router do
       |> host(req.headers)
       |> allow(methods)
 
-    # allow_header = Response.build_allow_header(methods)
-    # headers = Response.build_headers("", allow_header)
     Response.send_resp(200, body, headers)
   end
 

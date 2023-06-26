@@ -3,7 +3,7 @@ defmodule HTTPServer.Response.HeadersBuilder do
 
   def build, do: %Headers{}
 
-  def content_length(headers, body), do: %{headers | content_length: "#{String.length(body)}"}
+  def content_length(headers, body), do: %{headers | content_length: String.length(body)}
   def content_type(headers), do: %{headers | content_type: "text/plain"}
   def host(headers, req_headers), do: %{headers | host: "#{get_host(req_headers)}"}
 
