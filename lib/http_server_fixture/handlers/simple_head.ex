@@ -1,6 +1,6 @@
 defmodule HTTPServerFixture.SimpleHead do
   alias HTTPServer.Request
-  alias HTTPServer.Response
+  alias HTTPServer.Response.Headers
   import HTTPServer.Response.HeadersBuilder
   @behaviour HTTPServer.Handler
 
@@ -9,7 +9,7 @@ defmodule HTTPServerFixture.SimpleHead do
     body = "This body does not show up in a HEAD request"
 
     headers =
-      Response.build_headers()
+      %Headers{}
       |> content_length(body)
       |> content_type()
       |> host(req.headers)

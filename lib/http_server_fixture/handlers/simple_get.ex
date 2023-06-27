@@ -1,6 +1,6 @@
 defmodule HTTPServerFixture.SimpleGet do
   alias HTTPServer.Request
-  alias HTTPServer.Response
+  alias HTTPServer.Response.Headers
   import HTTPServer.Response.HeadersBuilder
   @behaviour HTTPServer.Handler
 
@@ -9,7 +9,7 @@ defmodule HTTPServerFixture.SimpleGet do
     body = ""
 
     headers =
-      Response.build_headers()
+      %Headers{}
       |> content_length(body)
       |> content_type()
       |> host(req.headers)

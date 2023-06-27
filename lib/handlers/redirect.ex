@@ -1,5 +1,5 @@
 defmodule HTTPServer.Handlers.Redirect do
-  alias HTTPServer.Response
+  alias HTTPServer.Response.Headers
   import HTTPServer.Response.HeadersBuilder
   @behaviour HTTPServer.Handler
   @routes Application.compile_env(:http_server, :routes, Routes)
@@ -11,7 +11,7 @@ defmodule HTTPServer.Handlers.Redirect do
     body = ""
 
     headers =
-      Response.build_headers()
+      %Headers{}
       |> content_length(body)
       |> content_type()
       |> host(req.headers)

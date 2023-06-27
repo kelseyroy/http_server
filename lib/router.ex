@@ -2,6 +2,7 @@ defmodule HTTPServer.Router do
   alias HTTPServer.Response
   alias HTTPServer.Request
   alias HTTPServer.Handlers.NotFound
+  alias HTTPServer.Response.Headers
   alias HTTPServer.Routes
   import HTTPServer.Response.HeadersBuilder
 
@@ -22,7 +23,7 @@ defmodule HTTPServer.Router do
     body = ""
 
     headers =
-      Response.build_headers()
+      %Headers{}
       |> content_length(body)
       |> content_type()
       |> host(req.headers)

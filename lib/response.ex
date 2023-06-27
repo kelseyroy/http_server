@@ -27,8 +27,6 @@ defmodule HTTPServer.Response do
     %{response | headers: collect_headers}
   end
 
-  def build_headers, do: %Headers{}
-
   defp status_message(status_code) do
     %{
       200 => "OK",

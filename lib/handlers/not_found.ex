@@ -1,5 +1,5 @@
 defmodule HTTPServer.Handlers.NotFound do
-  alias HTTPServer.Response
+  alias HTTPServer.Response.Headers
   import HTTPServer.Response.HeadersBuilder
   @behaviour HTTPServer.Handler
 
@@ -9,7 +9,7 @@ defmodule HTTPServer.Handlers.NotFound do
       "The requested URL #{req.path} was not found on this server. See the README for instructions on how to customize your routes!"
 
     headers =
-      Response.build_headers()
+      %Headers{}
       |> content_length(body)
       |> content_type()
       |> host(req.headers)
