@@ -10,7 +10,7 @@ defmodule HTTPServerTestFixture.MockRoutes do
         methods: ["GET"]
       },
       "/test_redirect" => %{
-        handler: HTTPServer.Handlers.Redirect,
+        handler: HTTPServer.Router.Handlers.Redirect,
         methods: ["GET"],
         location: "/test_get"
       }

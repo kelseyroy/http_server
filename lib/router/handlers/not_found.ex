@@ -1,22 +1,19 @@
-defmodule HTTPServer.Handlers.MethodNotAllowed do
+defmodule HTTPServer.Router.Handlers.NotFound do
   alias HTTPServer.Response.Headers
   import HTTPServer.Response.HeadersBuilder
   @behaviour HTTPServer.Handler
-  @routes Application.compile_env(:http_server, :routes, Routes)
 
   @impl HTTPServer.Handler
   def handle(req) do
-    methods = @routes.routes[req.path][:methods]
-
-    body = ""
+    body =
+      "The requested URL #{req.path} was not found on this server. See the README for instructions on how to customize your routes!"
 
     headers =
       %Headers{}
       |> content_length(body)
       |> content_type()
       |> host(req.headers)
-      |> allow(methods)
 
-    {405, body, headers}
+    {404, body, headers}
   end
 end

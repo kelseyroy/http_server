@@ -1,9 +1,9 @@
 defmodule HTTPServer.Router do
-  alias HTTPServer.Handlers.MethodNotAllowed
+  alias HTTPServer.Router.Handlers.MethodNotAllowed
   alias HTTPServer.Response
   alias HTTPServer.Request
-  alias HTTPServer.Handlers.NotFound
-  alias HTTPServer.Handlers.Options
+  alias HTTPServer.Router.Handlers.NotFound
+  alias HTTPServer.Router.Handlers.Options
   alias HTTPServer.Routes
 
   @routes Application.compile_env(:http_server, :routes, Routes)

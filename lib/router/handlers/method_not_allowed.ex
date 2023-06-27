@@ -1,4 +1,4 @@
-defmodule HTTPServer.Handlers.Options do
+defmodule HTTPServer.Router.Handlers.MethodNotAllowed do
   alias HTTPServer.Response.Headers
   import HTTPServer.Response.HeadersBuilder
   @behaviour HTTPServer.Handler
@@ -17,6 +17,6 @@ defmodule HTTPServer.Handlers.Options do
       |> host(req.headers)
       |> allow(methods)
 
-    {200, body, headers}
+    {405, body, headers}
   end
 end
