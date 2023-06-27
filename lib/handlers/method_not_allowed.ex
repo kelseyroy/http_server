@@ -1,4 +1,5 @@
 defmodule HTTPServer.Handlers.MethodNotAllowed do
+  alias HTTPServer.Response.Headers
   import HTTPServer.Response.HeadersBuilder
   @behaviour HTTPServer.Handler
   @routes Application.compile_env(:http_server, :routes, Routes)
@@ -10,7 +11,7 @@ defmodule HTTPServer.Handlers.MethodNotAllowed do
     body = ""
 
     headers =
-      build()
+      %Headers{}
       |> content_length(body)
       |> content_type()
       |> host(req.headers)
