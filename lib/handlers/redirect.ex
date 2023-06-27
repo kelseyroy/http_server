@@ -1,5 +1,6 @@
 defmodule HTTPServer.Handlers.Redirect do
-  alias HTTPServer.Response
+  alias HTTPServer.Response.Headers
+  import HTTPServer.Response.HeadersBuilder
   @behaviour HTTPServer.Handler
   @routes Application.compile_env(:http_server, :routes, Routes)
 
@@ -7,7 +8,15 @@ defmodule HTTPServer.Handlers.Redirect do
   def handle(req) do
     {:ok, path_info} = Map.fetch(@routes.routes, req.path)
     {:ok, location} = Map.fetch(path_info, :location)
-    location_header = Response.build_location_header(location)
-    {301, "", Response.build_headers("", location_header)}
+    body = ""
+
+    headers =
+      %Headers{}
+      |> content_length(body)
+      |> content_type()
+      |> host(req.headers)
+      |> location(req.headers, location)
+
+    {301, body, headers}
   end
 end

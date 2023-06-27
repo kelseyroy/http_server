@@ -56,6 +56,7 @@ defmodule HTTPServer do
   end
 
   defp log(message), do: Logger.info(message)
+
   defp log(data, message) do
     Logger.info(message <> "\n\n" <> data)
     data
