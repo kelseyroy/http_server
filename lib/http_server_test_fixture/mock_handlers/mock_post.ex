@@ -1,5 +1,6 @@
 defmodule HTTPServerTestFixture.Handlers.MockPost do
   alias HTTPServer.Request
+  alias HTTPServer.Response
   import HTTPServer.Response.HeadersBuilder
   @behaviour HTTPServer.Handler
 
@@ -8,7 +9,7 @@ defmodule HTTPServerTestFixture.Handlers.MockPost do
     body = req.body
 
     headers =
-      build()
+      Response.build_headers()
       |> content_length(body)
       |> content_type()
       |> host(req.headers)

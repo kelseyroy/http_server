@@ -1,5 +1,6 @@
 defmodule HTTPServerFixture.Options do
   alias HTTPServer.Request
+  alias HTTPServer.Response
   import HTTPServer.Response.HeadersBuilder
   @behaviour HTTPServer.Handler
 
@@ -8,7 +9,7 @@ defmodule HTTPServerFixture.Options do
     body = ""
 
     headers =
-      build()
+      Response.build_headers()
       |> content_length(body)
       |> content_type()
       |> host(req.headers)

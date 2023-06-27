@@ -22,7 +22,7 @@ defmodule HTTPServer.Router do
     body = ""
 
     headers =
-      build()
+      Response.build_headers()
       |> content_length(body)
       |> content_type()
       |> host(req.headers)
