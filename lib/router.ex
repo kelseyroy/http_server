@@ -9,11 +9,15 @@ defmodule HTTPServer.Router do
   @routes Application.compile_env(:http_server, :routes, Routes)
 
   def router(req) do
-    with {:ok, path_info} <- Map.fetch(@routes.routes, req.path),
-         true <- is_method_allowed(req.method, path_info) do
-      router(req, path_info)
-    else
-      :error -> route_not_found(req)
+    case Map.fetch(@routes.routes, req.path) do
+      {:ok, path_info} -> route_if_allowed(req, path_info)
+      _ -> route_not_found(req)
+    end
+  end
+
+  defp route_if_allowed(req = %Request{method: method}, path_info) do
+    case is_method_allowed(method, path_info) do
+      true -> router(req, path_info)
       false -> method_not_allowed(req)
     end
   end
