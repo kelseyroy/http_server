@@ -13,18 +13,13 @@ defmodule HTTPServer.Response do
   @carriage_return "\r\n"
 
   def send_resp(status_code, body, headers) do
-    response = %__MODULE__{
+    %__MODULE__{
       status_code: status_code,
       status_message: status_message(status_code),
       resource: "HTTP/1.1",
-      headers: headers,
+      headers: Headers.collect_headers(headers),
       body: body
     }
-
-    collect_headers =
-      for {k, v} <- Map.from_struct(response.headers), v != nil, into: %{}, do: {k, v}
-
-    %{response | headers: collect_headers}
   end
 
   defp status_message(status_code) do
@@ -39,21 +34,8 @@ defmodule HTTPServer.Response do
   def format_response(res) do
     "#{res.resource} #{res.status_code} #{res.status_message}" <>
       @carriage_return <>
-      "#{format_response_headers(res.headers)}" <>
+      "#{Headers.format_response_headers(res.headers)}" <>
       @carriage_return <>
       "#{res.body}"
-  end
-
-  defp format_response_headers(headers) do
-    for {n, v} <- headers,
-        into: "",
-        do: "#{format_header_name(n)}: #{v}#{@carriage_return}"
-  end
-
-  defp format_header_name(header_name) do
-    to_string(header_name)
-    |> String.split("_")
-    |> Enum.map(&String.capitalize/1)
-    |> Enum.join("-")
   end
 end
