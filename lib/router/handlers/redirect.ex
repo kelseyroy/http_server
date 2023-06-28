@@ -1,4 +1,4 @@
-defmodule HTTPServer.Handlers.Redirect do
+defmodule HTTPServer.Router.Handlers.Redirect do
   alias HTTPServer.Response.Headers
   import HTTPServer.Response.HeadersBuilder
   @behaviour HTTPServer.Handler

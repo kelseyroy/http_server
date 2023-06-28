@@ -27,7 +27,8 @@ defmodule HTTPServer.Response do
       200 => "OK",
       204 => "NO CONTENT",
       404 => "NOT FOUND",
-      301 => "MOVED PERMANENTLY"
+      301 => "MOVED PERMANENTLY",
+      405 => "METHOD NOT ALLOWED"
     }[status_code]
   end
 

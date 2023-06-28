@@ -180,4 +180,35 @@ defmodule HTTPServerTest.Router do
 
     assert Router.router(request) == expected_response
   end
+
+  test "returns 405 Method Not Found Response to GET request at /test_post" do
+    request = %Request{
+      method: "GET",
+      path: "/test_post",
+      resource: "HTTP/1.1",
+      headers: %{
+        "Accept" => "*/*",
+        "Content-Length" => 9,
+        "Content-Type" => "text/plain",
+        "Host" => "0.0.0.0:4000",
+        "User-Agent" => "ExampleBrowser/1.0"
+      },
+      body: "testing testing 123"
+    }
+
+    expected_response = %Response{
+      status_code: 405,
+      status_message: "METHOD NOT ALLOWED",
+      resource: "HTTP/1.1",
+      headers: %{
+        content_length: 0,
+        content_type: "text/plain",
+        host: "0.0.0.0:4000",
+        allow: "POST, OPTIONS"
+      },
+      body: ""
+    }
+
+    assert Router.router(request) == expected_response
+  end
 end

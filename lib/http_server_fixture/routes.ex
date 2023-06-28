@@ -26,7 +26,7 @@ defmodule HTTPServerFixture.Routes do
         methods: ["GET", "POST", "PUT"]
       },
       "/redirect" => %{
-        handler: HTTPServer.Handlers.Redirect,
+        handler: HTTPServer.Router.Handlers.Redirect,
         methods: ["GET"],
         location: "/simple_get"
       }
