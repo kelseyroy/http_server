@@ -25,6 +25,10 @@ defmodule HTTPServerTestFixture.MockRoutes do
       "/test_json" => %{
         handler: HTTPServerTestFixture.Handlers.MockJSON,
         methods: ["GET"]
+      },
+      "/test_xml" => %{
+        handler: HTTPServerTestFixture.Handlers.MockXML,
+        methods: ["GET"]
       }
     }
 end

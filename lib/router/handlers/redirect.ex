@@ -4,6 +4,7 @@ defmodule HTTPServer.Router.Handlers.Redirect do
   @impl HTTPServer.Handler
   def handle(_req) do
     body = ""
+
     {301, body, :text}
   end
 end

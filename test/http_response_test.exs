@@ -85,7 +85,7 @@ defmodule HTTPServerTest.Response do
       resource: "HTTP/1.1",
       headers: %{
         content_length: 12,
-        content_type: "text/plain",
+        content_type: "text/plain;charset=utf-8",
         host: "0.0.0.0:4000"
       },
       body: "hello world!"
@@ -113,10 +113,39 @@ defmodule HTTPServerTest.Response do
       resource: "HTTP/1.1",
       headers: %{
         content_length: 95,
-        content_type: "text/html",
+        content_type: "text/html;charset=utf-8",
         host: "0.0.0.0:4000"
       },
-      body: "<!DOCTYPE html><html><head><title>Basic Web Page</title></head><body>Hello World!</body></html>"
+      body:
+        "<!DOCTYPE html><html><head><title>Basic Web Page</title></head><body>Hello World!</body></html>"
+    }
+
+    assert Router.router(request) == expected_response
+  end
+
+  test "a GET request to /test_xml should return a XML body" do
+    request = %Request{
+      method: "GET",
+      path: "/test_xml",
+      resource: "HTTP/1.1",
+      headers: %{
+        "Accept" => "*/*",
+        "Host" => "0.0.0.0:4000",
+        "User-Agent" => "ExampleBrowser/1.0"
+      },
+      body: ""
+    }
+
+    expected_response = %Response{
+      status_code: 200,
+      status_message: "OK",
+      resource: "HTTP/1.1",
+      headers: %{
+        content_length: 37,
+        content_type: "application/xml;charset=utf-8",
+        host: "0.0.0.0:4000"
+      },
+      body: "<text><para>hello world</para></text>"
     }
 
     assert Router.router(request) == expected_response
@@ -135,16 +164,18 @@ defmodule HTTPServerTest.Response do
       body: ""
     }
 
+    {:ok, body} = JSON.encode(foo: "bar")
+
     expected_response = %Response{
       status_code: 200,
       status_message: "OK",
       resource: "HTTP/1.1",
       headers: %{
-        content_length: 14,
-        content_type: "application/json",
+        content_length: byte_size(body),
+        content_type: "application/json;charset=utf-8",
         host: "0.0.0.0:4000"
       },
-      body: "{\"foo\": \"bar\"}"
+      body: body
     }
 
     assert Router.router(request) == expected_response
