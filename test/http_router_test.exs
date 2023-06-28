@@ -14,7 +14,7 @@ defmodule HTTPServerTest.Router do
       headers: %{
         "Accept" => "*/*",
         "Content-Length" => 9,
-        "Content-Type" => "text/plain",
+        "Content-Type" => "text/plain;charset=utf-8",
         "Host" => "0.0.0.0:4000",
         "User-Agent" => "ExampleBrowser/1.0"
       },
@@ -27,7 +27,7 @@ defmodule HTTPServerTest.Router do
       resource: "HTTP/1.1",
       headers: %{
         content_length: 19,
-        content_type: "text/plain",
+        content_type: "text/plain;charset=utf-8",
         host: "0.0.0.0:4000"
       },
       body: "testing testing 123"
@@ -55,7 +55,7 @@ defmodule HTTPServerTest.Router do
       resource: "HTTP/1.1",
       headers: %{
         content_length: 32,
-        content_type: "text/plain",
+        content_type: "text/plain;charset=utf-8",
         host: "0.0.0.0:4000"
       },
       body: "this is a mocked get with a body"
@@ -83,7 +83,7 @@ defmodule HTTPServerTest.Router do
       resource: "HTTP/1.1",
       headers: %{
         content_length: 32,
-        content_type: "text/plain",
+        content_type: "text/plain;charset=utf-8",
         host: "0.0.0.0:4000"
       },
       body: ""
@@ -100,7 +100,7 @@ defmodule HTTPServerTest.Router do
       headers: %{
         "Accept" => "*/*",
         "Content-Length" => 9,
-        "Content-Type" => "text/plain",
+        "Content-Type" => "text/plain;charset=utf-8",
         "Host" => "0.0.0.0:4000",
         "User-Agent" => "ExampleBrowser/1.0"
       },
@@ -113,7 +113,7 @@ defmodule HTTPServerTest.Router do
       resource: "HTTP/1.1",
       headers: %{
         content_length: 128,
-        content_type: "text/plain",
+        content_type: "text/plain;charset=utf-8",
         host: "0.0.0.0:4000"
       },
       body:
@@ -142,7 +142,7 @@ defmodule HTTPServerTest.Router do
       resource: "HTTP/1.1",
       headers: %{
         content_length: 0,
-        content_type: "text/plain",
+        content_type: "text/plain;charset=utf-8",
         host: "0.0.0.0:4000",
         allow: "GET, HEAD, OPTIONS"
       },
@@ -171,7 +171,7 @@ defmodule HTTPServerTest.Router do
       resource: "HTTP/1.1",
       headers: %{
         content_length: 0,
-        content_type: "text/plain",
+        content_type: "text/plain;charset=utf-8",
         host: "0.0.0.0:4000",
         location: "http://0.0.0.0:4000/test_get"
       },
@@ -189,7 +189,7 @@ defmodule HTTPServerTest.Router do
       headers: %{
         "Accept" => "*/*",
         "Content-Length" => 9,
-        "Content-Type" => "text/plain",
+        "Content-Type" => "text/plain;charset=utf-8",
         "Host" => "0.0.0.0:4000",
         "User-Agent" => "ExampleBrowser/1.0"
       },
@@ -202,7 +202,7 @@ defmodule HTTPServerTest.Router do
       resource: "HTTP/1.1",
       headers: %{
         content_length: 0,
-        content_type: "text/plain",
+        content_type: "text/plain;charset=utf-8",
         host: "0.0.0.0:4000",
         allow: "POST, OPTIONS"
       },

@@ -23,30 +23,30 @@ defmodule HTTPServer.Router do
   end
 
   defp router(req = %Request{method: "OPTIONS"}, _path_info) do
-    {status_code, body, headers} = Options.handle(req)
-    Response.send_resp(status_code, body, headers)
+    {status_code, body, media_type} = Options.handle(req)
+    Response.build(req, status_code, body, media_type)
   end
 
   defp router(req = %Request{method: "HEAD"}, path_info) do
     {:ok, handler} = Map.fetch(path_info, :handler)
-    {status_code, _body, headers} = handler.handle(%{req | method: "GET"})
-    Response.send_resp(status_code, "", headers)
+    {status_code, body, media_type} = handler.handle(%{req | method: "GET"})
+    Response.build(req, status_code, body, media_type)
   end
 
   defp router(req, path_info) do
     {:ok, handler} = Map.fetch(path_info, :handler)
-    {status_code, body, headers} = handler.handle(req)
-    Response.send_resp(status_code, body, headers)
+    {status_code, body, media_type} = handler.handle(req)
+    Response.build(req, status_code, body, media_type)
   end
 
   defp route_not_found(req) do
-    {status_code, body, headers} = NotFound.handle(req)
-    Response.send_resp(status_code, body, headers)
+    {status_code, body, media_type} = NotFound.handle(req)
+    Response.build(req, status_code, body, media_type)
   end
 
   defp method_not_allowed(req) do
-    {status_code, body, headers} = MethodNotAllowed.handle(req)
-    Response.send_resp(status_code, body, headers)
+    {status_code, body, media_type} = MethodNotAllowed.handle(req)
+    Response.build(req, status_code, body, media_type)
   end
 
   defp is_method_allowed(req_method, path_info) do

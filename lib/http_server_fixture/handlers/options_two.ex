@@ -1,43 +1,20 @@
 defmodule HTTPServerFixture.OptionsTwo do
   alias HTTPServer.Request
-  alias HTTPServer.Response.Headers
-  import HTTPServer.Response.HeadersBuilder
   @behaviour HTTPServer.Handler
 
   @impl HTTPServer.Handler
-  def handle(%Request{method: "GET"} = req) do
+  def handle(%Request{method: "GET"} = _req) do
     body = ""
-
-    headers =
-      %Headers{}
-      |> content_length(body)
-      |> content_type()
-      |> host(req.headers)
-
-    {200, body, headers}
+    {200, body, :text}
   end
 
   def handle(%Request{method: "PUT"} = req) do
     body = req.body
-
-    headers =
-      %Headers{}
-      |> content_length(body)
-      |> content_type()
-      |> host(req.headers)
-
-    {200, body, headers}
+    {200, body, :text}
   end
 
   def handle(%Request{method: "POST"} = req) do
     body = req.body
-
-    headers =
-      %Headers{}
-      |> content_length(body)
-      |> content_type()
-      |> host(req.headers)
-
-    {200, body, headers}
+    {200, body, :text}
   end
 end
