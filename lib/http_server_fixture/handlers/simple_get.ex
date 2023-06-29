@@ -3,7 +3,7 @@ defmodule HTTPServerFixture.SimpleGet do
   @behaviour HTTPServer.Handler
 
   @impl HTTPServer.Handler
-  def handle(%Request{method: "GET"} = _req) do
+  def handle(%Request{method: "GET"}) do
     body = ""
     {200, body, :text}
   end

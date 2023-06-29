@@ -3,17 +3,17 @@ defmodule HTTPServerFixture.OptionsTwo do
   @behaviour HTTPServer.Handler
 
   @impl HTTPServer.Handler
-  def handle(%Request{method: "GET"} = _req) do
+  def handle(%Request{method: "GET"}) do
     body = ""
     {200, body, :text}
   end
 
-  def handle(%Request{method: "PUT", body: body} = _req) do
+  def handle(%Request{method: "PUT", body: body}) do
     body = body
     {200, body, :text}
   end
 
-  def handle(%Request{method: "POST", body: body} = _req) do
+  def handle(%Request{method: "POST", body: body}) do
     body = body
     {200, body, :text}
   end

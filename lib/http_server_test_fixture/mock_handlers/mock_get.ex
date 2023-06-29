@@ -3,7 +3,7 @@ defmodule HTTPServerTestFixture.Handlers.MockGet do
   @behaviour HTTPServer.Handler
 
   @impl HTTPServer.Handler
-  def handle(%Request{method: "GET"} = _req) do
+  def handle(%Request{method: "GET"}) do
     body = "this is a mocked get with a body"
     {200, body, :text}
   end

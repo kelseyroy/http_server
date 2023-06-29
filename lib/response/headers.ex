@@ -13,7 +13,7 @@ defmodule HTTPServer.Response.Headers do
         }
 
   def build(
-        _req = %Request{method: "OPTIONS", path: path, headers: headers},
+        %Request{method: "OPTIONS", path: path, headers: headers},
         _status_code,
         body,
         media_type
@@ -25,7 +25,7 @@ defmodule HTTPServer.Response.Headers do
   end
 
   def build(
-        _req = %Request{path: path, headers: headers},
+        %Request{path: path, headers: headers},
         _status_code = 405,
         body,
         media_type
@@ -37,7 +37,7 @@ defmodule HTTPServer.Response.Headers do
   end
 
   def build(
-        _req = %Request{path: path, headers: headers},
+        %Request{path: path, headers: headers},
         _status_code = 301,
         body,
         media_type
@@ -49,7 +49,7 @@ defmodule HTTPServer.Response.Headers do
   end
 
   def build(
-        _req = %Request{headers: headers},
+        %Request{headers: headers},
         _status_code,
         body,
         media_type
