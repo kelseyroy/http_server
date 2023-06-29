@@ -18,19 +18,13 @@ defmodule HTTPServer.Response do
 
   @carriage_return "\r\n"
 
-  def send_resp(resp) do
+  defp send_resp(resp) do
     %{resp | headers: Headers.collect_headers(resp.headers)}
   end
 
   def build(req = %Request{method: "HEAD"}, status_code, res_body, media_type) do
-    resp =
-      %__MODULE__{}
-      |> resource()
-      |> status(status_code)
-      |> body(res_body)
-      |> headers(req, media_type)
-
-    send_resp(%{resp | body: ""})
+    resp = build(%Request{req | method: "GET"}, status_code, res_body, media_type)
+    %{resp | body: ""}
   end
 
   def build(req, status_code, res_body, media_type) do
@@ -42,22 +36,15 @@ defmodule HTTPServer.Response do
     |> send_resp()
   end
 
-  def headers(
-        res = %__MODULE__{
-          status_code: status_code,
-          body: body
-        },
-        req,
-        media_type
-      ),
-      do: %{res | headers: Headers.build(req, status_code, body, media_type)}
+  defp headers(res = %__MODULE__{status_code: status_code, body: body}, req, media_type),
+    do: %{res | headers: Headers.build(req, status_code, body, media_type)}
 
-  def resource(res), do: %{res | resource: "HTTP/1.1"}
+  defp resource(res), do: %{res | resource: "HTTP/1.1"}
 
-  def status(res, status_code),
+  defp status(res, status_code),
     do: %{res | status_code: status_code, status_message: status_message(status_code)}
 
-  def body(res, body), do: %{res | body: body}
+  defp body(res, body), do: %{res | body: body}
 
   defp status_message(status_code) do
     %{
@@ -69,15 +56,13 @@ defmodule HTTPServer.Response do
     }[status_code]
   end
 
-  def format_response(
-        _res = %__MODULE__{
-          resource: resource,
-          status_code: status_code,
-          status_message: status_message,
-          body: body,
-          headers: headers
-        }
-      ) do
+  def format_response(%__MODULE__{
+        resource: resource,
+        status_code: status_code,
+        status_message: status_message,
+        body: body,
+        headers: headers
+      }) do
     "#{resource} #{status_code} #{status_message}" <>
       @carriage_return <>
       "#{Headers.format_response_headers(headers)}" <>

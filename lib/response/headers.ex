@@ -12,48 +12,28 @@ defmodule HTTPServer.Response.Headers do
           allow: list(String.t())
         }
 
-  def build(
-        %Request{method: "OPTIONS", path: path, headers: headers},
-        _status_code,
-        body,
-        media_type
-      ) do
+  def build(%Request{method: "OPTIONS", path: path, headers: headers}, _status_code, body, media_type) do
     %__MODULE__{}
     |> content(media_type, body)
     |> host(headers)
     |> allow(@routes.routes[path][:methods])
   end
 
-  def build(
-        %Request{path: path, headers: headers},
-        _status_code = 405,
-        body,
-        media_type
-      ) do
+  def build(%Request{path: path, headers: headers}, 405, body, media_type) do
     %__MODULE__{}
     |> content(media_type, body)
     |> host(headers)
     |> allow(@routes.routes[path][:methods])
   end
 
-  def build(
-        %Request{path: path, headers: headers},
-        _status_code = 301,
-        body,
-        media_type
-      ) do
+  def build(%Request{path: path, headers: headers}, 301, body, media_type) do
     %__MODULE__{}
     |> content(media_type, body)
     |> host(headers)
     |> location(@routes.routes[path][:location])
   end
 
-  def build(
-        %Request{headers: headers},
-        _status_code,
-        body,
-        media_type
-      ) do
+  def build(%Request{headers: headers}, _status_code, body, media_type) do
     %__MODULE__{}
     |> content(media_type, body)
     |> host(headers)
