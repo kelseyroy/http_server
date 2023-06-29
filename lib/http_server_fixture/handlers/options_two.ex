@@ -8,13 +8,13 @@ defmodule HTTPServerFixture.OptionsTwo do
     {200, body, :text}
   end
 
-  def handle(%Request{method: "PUT"} = req) do
-    body = req.body
+  def handle(%Request{method: "PUT", body: body} = _req) do
+    body = body
     {200, body, :text}
   end
 
-  def handle(%Request{method: "POST"} = req) do
-    body = req.body
+  def handle(%Request{method: "POST", body: body} = _req) do
+    body = body
     {200, body, :text}
   end
 end

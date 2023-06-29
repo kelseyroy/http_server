@@ -17,41 +17,53 @@ defmodule HTTPServer.Response.Headers do
     %__MODULE__{}
   end
 
-  def build(res, req = %Request{method: "OPTIONS"}, media_type) do
-    headers =
-      res.headers
-      |> content(media_type, res.body)
-      |> host(req.headers)
-      |> allow(@routes.routes[req.path][:methods])
+  def build(
+        res = %Response{headers: headers, body: body},
+        _req = %Request{method: "OPTIONS", path: path, headers: headers},
+        media_type
+      ) do
+    options_headers =
+      headers
+      |> content(media_type, body)
+      |> host(headers)
+      |> allow(@routes.routes[path][:methods])
 
-    %{res | headers: headers}
+    %{res | headers: options_headers}
   end
 
-  def build(res = %Response{status_code: 405}, req, media_type) do
-    headers =
-      res.headers
-      |> content(media_type, res.body)
-      |> host(req.headers)
-      |> allow(@routes.routes[req.path][:methods])
+  def build(
+        res = %Response{headers: headers, body: body, status_code: 405},
+        _req = %Request{path: path, headers: headers},
+        media_type
+      ) do
+    allowed_methods_headers =
+      headers
+      |> content(media_type, body)
+      |> host(headers)
+      |> allow(@routes.routes[path][:methods])
 
-    %{res | headers: headers}
+    %{res | headers: allowed_methods_headers}
   end
 
-  def build(res = %Response{status_code: 301}, req, media_type) do
-    headers =
-      res.headers
-      |> content(media_type, res.body)
-      |> host(req.headers)
-      |> location(@routes.routes[req.path][:location])
+  def build(
+        res = %Response{headers: headers, body: body, status_code: 301},
+        _req = %Request{path: path, headers: headers},
+        media_type
+      ) do
+    redirect_headers =
+      headers
+      |> content(media_type, body)
+      |> host(headers)
+      |> allow(@routes.routes[path][:methods])
 
-    %{res | headers: headers}
+    %{res | headers: redirect_headers}
   end
 
-  def build(res, req, media_type) do
+  def build(res, _req = %Request{headers: headers}, media_type) do
     headers =
       res.headers
       |> content(media_type, res.body)
-      |> host(req.headers)
+      |> host(headers)
 
     %{res | headers: headers}
   end

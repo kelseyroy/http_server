@@ -65,11 +65,19 @@ defmodule HTTPServer.Response do
     }[status_code]
   end
 
-  def format_response(res) do
-    "#{res.resource} #{res.status_code} #{res.status_message}" <>
+  def format_response(
+        _res = %__MODULE__{
+          resource: resource,
+          status_code: status_code,
+          status_message: status_message,
+          body: body,
+          headers: headers
+        }
+      ) do
+    "#{resource} #{status_code} #{status_message}" <>
       @carriage_return <>
-      "#{Headers.format_response_headers(res.headers)}" <>
+      "#{Headers.format_response_headers(headers)}" <>
       @carriage_return <>
-      res.body
+      body
   end
 end
