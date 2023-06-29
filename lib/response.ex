@@ -24,31 +24,35 @@ defmodule HTTPServer.Response do
 
   def build(req = %Request{method: "HEAD"}, status_code, res_body, media_type) do
     resp =
-      new()
+      %__MODULE__{}
+      |> resource()
       |> status(status_code)
       |> body(res_body)
-      |> Headers.build(req, media_type)
+      |> headers(req, media_type)
 
     send_resp(%{resp | body: ""})
   end
 
   def build(req, status_code, res_body, media_type) do
-    new()
+    %__MODULE__{}
+    |> resource()
     |> status(status_code)
     |> body(res_body)
-    |> Headers.build(req, media_type)
+    |> headers(req, media_type)
     |> send_resp()
   end
 
-  def new() do
-    %__MODULE__{
-      status_code: nil,
-      status_message: nil,
-      resource: "HTTP/1.1",
-      headers: Headers.new(),
-      body: nil
-    }
-  end
+  def headers(
+        res = %__MODULE__{
+          status_code: status_code,
+          body: body
+        },
+        req,
+        media_type
+      ),
+      do: %{res | headers: Headers.build(req, status_code, body, media_type)}
+
+  def resource(res), do: %{res | resource: "HTTP/1.1"}
 
   def status(res, status_code),
     do: %{res | status_code: status_code, status_message: status_message(status_code)}

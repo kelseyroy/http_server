@@ -1,6 +1,5 @@
 defmodule HTTPServer.Response.Headers do
   alias HTTPServer.Request
-  alias HTTPServer.Response
   defstruct content_length: nil, content_type: nil, host: nil, location: nil, allow: nil
   import HTTPServer.Response.HeadersBuilder
   @routes Application.compile_env(:http_server, :routes, Routes)
@@ -13,59 +12,51 @@ defmodule HTTPServer.Response.Headers do
           allow: list(String.t())
         }
 
-  def new() do
-    %__MODULE__{}
-  end
-
   def build(
-        res = %Response{headers: headers, body: body},
         _req = %Request{method: "OPTIONS", path: path, headers: headers},
+        _status_code,
+        body,
         media_type
       ) do
-    options_headers =
-      headers
-      |> content(media_type, body)
-      |> host(headers)
-      |> allow(@routes.routes[path][:methods])
-
-    %{res | headers: options_headers}
+    %__MODULE__{}
+    |> content(media_type, body)
+    |> host(headers)
+    |> allow(@routes.routes[path][:methods])
   end
 
   def build(
-        res = %Response{headers: headers, body: body, status_code: 405},
         _req = %Request{path: path, headers: headers},
+        _status_code = 405,
+        body,
         media_type
       ) do
-    allowed_methods_headers =
-      headers
-      |> content(media_type, body)
-      |> host(headers)
-      |> allow(@routes.routes[path][:methods])
-
-    %{res | headers: allowed_methods_headers}
+    %__MODULE__{}
+    |> content(media_type, body)
+    |> host(headers)
+    |> allow(@routes.routes[path][:methods])
   end
 
   def build(
-        res = %Response{headers: headers, body: body, status_code: 301},
         _req = %Request{path: path, headers: headers},
+        _status_code = 301,
+        body,
         media_type
       ) do
-    redirect_headers =
-      headers
-      |> content(media_type, body)
-      |> host(headers)
-      |> allow(@routes.routes[path][:methods])
-
-    %{res | headers: redirect_headers}
+    %__MODULE__{}
+    |> content(media_type, body)
+    |> host(headers)
+    |> location(@routes.routes[path][:location])
   end
 
-  def build(res, _req = %Request{headers: headers}, media_type) do
-    headers =
-      res.headers
-      |> content(media_type, res.body)
-      |> host(headers)
-
-    %{res | headers: headers}
+  def build(
+        _req = %Request{headers: headers},
+        _status_code,
+        body,
+        media_type
+      ) do
+    %__MODULE__{}
+    |> content(media_type, body)
+    |> host(headers)
   end
 
   def collect_headers(headers) do
