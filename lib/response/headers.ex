@@ -1,6 +1,13 @@
 defmodule HTTPServer.Response.Headers do
   alias HTTPServer.Request
-  defstruct content_length: nil, content_type: nil, host: nil, location: nil, allow: nil
+
+  defstruct content_length: nil,
+            content_type: nil,
+            host: nil,
+            location: nil,
+            allow: nil,
+            link: nil
+
   import HTTPServer.Response.HeadersBuilder
   @routes Application.compile_env(:http_server, :routes, Routes)
 
@@ -9,10 +16,16 @@ defmodule HTTPServer.Response.Headers do
           content_type: String.t(),
           host: String.t(),
           location: String.t(),
-          allow: list(String.t())
+          allow: list(String.t()),
+          link: String.t()
         }
 
-  def build(%Request{method: "OPTIONS", path: path, headers: headers}, _status_code, body, media_type) do
+  def build(
+        %Request{method: "OPTIONS", path: path, headers: headers},
+        _status_code,
+        body,
+        media_type
+      ) do
     %__MODULE__{}
     |> content(media_type, body)
     |> host(headers)
@@ -31,6 +44,21 @@ defmodule HTTPServer.Response.Headers do
     |> content(media_type, body)
     |> host(headers)
     |> location(@routes.routes[path][:location])
+  end
+
+  def build(%Request{path: path, headers: headers}, _status_code, body, media_type = :html) do
+    case Map.fetch(@routes.routes[path], :stylesheet) do
+      {:ok, stylesheet_filepath} ->
+        %__MODULE__{}
+        |> content(media_type, body)
+        |> host(headers)
+        |> link(stylesheet_filepath)
+
+      :error ->
+        %__MODULE__{}
+        |> content(media_type, body)
+        |> host(headers)
+    end
   end
 
   def build(%Request{headers: headers}, _status_code, body, media_type) do

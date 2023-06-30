@@ -5,7 +5,7 @@ defmodule HTTPServer.Router.Handlers.NotFound do
   @impl HTTPServer.Handler
   def handle(%Request{path: path}) do
     body =
-      "The requested URL #{path} was not found on this server. See the README for instructions on how to customize your routes!"
+      "Something went wrong at #{path}. See the README for instructions on how to customize your routes!"
 
     {404, body, :text}
   end

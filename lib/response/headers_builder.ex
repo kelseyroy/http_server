@@ -26,10 +26,18 @@ defmodule HTTPServer.Response.HeadersBuilder do
     |> content_type("application/xml;charset=utf-8")
   end
 
+  def content(headers, :css, body) do
+    headers
+    |> content_length(body)
+    |> content_type("text/css;charset=utf-8")
+  end
+
   def host(headers, req_headers), do: %{headers | host: "#{get_host(req_headers)}"}
 
   def location(headers, path),
-    do: %{headers | location: "http://#{Map.get(headers, :host)}#{path}"}
+    do: %{headers | location: uri(headers, path)}
+
+  defp uri(headers, path), do: URI.encode("http://#{Map.get(headers, :host)}#{path}")
 
   def allow(headers, methods) do
     methods =
@@ -41,6 +49,12 @@ defmodule HTTPServer.Response.HeadersBuilder do
 
     %{headers | allow: "#{Enum.join(methods, ", ")}"}
   end
+
+  def link(headers, stylesheet_filepath),
+    do: %{
+      headers
+      | link: "<" <> stylesheet_filepath <> ">; rel=stylesheet; type=text/css;"
+    }
 
   defp get_host(req_headers) do
     case Map.fetch(req_headers, "Host") do
