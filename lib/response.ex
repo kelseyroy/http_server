@@ -31,7 +31,7 @@ defmodule HTTPServer.Response do
     %__MODULE__{}
     |> resource()
     |> status(status_code)
-    |> body(res_body)
+    |> body(media_type, res_body)
     |> headers(req, media_type)
     |> send_resp()
   end
@@ -44,7 +44,12 @@ defmodule HTTPServer.Response do
   defp status(res, status_code),
     do: %{res | status_code: status_code, status_message: status_message(status_code)}
 
-  defp body(res, body), do: %{res | body: body}
+  defp body(res, :json, res_body) do
+    {:ok, json_body} = JSON.encode(res_body)
+    %{res | body: json_body}
+  end
+
+  defp body(res, _media_type, res_body), do: %{res | body: res_body}
 
   defp status_message(status_code) do
     %{

@@ -1,7 +1,6 @@
 defmodule HTTPServer.Response.HeadersBuilder do
   defp content_length(headers, body), do: %{headers | content_length: byte_size(body)}
   defp content_type(headers, media_type), do: %{headers | content_type: media_type}
-  def host(headers, req_headers), do: %{headers | host: "#{get_host(req_headers)}"}
 
   def content(headers, :text, body) do
     headers
@@ -26,6 +25,8 @@ defmodule HTTPServer.Response.HeadersBuilder do
     |> content_length(body)
     |> content_type("application/xml;charset=utf-8")
   end
+
+  def host(headers, req_headers), do: %{headers | host: "#{get_host(req_headers)}"}
 
   def location(headers, path),
     do: %{headers | location: "http://#{Map.get(headers, :host)}#{path}"}

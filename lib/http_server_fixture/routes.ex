@@ -29,6 +29,22 @@ defmodule HTTPServerFixture.Routes do
         handler: HTTPServer.Router.Handlers.Redirect,
         methods: ["GET"],
         location: "/simple_get"
+      },
+      "/text_response" => %{
+        handler: HTTPServerFixture.TextResponse,
+        methods: ["GET"]
+      },
+      "/html_response" => %{
+        handler: HTTPServerFixture.HTMLResponse,
+        methods: ["GET"]
+      },
+      "/json_response" => %{
+        handler: HTTPServerFixture.JSONResponse,
+        methods: ["GET"]
+      },
+      "/xml_response" => %{
+        handler: HTTPServerFixture.XMLResponse,
+        methods: ["GET"]
       }
     }
 end
