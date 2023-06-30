@@ -4,8 +4,7 @@ defmodule HTTPServerTestFixture.Handlers.MockJSON do
 
   @impl HTTPServer.Handler
   def handle(%Request{method: "GET"}) do
-    {:ok, body} = JSON.encode(foo: "bar")
-
+    body = [foo: "bar"]
     {200, body, :json}
   end
 end

@@ -4,7 +4,6 @@ defmodule HTTPServer.Router.Handlers.Options do
   @impl HTTPServer.Handler
   def handle(_req) do
     body = ""
-
     {200, body, :text}
   end
 end

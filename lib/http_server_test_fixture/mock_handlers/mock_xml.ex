@@ -6,7 +6,6 @@ defmodule HTTPServerTestFixture.Handlers.MockXML do
   @impl HTTPServer.Handler
   def handle(%Request{method: "GET"}) do
     body = "<text><para>hello world</para></text>"
-
     {200, body, :xml}
   end
 end
