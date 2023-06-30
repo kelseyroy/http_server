@@ -1,5 +1,8 @@
 defmodule HTTPServer.Response.Headers do
+  alias HTTPServer.Request
   defstruct content_length: nil, content_type: nil, host: nil, location: nil, allow: nil
+  import HTTPServer.Response.HeadersBuilder
+  @routes Application.compile_env(:http_server, :routes, Routes)
 
   @type t :: %__MODULE__{
           content_length: non_neg_integer(),
@@ -8,6 +11,33 @@ defmodule HTTPServer.Response.Headers do
           location: String.t(),
           allow: list(String.t())
         }
+
+  def build(%Request{method: "OPTIONS", path: path, headers: headers}, _status_code, body, media_type) do
+    %__MODULE__{}
+    |> content(media_type, body)
+    |> host(headers)
+    |> allow(@routes.routes[path][:methods])
+  end
+
+  def build(%Request{path: path, headers: headers}, 405, body, media_type) do
+    %__MODULE__{}
+    |> content(media_type, body)
+    |> host(headers)
+    |> allow(@routes.routes[path][:methods])
+  end
+
+  def build(%Request{path: path, headers: headers}, 301, body, media_type) do
+    %__MODULE__{}
+    |> content(media_type, body)
+    |> host(headers)
+    |> location(@routes.routes[path][:location])
+  end
+
+  def build(%Request{headers: headers}, _status_code, body, media_type) do
+    %__MODULE__{}
+    |> content(media_type, body)
+    |> host(headers)
+  end
 
   def collect_headers(headers) do
     for {k, v} <- Map.from_struct(headers), v != nil, into: %{}, do: {k, v}

@@ -1,9 +1,15 @@
 defmodule HTTPServer.Response do
+  alias HTTPServer.Request
   alias HTTPServer.Response.Headers
-  defstruct status_code: nil, status_message: "", resource: nil, headers: %{}, body: ""
+
+  defstruct status_code: nil,
+            status_message: "",
+            resource: nil,
+            headers: %{},
+            body: ""
 
   @type t :: %__MODULE__{
-          status_code: 200 | 204 | 404,
+          status_code: 200 | 204 | 404 | 301 | 405,
           status_message: String.t(),
           resource: String.t(),
           headers: %Headers{},
@@ -12,15 +18,33 @@ defmodule HTTPServer.Response do
 
   @carriage_return "\r\n"
 
-  def send_resp(status_code, body, headers) do
-    %__MODULE__{
-      status_code: status_code,
-      status_message: status_message(status_code),
-      resource: "HTTP/1.1",
-      headers: Headers.collect_headers(headers),
-      body: body
-    }
+  defp send_resp(resp) do
+    %{resp | headers: Headers.collect_headers(resp.headers)}
   end
+
+  def build(req = %Request{method: "HEAD"}, status_code, res_body, media_type) do
+    resp = build(%Request{req | method: "GET"}, status_code, res_body, media_type)
+    %{resp | body: ""}
+  end
+
+  def build(req, status_code, res_body, media_type) do
+    %__MODULE__{}
+    |> resource()
+    |> status(status_code)
+    |> body(res_body)
+    |> headers(req, media_type)
+    |> send_resp()
+  end
+
+  defp headers(res = %__MODULE__{status_code: status_code, body: body}, req, media_type),
+    do: %{res | headers: Headers.build(req, status_code, body, media_type)}
+
+  defp resource(res), do: %{res | resource: "HTTP/1.1"}
+
+  defp status(res, status_code),
+    do: %{res | status_code: status_code, status_message: status_message(status_code)}
+
+  defp body(res, body), do: %{res | body: body}
 
   defp status_message(status_code) do
     %{
@@ -32,11 +56,17 @@ defmodule HTTPServer.Response do
     }[status_code]
   end
 
-  def format_response(res) do
-    "#{res.resource} #{res.status_code} #{res.status_message}" <>
+  def format_response(%__MODULE__{
+        resource: resource,
+        status_code: status_code,
+        status_message: status_message,
+        body: body,
+        headers: headers
+      }) do
+    "#{resource} #{status_code} #{status_message}" <>
       @carriage_return <>
-      "#{Headers.format_response_headers(res.headers)}" <>
+      "#{Headers.format_response_headers(headers)}" <>
       @carriage_return <>
-      "#{res.body}"
+      body
   end
 end
