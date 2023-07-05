@@ -50,12 +50,6 @@ defmodule HTTPServer.Response.HeadersBuilder do
     %{headers | allow: "#{Enum.join(methods, ", ")}"}
   end
 
-  def link(headers, stylesheet_filepath),
-    do: %{
-      headers
-      | link: "<" <> stylesheet_filepath <> ">; rel=stylesheet; type=text/css;"
-    }
-
   defp get_host(req_headers) do
     case Map.fetch(req_headers, "Host") do
       {:ok, host} -> host

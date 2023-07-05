@@ -251,8 +251,7 @@ defmodule HTTPServerTest.Router do
       headers: %{
         content_length: 108,
         content_type: "text/html;charset=utf-8",
-        host: "0.0.0.0:4000",
-        link: "</mock-layout.css>; rel=stylesheet; type=text/css;"
+        host: "0.0.0.0:4000"
       },
       body:
         "<!DOCTYPE html>\n<html>\n\n<head>\n    <title>Basic Web Page</title>\n</head>\n\n<body>Hello World!</body>\n\n</html>"

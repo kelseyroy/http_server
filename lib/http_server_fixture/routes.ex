@@ -54,7 +54,8 @@ defmodule HTTPServerFixture.Routes do
       },
       "/layout-styles.css" => %{
         handler: HTTPServer.Router.Handlers.ServeStatic,
-        methods: ["GET"]
+        methods: ["GET"],
+        filepath: "test/http_server_spec/web/layout-styles.css",
       }
     }
 end

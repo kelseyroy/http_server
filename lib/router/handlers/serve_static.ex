@@ -1,6 +1,6 @@
 defmodule HTTPServer.Router.Handlers.ServeStatic do
   alias HTTPServer.Request
-  alias HTTPServer.Router.Handlers.MethodNotAllowed
+  alias HTTPServer.Router.Handlers.NotFound
   @routes Application.compile_env(:http_server, :routes, Routes)
 
   def handle(req = %Request{path: path}) do
@@ -8,7 +8,7 @@ defmodule HTTPServer.Router.Handlers.ServeStatic do
 
     case File.read(filepath) do
       {:ok, contents} -> {200, contents, get_media_type(filepath)}
-      {:error, _} -> MethodNotAllowed.handle(req)
+      {:error, _} -> NotFound.handle(req)
     end
   end
 

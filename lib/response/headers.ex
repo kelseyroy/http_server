@@ -46,21 +46,6 @@ defmodule HTTPServer.Response.Headers do
     |> location(@routes.routes[path][:location])
   end
 
-  def build(%Request{path: path, headers: headers}, _status_code, body, media_type = :html) do
-    case Map.fetch(@routes.routes[path], :stylesheet) do
-      {:ok, stylesheet_filepath} ->
-        %__MODULE__{}
-        |> content(media_type, body)
-        |> host(headers)
-        |> link(stylesheet_filepath)
-
-      :error ->
-        %__MODULE__{}
-        |> content(media_type, body)
-        |> host(headers)
-    end
-  end
-
   def build(%Request{headers: headers}, _status_code, body, media_type) do
     %__MODULE__{}
     |> content(media_type, body)
