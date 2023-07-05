@@ -38,8 +38,7 @@ defmodule HTTPServerTestFixture.MockRoutes do
       "/mock-html.html" => %{
         handler: HTTPServer.Router.Handlers.ServeStatic,
         methods: ["GET"],
-        filepath: "lib/http_server_test_fixture/mock_public/mock-html.html",
-        stylesheet: "/mock-layout.css"
+        filepath: "lib/http_server_test_fixture/mock_public/mock-html.html"
       },
       "/mock-layout.css" => %{
         handler: HTTPServer.Router.Handlers.ServeStatic,
