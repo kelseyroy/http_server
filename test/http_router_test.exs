@@ -3,6 +3,7 @@ defmodule HTTPServerTest.Router do
   alias HTTPServer.Router
   alias HTTPServer.Request
   alias HTTPServer.Response
+  alias HTTPServer.Router.Handlers.ServeStatic
 
   doctest HTTPServer
 
@@ -112,12 +113,12 @@ defmodule HTTPServerTest.Router do
       status_message: "NOT FOUND",
       resource: "HTTP/1.1",
       headers: %{
-        content_length: 128,
+        content_length: 105,
         content_type: "text/plain;charset=utf-8",
         host: "0.0.0.0:4000"
       },
       body:
-        "The requested URL /test-not-found was not found on this server. See the README for instructions on how to customize your routes!"
+        "Something went wrong at /test-not-found. See the README for instructions on how to customize your routes!"
     }
 
     assert Router.router(request) == expected_response
@@ -207,6 +208,53 @@ defmodule HTTPServerTest.Router do
         allow: "POST, OPTIONS"
       },
       body: ""
+    }
+
+    assert Router.router(request) == expected_response
+  end
+
+  test "returns {200, \"Hello world!\", :text} from hello_world.txt file" do
+    expected_result = {200, "Hello world!\n", :text}
+
+    request = %Request{
+      method: "GET",
+      path: "/hello-world.text",
+      resource: "HTTP/1.1",
+      headers: %{
+        "Accept" => "*/*",
+        "Host" => "0.0.0.0:4000",
+        "User-Agent" => "ExampleBrowser/1.0"
+      },
+      body: ""
+    }
+
+    assert ServeStatic.handle(request) == expected_result
+  end
+
+  test "returns properly formatted response from mock_html.html file" do
+    request = %Request{
+      method: "GET",
+      path: "/mock-html.html",
+      resource: "HTTP/1.1",
+      headers: %{
+        "Accept" => "*/*",
+        "Host" => "0.0.0.0:4000",
+        "User-Agent" => "ExampleBrowser/1.0"
+      },
+      body: ""
+    }
+
+    expected_response = %Response{
+      status_code: 200,
+      status_message: "OK",
+      resource: "HTTP/1.1",
+      headers: %{
+        content_length: 109,
+        content_type: "text/html;charset=utf-8",
+        host: "0.0.0.0:4000"
+      },
+      body:
+        "<!DOCTYPE html>\n<html>\n\n<head>\n    <title>Basic Web Page</title>\n</head>\n\n<body>Hello World!</body>\n\n</html>\n"
     }
 
     assert Router.router(request) == expected_response

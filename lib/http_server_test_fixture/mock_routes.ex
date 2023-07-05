@@ -29,6 +29,21 @@ defmodule HTTPServerTestFixture.MockRoutes do
       "/test_xml" => %{
         handler: HTTPServerTestFixture.Handlers.MockXML,
         methods: ["GET"]
+      },
+      "/hello-world.text" => %{
+        handler: HTTPServer.Router.Handlers.ServeStatic,
+        methods: ["GET"],
+        filepath: "lib/http_server_test_fixture/mock_public/hello-world.txt"
+      },
+      "/mock-html.html" => %{
+        handler: HTTPServer.Router.Handlers.ServeStatic,
+        methods: ["GET"],
+        filepath: "lib/http_server_test_fixture/mock_public/mock-html.html"
+      },
+      "/mock-layout.css" => %{
+        handler: HTTPServer.Router.Handlers.ServeStatic,
+        methods: ["GET"],
+        filepath: "lib/http_server_test_fixture/mock_public/mock-layout.css"
       }
     }
 end

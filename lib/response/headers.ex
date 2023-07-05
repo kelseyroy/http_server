@@ -1,6 +1,8 @@
 defmodule HTTPServer.Response.Headers do
   alias HTTPServer.Request
+
   defstruct content_length: nil, content_type: nil, host: nil, location: nil, allow: nil
+
   import HTTPServer.Response.HeadersBuilder
   @routes Application.compile_env(:http_server, :routes, Routes)
 

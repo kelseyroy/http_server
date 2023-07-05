@@ -45,6 +45,16 @@ defmodule HTTPServerFixture.Routes do
       "/xml_response" => %{
         handler: HTTPServerFixture.XMLResponse,
         methods: ["GET"]
+      },
+      "/health-check.html" => %{
+        handler: HTTPServer.Router.Handlers.ServeStatic,
+        methods: ["GET"],
+        filepath: "test/http_server_spec/web/health-check.html"
+      },
+      "/layout-styles.css" => %{
+        handler: HTTPServer.Router.Handlers.ServeStatic,
+        methods: ["GET"],
+        filepath: "test/http_server_spec/web/layout-styles.css"
       }
     }
 end
