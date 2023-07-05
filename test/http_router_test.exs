@@ -214,7 +214,7 @@ defmodule HTTPServerTest.Router do
   end
 
   test "returns {200, \"Hello world!\", :text} from hello_world.txt file" do
-    expected_result = {200, "Hello world!", :text}
+    expected_result = {200, "Hello world!\n", :text}
 
     request = %Request{
       method: "GET",
@@ -249,12 +249,12 @@ defmodule HTTPServerTest.Router do
       status_message: "OK",
       resource: "HTTP/1.1",
       headers: %{
-        content_length: 108,
+        content_length: 109,
         content_type: "text/html;charset=utf-8",
         host: "0.0.0.0:4000"
       },
       body:
-        "<!DOCTYPE html>\n<html>\n\n<head>\n    <title>Basic Web Page</title>\n</head>\n\n<body>Hello World!</body>\n\n</html>"
+        "<!DOCTYPE html>\n<html>\n\n<head>\n    <title>Basic Web Page</title>\n</head>\n\n<body>Hello World!</body>\n\n</html>\n"
     }
 
     assert Router.router(request) == expected_response
