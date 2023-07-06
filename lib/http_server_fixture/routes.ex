@@ -1,5 +1,5 @@
 defmodule HTTPServerFixture.Routes do
-  alias HTTPServer.Router.Handlers.ServeStatic
+  alias HTTPServer.ServeStatic
 
   def routes do
     %{
@@ -49,6 +49,6 @@ defmodule HTTPServerFixture.Routes do
         methods: ["GET"]
       }
     }
-    |> ServeStatic.add_static_dir("test/http_server_spec/web")
+    |> ServeStatic.static("test/http_server_spec/web")
   end
 end

@@ -1,5 +1,5 @@
 defmodule HTTPServerTest.ServeStatic do
-  alias HTTPServer.Router.Handlers.ServeStatic
+  alias HTTPServer.ServeStatic
   use ExUnit.Case
   doctest HTTPServer
 
@@ -23,10 +23,10 @@ defmodule HTTPServerTest.ServeStatic do
         filepath: path <> "/mock-layout.css"
       }
     }
-    assert ServeStatic.add_static_dir(%{}, path) == expected_routes
+    assert ServeStatic.static(%{}, path) == expected_routes
   end
 
-  test "Adds more than one static directory for routes" do
+  test "can customize route path for static routes" do
     path = "lib/http_server_test_fixture/mock_public"
 
     expected_routes = %{
@@ -46,6 +46,14 @@ defmodule HTTPServerTest.ServeStatic do
         filepath: path <> "/mock-layout.css"
       }
     }
-    assert ServeStatic.add_static_dir(%{}, path, "/static") == expected_routes
+    assert ServeStatic.static(%{}, path, "/static") == expected_routes
+  end
+
+  test "Returns an empty map when filepath is incorrect, which will default to 404 not found when routed" do
+    path = "public"
+
+    empty_map = Map.new()
+
+    assert ServeStatic.static(%{}, path, "/static") == empty_map
   end
 end

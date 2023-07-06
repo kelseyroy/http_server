@@ -14,13 +14,6 @@ defmodule HTTPServer.Router.Handlers.ServeStatic do
     end
   end
 
-  def add_static_dir(routes, dirpath, path \\ "") do
-    dirpath
-    |> get_filepaths()
-    |> build_routes(dirpath, path)
-    |> Map.merge(routes)
-  end
-
   defp get_media_type(filepath) do
     file_type = filepath |> String.split(".", trim: true) |> List.last()
 
@@ -32,24 +25,4 @@ defmodule HTTPServer.Router.Handlers.ServeStatic do
       "css" -> :css
     end
   end
-
-  defp get_filepaths(dirpath), do: Path.wildcard(dirpath <> "/*.{html,css,xml,txt,css}")
-
-  defp build_routes(filepaths, dirpath, path) do
-    Enum.map(filepaths, fn filepath ->
-      {path(path, filepath, dirpath), route(filepath)}
-    end)
-    |> Map.new()
-  end
-
-  defp path(path, filepath, dirpath), do: path <> filename(filepath, dirpath)
-
-  defp filename(filepath, dirpath), do: String.replace(filepath, dirpath, "")
-
-  defp route(filepath),
-    do: %{
-      handler: HTTPServer.Router.Handlers.ServeStatic,
-      methods: ["GET"],
-      filepath: filepath
-    }
 end

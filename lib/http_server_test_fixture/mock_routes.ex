@@ -1,5 +1,5 @@
 defmodule HTTPServerTestFixture.MockRoutes do
-  alias HTTPServer.Router.Handlers.ServeStatic
+  alias HTTPServer.ServeStatic
   def routes() do
     %{
       "/test_post" => %{
@@ -32,6 +32,6 @@ defmodule HTTPServerTestFixture.MockRoutes do
         methods: ["GET"]
       }
     }
-    |> ServeStatic.add_static_dir("lib/http_server_test_fixture/mock_public")
+    |> ServeStatic.static("lib/http_server_test_fixture/mock_public")
   end
 end
