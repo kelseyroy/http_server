@@ -1,7 +1,27 @@
 defmodule HTTPServer.Router.Handlers.ServeStatic do
   alias HTTPServer.Request
   alias HTTPServer.Router.Handlers.NotFound
+  require Logger
   @routes Application.compile_env(:http_server, :routes, Routes)
+
+  def add_static_dir(routes, dirpath, path \\ "") do
+    filepaths = Path.wildcard(dirpath <> "/**")
+
+    Enum.map(filepaths, fn filepath ->
+      file_name = String.replace(filepath, dirpath, "")
+      new_path = path <> file_name
+
+      new_route = %{
+        handler: HTTPServer.Router.Handlers.ServeStatic,
+        methods: ["GET"],
+        filepath: filepath
+      }
+
+      {new_path, new_route}
+    end)
+    |> Map.new()
+    |> Map.merge(routes)
+  end
 
   def handle(req = %Request{path: path}) do
     filepath = @routes.routes[path][:filepath]

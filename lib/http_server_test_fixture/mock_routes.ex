@@ -1,6 +1,7 @@
 defmodule HTTPServerTestFixture.MockRoutes do
-  def routes,
-    do: %{
+  alias HTTPServer.Router.Handlers.ServeStatic
+  def routes() do
+    %{
       "/test_post" => %{
         handler: HTTPServerTestFixture.Handlers.MockPost,
         methods: ["POST"]
@@ -29,21 +30,8 @@ defmodule HTTPServerTestFixture.MockRoutes do
       "/test_xml" => %{
         handler: HTTPServerTestFixture.Handlers.MockXML,
         methods: ["GET"]
-      },
-      "/hello-world.text" => %{
-        handler: HTTPServer.Router.Handlers.ServeStatic,
-        methods: ["GET"],
-        filepath: "lib/http_server_test_fixture/mock_public/hello-world.txt"
-      },
-      "/mock-html.html" => %{
-        handler: HTTPServer.Router.Handlers.ServeStatic,
-        methods: ["GET"],
-        filepath: "lib/http_server_test_fixture/mock_public/mock-html.html"
-      },
-      "/mock-layout.css" => %{
-        handler: HTTPServer.Router.Handlers.ServeStatic,
-        methods: ["GET"],
-        filepath: "lib/http_server_test_fixture/mock_public/mock-layout.css"
       }
     }
+    |> ServeStatic.add_static_dir("lib/http_server_test_fixture/mock_public")
+  end
 end

@@ -1,6 +1,8 @@
 defmodule HTTPServerFixture.Routes do
-  def routes,
-    do: %{
+  alias HTTPServer.Router.Handlers.ServeStatic
+
+  def routes do
+    %{
       "/echo_body" => %{
         handler: HTTPServerFixture.SimplePost,
         methods: ["POST"]
@@ -45,16 +47,8 @@ defmodule HTTPServerFixture.Routes do
       "/xml_response" => %{
         handler: HTTPServerFixture.XMLResponse,
         methods: ["GET"]
-      },
-      "/health-check.html" => %{
-        handler: HTTPServer.Router.Handlers.ServeStatic,
-        methods: ["GET"],
-        filepath: "test/http_server_spec/web/health-check.html"
-      },
-      "/layout-styles.css" => %{
-        handler: HTTPServer.Router.Handlers.ServeStatic,
-        methods: ["GET"],
-        filepath: "test/http_server_spec/web/layout-styles.css"
       }
     }
+    |> ServeStatic.add_static_dir("test/http_server_spec/web")
+  end
 end
