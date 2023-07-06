@@ -218,7 +218,7 @@ defmodule HTTPServerTest.Router do
 
     request = %Request{
       method: "GET",
-      path: "/hello-world.text",
+      path: "/hello-world.txt",
       resource: "HTTP/1.1",
       headers: %{
         "Accept" => "*/*",

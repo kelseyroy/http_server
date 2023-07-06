@@ -1,8 +1,10 @@
 defmodule HTTPServer.Router.Handlers.ServeStatic do
   alias HTTPServer.Request
   alias HTTPServer.Router.Handlers.NotFound
+  @behaviour HTTPServer.Handler
   @routes Application.compile_env(:http_server, :routes, Routes)
 
+  @impl HTTPServer.Handler
   def handle(req = %Request{path: path}) do
     filepath = @routes.routes[path][:filepath]
 
