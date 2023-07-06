@@ -33,7 +33,7 @@ defmodule HTTPServer.Router.Handlers.ServeStatic do
     end
   end
 
-  defp get_filepaths(dirpath), do: Path.wildcard(dirpath <> "/**")
+  defp get_filepaths(dirpath), do: Path.wildcard(dirpath <> "/*.{html,css,xml,txt,css}")
 
   defp build_routes(filepaths, dirpath, path) do
     Enum.map(filepaths, fn filepath ->
