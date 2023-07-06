@@ -23,7 +23,7 @@ defmodule HTTPServerTest.ServeStatic do
         filepath: path <> "/mock-layout.css"
       }
     }
-    assert ServeStatic.static(%{}, path) == expected_routes
+    assert ServeStatic.add_static_routes(%{}, path) == expected_routes
   end
 
   test "can customize route path for static routes" do
@@ -46,7 +46,7 @@ defmodule HTTPServerTest.ServeStatic do
         filepath: path <> "/mock-layout.css"
       }
     }
-    assert ServeStatic.static(%{}, path, "/static") == expected_routes
+    assert ServeStatic.add_static_routes(%{}, path, "/static") == expected_routes
   end
 
   test "Returns an empty map when filepath is incorrect, which will default to 404 not found when routed" do
@@ -54,6 +54,6 @@ defmodule HTTPServerTest.ServeStatic do
 
     empty_map = Map.new()
 
-    assert ServeStatic.static(%{}, path, "/static") == empty_map
+    assert ServeStatic.add_static_routes(%{}, path, "/static") == empty_map
   end
 end

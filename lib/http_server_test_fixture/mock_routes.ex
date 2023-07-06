@@ -32,6 +32,6 @@ defmodule HTTPServerTestFixture.MockRoutes do
         methods: ["GET"]
       }
     }
-    |> ServeStatic.static("lib/http_server_test_fixture/mock_public")
+    |> ServeStatic.add_static_routes("lib/http_server_test_fixture/mock_public")
   end
 end

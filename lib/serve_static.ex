@@ -1,5 +1,5 @@
 defmodule HTTPServer.ServeStatic do
-  def static(routes, dirpath, path \\ "") do
+  def add_static_routes(routes, dirpath, path \\ "") do
     dirpath
     |> get_filepaths()
     |> build_routes(dirpath, path)

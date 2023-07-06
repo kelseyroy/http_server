@@ -49,6 +49,6 @@ defmodule HTTPServerFixture.Routes do
         methods: ["GET"]
       }
     }
-    |> ServeStatic.static("test/http_server_spec/web")
+    |> ServeStatic.add_static_routes("test/http_server_spec/web")
   end
 end
