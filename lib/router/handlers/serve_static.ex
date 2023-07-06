@@ -23,6 +23,9 @@ defmodule HTTPServer.Router.Handlers.ServeStatic do
       "xml" -> :xml
       "txt" -> :text
       "css" -> :css
+      "png" -> :png
+      "gif" -> :gif
+      "jpg" -> :jpeg
     end
   end
 end

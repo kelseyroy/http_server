@@ -32,6 +32,24 @@ defmodule HTTPServer.Response.HeadersBuilder do
     |> content_type("text/css;charset=utf-8")
   end
 
+  def content(headers, :jpeg, body) do
+    headers
+    |> content_length(body)
+    |> content_type("image/jpeg")
+  end
+
+  def content(headers, :png, body) do
+    headers
+    |> content_length(body)
+    |> content_type("image/png")
+  end
+
+  def content(headers, :gif, body) do
+    headers
+    |> content_length(body)
+    |> content_type("image/gif")
+  end
+
   def host(headers, req_headers), do: %{headers | host: "#{get_host(req_headers)}"}
 
   def location(headers, path),
