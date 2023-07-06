@@ -52,13 +52,14 @@ Right now, all requests sent to the server should receive a response back with a
 Each route takes the following structure:
 
 ```
-def routes, 
-  do: %{
+def routes do
+  %{
     "/PATH" => %{
         handler: HandlerModule,
         methods: ["METHOD"]
       }
   }
+end
 ```
 
 * `routes/0` is a function that holds the routes in a Map data structure. The server path acts as the routes key, with the handler functionality as the value.
@@ -79,7 +80,7 @@ defmodule HTTPServer.Handlers.MODULE_NAME do
 
   @impl HTTPServer.Handler
   def handle(%Request{method: METHOD} = req) do
-    {STATUS_CODE, RESPONSE_BODY, %{HEADER_NAME => HEADER_CONTENT}}
+    {STATUS_CODE, RESPONSE_BODY, :MEDIA_TYPE}
   end
 end
 ```
@@ -90,63 +91,13 @@ end
 * `METHOD` is an [HTTP request method](https://en.wikipedia.org/wiki/HTTP#Request_methods) as a string in all capital letters.
 * `STATUS_CODE` is an [HTTP response status code](https://en.wikipedia.org/wiki/List_of_HTTP_status_codes) as an integer.
 * `RESPONSE_BODY` is the body of the response object that will be sent back to the client.
-* `%{HEADER_NAME => HEADER_CONTENT}` are the headers of the response object, represented as key value pairs in an Elixir map, that will be sent back to the client.
-
-If you do not want to build a custom headers map, the server application has a default `build_headers/1` function that automatically builds headers for Content-Length, Content-Type and Host:
-
-```
-defmodule HTTPServer.Handlers.MODULE_NAME do
-  alias HTTPServer.Request
-  alias HTTPServer.Response
-  @behaviour HTTPServer.Handler
-
-  @impl HTTPServer.Handler
-  def handle(%Request{method: METHOD} = req) do
-    {STATUS_CODE, RESPONSE_BODY, Response.build_headers(RESPONSE_BODY)}
-  end
-end
-```
-
-If you want to use those headers but need further cutomization, `build_headers/2` allows you to add additional headers to the 3 default headers provided:
-
-```
-defmodule HTTPServer.Handlers.MODULE_NAME do
-  alias HTTPServer.Request
-  alias HTTPServer.Response
-  @behaviour HTTPServer.Handler
-
-  @impl HTTPServer.Handler
-  def handle(%Request{method: METHOD} = req) do
-    {STATUS_CODE, RESPONSE_BODY, Response.build_headers(RESPONSE_BODY, %{"HEADER_NAME" => "HEADER_CONTENT"})}
-  end
-end
-```
-
-### Handling Redirects
-
-Luckily, the server already has built in handling to accomodate URL redirection/forwarding responses! Redirects allow a user to preserve an existing path while assigning it a new and premanent endpoint. All necessary changes needed to setup URI redirection happen in the `HTTPServer.Routes` module in `lib/routes.ex`:
-
-```
-def routes, 
-  do: %{
-    "/FROM" => %{
-        handler: HTTPServer.Handlers.Redirect,
-        methods: ["METHOD"],
-        location: "/TO"
-      },
-      "/TO" => %{
-        handler: HandlerModule,
-        methods: ["METHOD"]
-      }
-  }
-```
-
-* `/FROM` is the original path on the server you are redirecting the client away from. This path will respond to the HTTP Client with a 301 status code, which will send the request to the path specified in the `location:` field.
-* `HTTPServer.Handlers.Redirect` is the module that lets you redirect the user to a different URL by sending an HTTP response with status 301.
-* `methods: ["METHOD"]` is a list of [HTTP request methods](https://en.wikipedia.org/wiki/HTTP#Request_methods) that the `/TO` path can respond to.
-* `location: "/TO"` is the path on the server you are redirecting the client towards. After receiving a response with a 301 status code at the `/FROM` endpoint, the `Location` response header will point toward this path as the new endpoint that will respond to the request.
-
-Please be sure that the `/TO` route and it's handler module is properly setup before redirecting the clients to that path.
+* `:MEDIA_TYPE` is [a media type, also known as a MIME type](https://datatracker.ietf.org/doc/html/rfc6838), represented as an Elixir atom, that indicates the nature and format of the body or file being sent back to the client. Usable media types include:
+  1. `:text` for string/text-only data
+  2. `:json` for JSON data
+  3. `:html` for HTML content
+  4. `:xml` for XML content or in an instance when you want to utilize XML's strict parsing rules
+  5. `:css` for CSS files/content used to style a Web page
+  6. `:png`, `:gif` and `.jpeg` for image file types such as PNGs, GIFs and JPEG/JPGs, respectively.
 
 ### An Example
 
@@ -163,7 +114,7 @@ defmodule HTTPServer.Handlers.HelloWorld do
   @impl HTTPServer.Handler
   def handle(%Request{method: "GET"} = _req) do
     body = "Hello World!"
-    {200, body, Response.build_headers(body)}
+    {200, body, :text}
   end
 end
 ```
@@ -174,13 +125,14 @@ Next I'll update the `lib/routes.ex` file to include the new route and it's corr
 defmodule HTTPServer.Routes do
   alias HTTPServer.Handlers.HelloWorld
   
-  def routes, 
-    do: %{
+  def routes do 
+    %{
       "/PATH" => %{
         handler: HandlerModule,
         methods: ["GET"]
       } 
     }
+  end
 end
 ```
 
@@ -194,10 +146,10 @@ defmodule HTTPServer.Handlers.HelloWorld do
   @impl HTTPServer.Handler
   def handle(%Request{method: "GET"} = _req) do
     body = "Hello World!"
-    {200, body, Response.build_headers(body)}
+    {200, body, :text}
   end
   def handle(%Request{method: "POST"} = req) do
-    {200, req.body, Response.build_headers(req.body)}
+    {200, req.body, :text}
   end
 end
 ```
@@ -208,15 +160,91 @@ And finally update the `HTTPServer.Routes` module to reflect the newly added met
 defmodule HTTPServer.Routes do
   alias HTTPServer.Handlers.HelloWorld
   
-  def routes, 
-    do: %{
+  def routes do 
+    %{
       "/PATH" => %{
         handler: HandlerModule,
         methods: ["GET", "POST"]
       } 
     }
+  end
 end
 ```
+
+### Handling Redirects
+
+Luckily, the server already has built in middleware to accomodate URL redirection/forwarding responses! Redirects allow a user to preserve an existing path while assigning it a new and premanent endpoint. All necessary changes needed to setup URI redirection happen in the `HTTPServer.Routes` module in `lib/routes.ex`:
+
+```
+def routes do 
+  %{
+    "/FROM" => %{
+        handler: HTTPServer.Handlers.Redirect,
+        methods: ["METHOD"],
+        location: "/TO"
+      },
+      "/TO" => %{
+        handler: HandlerModule,
+        methods: ["METHOD"]
+      }
+  }
+end
+```
+
+* `/FROM` is the original path on the server you are redirecting the client away from. This path will respond to the HTTP Client with a 301 status code, which will send the request to the path specified in the `location:` field.
+* `HTTPServer.Handlers.Redirect` is the module that lets you redirect the user to a different URL by sending an HTTP response with status 301.
+* `methods: ["METHOD"]` is a list of [HTTP request methods](https://en.wikipedia.org/wiki/HTTP#Request_methods) that the `/TO` path can respond to.
+* `location: "/TO"` is the path on the server you are redirecting the client towards. After receiving a response with a 301 status code at the `/FROM` endpoint, the `Location` response header will point toward this path as the new endpoint that will respond to the request.
+
+Please be sure that the `/TO` route and it's handler module is properly setup before redirecting the clients to that path.
+
+### Serving Static Files
+
+To serve static files such as images, CSS files, and HTML files from within a static assets directory, use the HTTPServer.ServeStatic built-in middleware. The function call to add static asset routes that correspond with files from a folder will take the following structure:
+
+```
+HTTPServer.ServeStatic.add_static_routes(%{ROUTES_MAP}, "filepath/to/dir", "/mount-path")
+```
+
+* `HTTPServer.ServeStatic` is the module that lets you serve static assets from within the directory specified by `filepath/to/dir`.
+* `add_static_routes/3` is the function call that updates the routes map to include the static asset routes. It accepts a routes map, a string representing a filepath to a static assests directory and, optionally, a string representing a path to mount the static asset routes on.
+* `%{ROUTES_MAP}` is a list of paths on the server that will be updated by `add_static_routes/3` to include the static asset routes. See the "Anatomy of a Route" for more information on how this map must be structured.
+* `"filepath/to/dir"` specifies the stringified file tree path to the directory from which to serve static assets.
+* `"/mount-path"` specifies a mount path for the static assets in the directory, creating a virtual path prefix to access and load each static asset. This is optional and if left blank will default to the `root` path.
+
+Implementation of this middleware happens in the `HTTPServer.Routes` module in `lib/routes.ex`. For example, use the following code to serves images, HTML and CSS files saved in a directory named `public`:
+
+```
+def routes do 
+  %{
+    ...
+  }
+  |> HTTPServer.ServeStatic.add_static_routes("public", "/static")
+end
+```
+
+Elixir's pipe operator (`|>`) takes the result of the custom routes map written above and passes it to `HTTPServer.ServeStatic.add_static_routes/3`. The `public` argument specifies the directory name, and the `/static` argument specifies the path prefix.
+
+Now you can load the files that are in the `public` using the virtual path prefix `/static`:
+
+```
+http://localhost:4000/static/kitten.jpg
+http://localhost:4000/static/layout-style.css
+http://localhost:4000/static/hello.html
+```
+
+To use multiple static asset directories, you can call `HTTPServer.ServeStatic.add_static_routes/3` multiple times:
+
+```
+def routes do 
+  %{
+    ...
+  }
+  |> HTTPServer.ServeStatic.add_static_routes("public")
+  |> HTTPServer.ServeStatic.add_static_routes("test/public", "/test-files")
+end
+```
+
 
 ## Testing
 ### Running the ExUnit Test Suite:
