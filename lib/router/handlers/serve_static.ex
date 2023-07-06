@@ -1,15 +1,10 @@
 defmodule HTTPServer.Router.Handlers.ServeStatic do
   alias HTTPServer.Request
   alias HTTPServer.Router.Handlers.NotFound
+  @behaviour HTTPServer.Handler
   @routes Application.compile_env(:http_server, :routes, Routes)
 
-  def add_static_dir(routes, dirpath, path \\ "") do
-    dirpath
-    |> get_filepaths()
-    |> build_routes(dirpath, path)
-    |> Map.merge(routes)
-  end
-
+  @impl HTTPServer.Handler
   def handle(req = %Request{path: path}) do
     filepath = @routes.routes[path][:filepath]
 
@@ -17,6 +12,13 @@ defmodule HTTPServer.Router.Handlers.ServeStatic do
       {:ok, contents} -> {200, contents, get_media_type(filepath)}
       {:error, _} -> NotFound.handle(req)
     end
+  end
+
+  def add_static_dir(routes, dirpath, path \\ "") do
+    dirpath
+    |> get_filepaths()
+    |> build_routes(dirpath, path)
+    |> Map.merge(routes)
   end
 
   defp get_media_type(filepath) do
