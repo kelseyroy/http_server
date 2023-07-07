@@ -34,7 +34,7 @@ A user should be able to interact with the HTTP server as follows:
 
 ## Using the Server
 
-For more information about connecting to the server as a client, basic routing, as well as handling redirects and static files, please see the doc folder.
+For more information about [connecting to the server as a client](https://github.com/kelseyroy/http_server/blob/images/doc/using.md#connecting-to-the-server-as-a-client), [basic routing](https://github.com/kelseyroy/http_server/blob/images/doc/basic_routing.md#basic-routing), as well as [handling redirects](https://github.com/kelseyroy/http_server/blob/images/doc/redirects.md) and [static files](https://github.com/kelseyroy/http_server/blob/images/doc/static_files.md), please see the doc folder.
 
 ## Testing
 ### Running the ExUnit Test Suite:
