@@ -1,53 +1,25 @@
 defmodule HTTPServer.Response.HeadersBuilder do
+  def content(headers, media_type, body) do
+    headers
+    |> content_length(body)
+    |> content_type(media_type)
+  end
+
   defp content_length(headers, body), do: %{headers | content_length: byte_size(body)}
-  defp content_type(headers, media_type), do: %{headers | content_type: media_type}
 
-  def content(headers, :text, body) do
-    headers
-    |> content_length(body)
-    |> content_type("text/plain;charset=utf-8")
-  end
+  defp content_type(headers, media_type), do: %{headers | content_type: content_type(media_type)}
 
-  def content(headers, :html, body) do
-    headers
-    |> content_length(body)
-    |> content_type("text/html;charset=utf-8")
-  end
-
-  def content(headers, :json, json_body) do
-    headers
-    |> content_length(json_body)
-    |> content_type("application/json;charset=utf-8")
-  end
-
-  def content(headers, :xml, body) do
-    headers
-    |> content_length(body)
-    |> content_type("application/xml;charset=utf-8")
-  end
-
-  def content(headers, :css, body) do
-    headers
-    |> content_length(body)
-    |> content_type("text/css;charset=utf-8")
-  end
-
-  def content(headers, :jpeg, body) do
-    headers
-    |> content_length(body)
-    |> content_type("image/jpeg")
-  end
-
-  def content(headers, :png, body) do
-    headers
-    |> content_length(body)
-    |> content_type("image/png")
-  end
-
-  def content(headers, :gif, body) do
-    headers
-    |> content_length(body)
-    |> content_type("image/gif")
+  defp content_type(media_type) do
+    %{
+      :text => "text/plain;charset=utf-8",
+      :html => "text/html;charset=utf-8",
+      :json => "application/json;charset=utf-8",
+      :xml => "application/xml;charset=utf-8",
+      :css => "text/css;charset=utf-8",
+      :jpeg => "image/jpeg",
+      :png => "image/png",
+      :gif => "image/gif"
+    }[media_type]
   end
 
   def host(headers, req_headers), do: %{headers | host: "#{get_host(req_headers)}"}
