@@ -63,53 +63,54 @@ defmodule HTTPServerTest.ServeStatic do
     path1 = "lib/http_server_test_fixture/mock_public"
     path2 = "test/http_server_spec/web"
 
-    empty_map = Map.new()
-
-    mock_public_static_map = ServeStatic.add_static_routes(empty_map, path1)
-
     expected_routes = %{
-      "/hello-world.txt" => %{
+      "/test_path_one/hello-world.txt" => %{
         handler: HTTPServer.Router.Handlers.ServeStatic,
         methods: ["GET"],
         filepath: path1 <> "/hello-world.txt"
       },
-      "/mock-html.html" => %{
+      "/test_path_one/mock-html.html" => %{
         handler: HTTPServer.Router.Handlers.ServeStatic,
         methods: ["GET"],
         filepath: path1 <> "/mock-html.html"
       },
-      "/mock-layout.css" => %{
+      "/test_path_one/mock-layout.css" => %{
         handler: HTTPServer.Router.Handlers.ServeStatic,
         methods: ["GET"],
         filepath: path1 <> "/mock-layout.css"
       },
-      "/static/doggo.png" => %{
+      "/test_path_two/doggo.png" => %{
         handler: HTTPServer.Router.Handlers.ServeStatic,
         methods: ["GET"],
         filepath: path2 <> "/doggo.png"
       },
-      "/static/health-check.html" => %{
+      "/test_path_two/health-check.html" => %{
         handler: HTTPServer.Router.Handlers.ServeStatic,
         methods: ["GET"],
         filepath: path2 <> "/health-check.html"
       },
-      "/static/kisses.gif" => %{
+      "/test_path_two/kisses.gif" => %{
         handler: HTTPServer.Router.Handlers.ServeStatic,
         methods: ["GET"],
         filepath: path2 <> "/kisses.gif"
       },
-      "/static/kitteh.jpg" => %{
+      "/test_path_two/kitteh.jpg" => %{
         handler: HTTPServer.Router.Handlers.ServeStatic,
         methods: ["GET"],
         filepath: path2 <> "/kitteh.jpg"
       },
-      "/static/layout-styles.css" => %{
+      "/test_path_two/layout-styles.css" => %{
         handler: HTTPServer.Router.Handlers.ServeStatic,
         methods: ["GET"],
         filepath: path2 <> "/layout-styles.css"
       }
     }
 
-    assert ServeStatic.add_static_routes(mock_public_static_map, path2, "/static") == expected_routes
+    test_routes =
+      Map.new()
+      |> ServeStatic.add_static_routes(path1, "/test_path_one")
+      |> ServeStatic.add_static_routes(path2, "/test_path_two")
+
+    assert test_routes == expected_routes
   end
 end
