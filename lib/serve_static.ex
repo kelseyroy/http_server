@@ -6,7 +6,7 @@ defmodule HTTPServer.ServeStatic do
     |> Map.merge(routes)
   end
 
-  defp get_filepaths(dirpath), do: Path.wildcard(dirpath <> "/*.{html,xml,txt,css,json}")
+  defp get_filepaths(dirpath), do: Path.wildcard(dirpath <> "/**")
 
   defp build_routes(filepaths, dirpath, path) do
     Enum.map(filepaths, fn filepath ->
