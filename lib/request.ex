@@ -14,15 +14,27 @@ defmodule HTTPServer.Request do
   def parse_request(message) do
     [request_data | body] = message |> String.split("#{@carriage_return}#{@carriage_return}")
     [first | headers] = request_data |> String.split("#{@carriage_return}")
+    headers = parse_headers(headers, %{})
     [method, path, resource] = first |> String.split(" ")
 
     %__MODULE__{
       method: method,
       path: path,
       resource: resource,
-      headers: parse_headers(headers, %{}),
-      body: hd(body)
+      headers: headers,
+      body: parse_body(hd(body), headers)
     }
+  end
+
+  defp parse_body(body, headers) do
+    case headers["Content-Type"] do
+      "application/json" ->
+        {:ok, parsed_body} = JSON.decode(body)
+        parsed_body
+
+      _ ->
+        body
+    end
   end
 
   defp parse_headers([head | tail], headers) do
