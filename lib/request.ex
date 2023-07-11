@@ -12,10 +12,10 @@ defmodule HTTPServer.Request do
   @carriage_return "\r\n"
 
   def parse_request(message) do
-    [request_data | body] = message |> String.split("#{@carriage_return}#{@carriage_return}")
+    [request_data, body] = message |> String.split("#{@carriage_return}#{@carriage_return}")
     [first | headers] = request_data |> String.split("#{@carriage_return}")
     headers = parse_headers(headers, %{})
-    body = body |> hd |> parse_body(headers)
+    body = body |> parse_body(headers)
     [method, path, resource] = first |> String.split(" ")
 
     %__MODULE__{
