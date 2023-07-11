@@ -28,16 +28,12 @@ defmodule HTTPServer.Request do
   end
 
   defp parse_body(body, headers) do
-    if is_content_type_not_nil(headers) && is_content_type_json(headers) do
+    if headers["Content-Type"] != nil && is_content_type_json(headers) do
       {:ok, parsed_body} = JSON.decode(body)
       parsed_body
     else
       body
     end
-  end
-
-  defp is_content_type_not_nil(headers) do
-    headers["Content-Type"] != nil
   end
 
   defp is_content_type_json(headers) do
