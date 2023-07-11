@@ -15,7 +15,7 @@ defmodule HTTPServer.Request do
     [request_data | body] = message |> String.split("#{@carriage_return}#{@carriage_return}")
     [first | headers] = request_data |> String.split("#{@carriage_return}")
     headers = parse_headers(headers, %{})
-    body = parse_body(hd(body), headers)
+    body = body |> hd |> parse_body(headers)
     [method, path, resource] = first |> String.split(" ")
 
     %__MODULE__{
