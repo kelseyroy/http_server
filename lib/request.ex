@@ -15,6 +15,7 @@ defmodule HTTPServer.Request do
     [request_data | body] = message |> String.split("#{@carriage_return}#{@carriage_return}")
     [first | headers] = request_data |> String.split("#{@carriage_return}")
     headers = parse_headers(headers, %{})
+    body = parse_body(hd(body), headers)
     [method, path, resource] = first |> String.split(" ")
 
     %__MODULE__{
@@ -22,19 +23,26 @@ defmodule HTTPServer.Request do
       path: path,
       resource: resource,
       headers: headers,
-      body: parse_body(hd(body), headers)
+      body: body
     }
   end
 
   defp parse_body(body, headers) do
-    case headers["Content-Type"] do
-      "application/json" ->
-        {:ok, parsed_body} = JSON.decode(body)
-        parsed_body
-
-      _ ->
-        body
+    if is_content_type_not_nil(headers) && is_content_type_json(headers) do
+      {:ok, parsed_body} = JSON.decode(body)
+      parsed_body
+    else
+      body
     end
+  end
+
+  defp is_content_type_not_nil(headers) do
+    headers["Content-Type"] != nil
+  end
+
+  defp is_content_type_json(headers) do
+    [type | _parameter] = headers["Content-Type"] |> String.split(";")
+    type == "application/json"
   end
 
   defp parse_headers([head | tail], headers) do

@@ -62,7 +62,6 @@ defmodule HTTPServerTest.Request do
   end
 
   test "parses JSON request bodies" do
-    # {:ok, json_body} = JSON.encode(foo: "bar")
     json_body = "{\"foo\":\"bar\"}"
 
     req =
