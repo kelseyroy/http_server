@@ -32,8 +32,8 @@ defmodule HTTPServerTestFixture.MockRoutes do
         handler: HTTPServerTestFixture.Handlers.MockXML,
         methods: ["GET"]
       },
-      "/json_only" => %{
-        handler: HTTPServerTestFixture.Handlers.MockJSONOnly,
+      "/test_supported_types" => %{
+        handler: HTTPServerTestFixture.Handlers.MockSupportedTypes,
         methods: ["POST"]
       }
     }

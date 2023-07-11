@@ -11,8 +11,6 @@ defmodule HTTPServer.Helpers.Validate do
     unless headers["Content-Type"] == nil do
       [type | _parameter] = headers["Content-Type"] |> String.split(";", parts: 2)
       type
-      # [type | subtype] = media_type |> String.split("/")
-      # {type, hd(subtype)}
     end
   end
 end

@@ -260,33 +260,42 @@ defmodule HTTPServerTest.Router do
     assert Router.router(request) == expected_response
   end
 
-  # test "returns 415 Unsupported Media Type to POST request at /json_only" do
-  #   request = %Request{
-  #     method: "POST",
-  #     path: "/json_only",
-  #     resource: "HTTP/1.1",
-  #     headers: %{
-  #       "Accept" => "*/*",
-  #       "Content-Length" => 9,
-  #       "Content-Type" => "text/html",
-  #       "Host" => "0.0.0.0:4000",
-  #       "User-Agent" => "ExampleBrowser/1.0"
-  #     },
-  #     body: "<type>Not a valid type</type>"
-  #   }
+  test "returns 415 Unsupported Media Type to POST request at /json_only" do
+    request = %Request{
+      method: "POST",
+      path: "/test_supported_types",
+      resource: "HTTP/1.1",
+      headers: %{
+        "Accept" => "*/*",
+        "Content-Length" => 29,
+        "Content-Type" => "text/html;charset=utf-8",
+        "Host" => "0.0.0.0:4000",
+        "User-Agent" => "ExampleBrowser/1.0"
+      },
+      body: "<type>Not a valid type</type>"
+    }
 
-  #   expected_response = %Response{
-  #     status_code: 200,
-  #     status_message: "OK",
-  #     resource: "HTTP/1.1",
-  #     headers: %{
-  #       content_length: 19,
-  #       content_type: "text/plain;charset=utf-8",
-  #       host: "0.0.0.0:4000"
-  #     },
-  #     body: "testing testing 123"
-  #   }
+    expected_response = %Response{
+      status_code: 415,
+      status_message: "UNSUPPORTED MEDIA TYPE",
+      resource: "HTTP/1.1",
+      headers: %{
+        content_length: 157,
+        content_type: "text/html;charset=utf-8",
+        host: "0.0.0.0:4000"
+      },
+      body: """
+        <html>
+          <head>
+            <title>Unsupported Format<\title>
+          </head>
+          <body>
+            <p>Please check content-type and try again</p>
+          </body>
+        </html>
+      """
+    }
 
-  #   assert Router.router(request) == expected_response
-  # end
+    assert Router.router(request) == expected_response
+  end
 end
