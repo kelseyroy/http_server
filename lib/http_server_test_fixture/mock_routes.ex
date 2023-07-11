@@ -31,6 +31,10 @@ defmodule HTTPServerTestFixture.MockRoutes do
       "/test_xml" => %{
         handler: HTTPServerTestFixture.Handlers.MockXML,
         methods: ["GET"]
+      },
+      "/json_only" => %{
+        handler: HTTPServerTestFixture.Handlers.MockJSONOnly,
+        methods: ["POST"]
       }
     }
     |> ServeStatic.add_static_routes("lib/http_server_test_fixture/mock_public")
