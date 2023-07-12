@@ -1,12 +1,11 @@
 defmodule HTTPServerTest.ToDo do
   alias ToDo.API
-  use ExUnit.Case
+  use ExUnit.Case, async: true
   doctest HTTPServer
 
   setup do
     mock_data = JSON.encode!(%{"todo1" => "Act", "todo2" => "Arrange"})
     File.write!("lib/http_server_test_fixture/mock_data/test-data.json", mock_data)
-    on_exit(fn -> File.rm!("lib/http_server_test_fixture/mock_data/test-data.json") end)
     [mock_data: %{"todo1" => "Act", "todo2" => "Arrange"}]
   end
 
