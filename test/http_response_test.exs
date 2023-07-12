@@ -180,4 +180,10 @@ defmodule HTTPServerTest.Response do
 
     assert Router.router(request) == expected_response
   end
+
+  test "Response.Body.handle/1 should return a decoded JSON body" do
+    req_body = JSON.encode!(key: "value")
+    expected_body = %{"key" => "value"}
+    assert Response.Body.handle(req_body, :json) == expected_body
+  end
 end
