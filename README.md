@@ -23,8 +23,8 @@ A user should be able to interact with the HTTP server as follows:
 * The HTTP server should pass all of the tests covered in `01_getting_started` in the [HTTP Server Spec](https://github.com/8thlight/http_server_spec).
 
 ## Dependencies
-* Elixir 1.14.x
-* Erlang/OTP 25
+* Elixir 1.15.2
+* Erlang/OTP 26
 * [Echo Server](https://github.com/8thlight/apprenticeship_syllabus/blob/master/shared_resources/projects/http_server/01_beginner/echo_server.md)
 
 ## Setup
