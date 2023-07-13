@@ -9,7 +9,7 @@ defmodule HTTPServer.Response do
             body: ""
 
   @type t :: %__MODULE__{
-          status_code: 200 | 204 | 404 | 301 | 405 | 201,
+          status_code: 200 | 204 | 404 | 301 | 405 | 201 | 415 | 400,
           status_message: String.t(),
           resource: String.t(),
           headers: %Headers{},
@@ -59,7 +59,8 @@ defmodule HTTPServer.Response do
       301 => "MOVED PERMANENTLY",
       405 => "METHOD NOT ALLOWED",
       201 => "CREATED",
-      415 => "UNSUPPORTED MEDIA TYPE"
+      415 => "UNSUPPORTED MEDIA TYPE",
+      400 => "BAD REQUEST"
     }[status_code]
   end
 

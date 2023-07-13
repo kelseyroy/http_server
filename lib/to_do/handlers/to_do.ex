@@ -6,12 +6,15 @@ defmodule ToDo.Handlers.ToDo do
   @behaviour HTTPServer.Handler
 
   @impl HTTPServer.Handler
-  def handle(%Request{method: "POST", body: body} = req) do
-    {status, value} = Body.handle(body, :json)
+  def handle(%Request{method: "POST"} = req) do
+    {status, value} = Body.handle(req, :json)
 
-    case API.create({status, value}) do
+    {status, value}
+    |> API.create()
+    |> case do
       :ok -> {201, value, :json}
       {:error, _} -> NotFound.handle(req)
+      _ -> value
     end
   end
 end
