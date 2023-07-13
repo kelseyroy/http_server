@@ -1,7 +1,7 @@
 defmodule ToDo.Routes do
   def routes, do: %{
     "/todo" => %{
-      handler: ToDoAPI.Handlers.ToDo,
+      handler: ToDo.Handlers.ToDo,
       methods: ["POST"]
     },
   }

@@ -3,9 +3,11 @@ defmodule HTTPServerTest.ToDo do
   use ExUnit.Case, async: true
   doctest HTTPServer
 
+  @file_path Application.compile_env(:http_server, :file_path, "lib/http_server_test_fixture/mock_data/test-data.json")
+
   setup do
     mock_data = JSON.encode!(%{"todo1" => "Act", "todo2" => "Arrange"})
-    File.write!("lib/http_server_test_fixture/mock_data/test-data.json", mock_data)
+    File.write!(@file_path, mock_data)
     [mock_data: %{"todo1" => "Act", "todo2" => "Arrange"}]
   end
 
@@ -16,7 +18,7 @@ defmodule HTTPServerTest.ToDo do
     API.create(todo_to_add)
 
     file_contents =
-      File.read!("lib/http_server_test_fixture/mock_data/test-data.json")
+      File.read!(@file_path)
       |> JSON.decode!()
 
     assert file_contents == expected_file_contents
