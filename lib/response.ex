@@ -58,7 +58,8 @@ defmodule HTTPServer.Response do
       404 => "NOT FOUND",
       301 => "MOVED PERMANENTLY",
       405 => "METHOD NOT ALLOWED",
-      201 => "CREATED"
+      201 => "CREATED",
+      415 => "UNSUPPORTED MEDIA TYPE"
     }[status_code]
   end
 

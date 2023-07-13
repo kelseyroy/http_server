@@ -181,9 +181,39 @@ defmodule HTTPServerTest.Response do
     assert Router.router(request) == expected_response
   end
 
-  test "Response.Body.handle/1 should return a decoded JSON body" do
-    req_body = JSON.encode!(key: "value")
-    expected_body = %{"key" => "value"}
-    assert Response.Body.handle(req_body, :json) == expected_body
+  test "Response.Body.handle/1 should return a 200 status response and decoded json body" do
+    request = %Request{
+      method: "POST",
+      path: "/",
+      resource: "HTTP/1.1",
+      headers: %{
+        "Accept" => "*/*",
+        "Host" => "0.0.0.0:4000",
+        "Content-Type" => "application/json",
+        "User-Agent" => "ExampleBrowser/1.0"
+      },
+      body: JSON.encode!(key: "value")
+    }
+
+    assert Response.Body.handle(request, :json) == {:ok, %{"key" => "value"}}
+  end
+
+  test "Response.Body.handle/1 should return a 415 status response when Content-Type is not json" do
+    request = %Request{
+      method: "POST",
+      path: "/",
+      resource: "HTTP/1.1",
+      headers: %{
+        "Accept" => "*/*",
+        "Host" => "0.0.0.0:4000",
+        "Content-Type" => "text/html",
+        "User-Agent" => "ExampleBrowser/1.0"
+      },
+      body: "<type>Not a valid type</type>"
+    }
+
+    unsupported_media_type_res = {415, "Unsupported Media Type", :text}
+
+    assert Response.Body.handle(request, :json) == {:error, unsupported_media_type_res}
   end
 end
