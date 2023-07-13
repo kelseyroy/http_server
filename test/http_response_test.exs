@@ -57,9 +57,9 @@ defmodule HTTPServerTest.Response do
 
     expected_parsed_response =
       "HTTP/1.1 200 OK#{@carriage_return}" <>
+        "Host: 0.0.0.0:4000#{@carriage_return}" <>
         "Content-Length: 15#{@carriage_return}" <>
         "Content-Type: text/plain;charset=utf-8#{@carriage_return}" <>
-        "Host: 0.0.0.0:4000#{@carriage_return}" <>
         "#{@carriage_return}" <>
         "this is my body"
 
