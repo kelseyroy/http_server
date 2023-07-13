@@ -1,7 +1,8 @@
 import Config
 
 config :http_server,
-  routes: HTTPServerFixture.Routes
+  routes: HTTPServerFixture.Routes,
+  file_path: "lib/http_server_fixture/data/test-data.json"
 
 config :logger,
   backends: [:console],

@@ -47,6 +47,10 @@ defmodule HTTPServerFixture.Routes do
       "/xml_response" => %{
         handler: HTTPServerFixture.XMLResponse,
         methods: ["GET"]
+      },
+      "/todo" => %{
+        handler: ToDo.Handlers.ToDo,
+        methods: ["POST"]
       }
     }
     |> ServeStatic.add_static_routes("test/http_server_spec/web")
