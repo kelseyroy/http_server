@@ -6,12 +6,12 @@ Feature: Create To-Do
     Then my response should have status code 201
     And my response should return JSON
     And my response should have a body with the details of the task
-@wip
+
   Scenario: Trying to create a to-do task with an unsupported media type
     Given I make a POST request with an unsupported media type
     Then my response should have status code 415
     And my response should have an empty body
-@wip
+
   Scenario: Trying to create a to-do item with invalid values
     Given I make a POST request with invalid values
     Then my response should have status code 400

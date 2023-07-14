@@ -181,9 +181,79 @@ defmodule HTTPServerTest.Response do
     assert Router.router(request) == expected_response
   end
 
-  test "Response.Body.handle/1 should return a decoded JSON body" do
-    req_body = JSON.encode!(key: "value")
-    expected_body = %{"key" => "value"}
-    assert Response.Body.handle(req_body, :json) == expected_body
+  test "Response.Body.handle/1 should return a 200 status response and decoded json body" do
+    request = %Request{
+      method: "POST",
+      path: "/",
+      resource: "HTTP/1.1",
+      headers: %{
+        "Accept" => "*/*",
+        "Host" => "0.0.0.0:4000",
+        "Content-Type" => "application/json",
+        "User-Agent" => "ExampleBrowser/1.0"
+      },
+      body: JSON.encode!(key: "value")
+    }
+
+    assert Response.Body.handle(request, :json) == {:ok, %{"key" => "value"}}
+  end
+
+  test "Response.Body.handle/1 should return a 415 status response when type is not application/json" do
+    request = %Request{
+      method: "POST",
+      path: "/",
+      resource: "HTTP/1.1",
+      headers: %{
+        "Accept" => "*/*",
+        "Host" => "0.0.0.0:4000",
+        "Content-Type" => "text/html",
+        "User-Agent" => "ExampleBrowser/1.0"
+      },
+      body: "<type>Not a valid type</type>"
+    }
+
+    unsupported_media_type_res = {415, "", :text}
+
+    assert Response.Body.handle(request, :json) == {:error, unsupported_media_type_res}
+  end
+
+  test "Response.Body.handle/1 should return a 400 Bad Request status response when content-type is application/xml" do
+    request = %Request{
+      method: "POST",
+      path: "/",
+      resource: "HTTP/1.1",
+      headers: %{
+        "Accept" => "*/*",
+        "Host" => "0.0.0.0:4000",
+        "Content-Type" => "application/xml",
+        "User-Agent" => "ExampleBrowser/1.0"
+      },
+      body: "<text><para>hello world</para></text>"
+    }
+
+    bad_req_res =
+      {400, "", :text}
+
+    assert Response.Body.handle(request, :json) == {:error, bad_req_res}
+  end
+
+  test "Response.Body.handle/1 should return a 400 Bad Request status response when body is not proper formatted json" do
+    request = %Request{
+      method: "POST",
+      path: "/",
+      resource: "HTTP/1.1",
+      headers: %{
+        "Accept" => "*/*",
+        "Host" => "0.0.0.0:4000",
+        "Content-Type" => "application/json",
+        "User-Agent" => "ExampleBrowser/1.0"
+      },
+      body: "key:"
+    }
+
+    bad_req_res =
+      {400, "", :text}
+
+    assert Response.Body.handle(request, :json) == {:error, bad_req_res}
   end
 end
