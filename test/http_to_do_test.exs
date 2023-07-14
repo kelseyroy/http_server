@@ -10,15 +10,19 @@ defmodule HTTPServerTest.ToDo do
              )
 
   setup do
-    mock_data = JSON.encode!(%{"todo1" => "Act", "todo2" => "Arrange"})
+    mock_data = JSON.encode!(%{"1" => %{"todo1" => "Act"}, "2" => %{"todo2" => "Arrange"}})
     File.write!(@file_path, mock_data)
-    [mock_data: %{"todo1" => "Act", "todo2" => "Arrange"}]
   end
 
   test "Can write \"{\"todo3\":\"Assert\"}\" to data file without overwriting previous data" do
     todo_to_add = %{"todo3" => "Assert"}
     handle_resp = {:ok, todo_to_add}
-    expected_file_contents = Map.merge(%{"todo1" => "Act", "todo2" => "Arrange"}, todo_to_add)
+
+    expected_file_contents = %{
+      "1" => %{"todo1" => "Act"},
+      "2" => %{"todo2" => "Arrange"},
+      "3" => %{"todo3" => "Assert"}
+    }
 
     API.create(handle_resp)
 
