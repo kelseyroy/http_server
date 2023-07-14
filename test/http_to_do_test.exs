@@ -39,4 +39,16 @@ defmodule HTTPServerTest.ToDo do
 
     assert API.create(handle_resp) == error_message
   end
+
+  test "Can delete \"{\"todo1\":\"Act\"}\" from data file" do
+    todo_to_be_deleted = "1"
+
+    API.delete(todo_to_be_deleted)
+
+    file_contents =
+      File.read!(@file_path)
+      |> JSON.decode!()
+
+    refute file_contents[todo_to_be_deleted]
+  end
 end

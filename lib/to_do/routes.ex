@@ -4,5 +4,9 @@ defmodule ToDo.Routes do
       handler: ToDo.Handlers.ToDo,
       methods: ["POST"]
     },
+    # "/todo/#{is_integer()}" => %{
+    #   handler: ToDo.Handlers.ToDo,
+    #   methods: ["POST"]
+    # }
   }
 end
