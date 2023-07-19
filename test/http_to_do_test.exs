@@ -1,5 +1,6 @@
 defmodule HTTPServerTest.ToDo do
   alias ToDo.API
+  alias ToDo.DB
   use ExUnit.Case, async: true
   doctest HTTPServer
 
@@ -10,7 +11,12 @@ defmodule HTTPServerTest.ToDo do
              )
 
   setup_all do
-    act_arrange_test_todo = JSON.encode!(%{"1" => %{"todo1" => "Act"}, "2" => %{"todo2" => "Arrange"}})
+    act_arrange_test_todo =
+      JSON.encode!(%{
+        "1" => %{"todo1" => "Act"},
+        "2" => %{"todo2" => "Arrange"}
+      })
+
     File.write(@file_path, act_arrange_test_todo)
     on_exit(fn -> if File.exists?(@file_path), do: File.rm!(@file_path) end)
   end
@@ -27,11 +33,7 @@ defmodule HTTPServerTest.ToDo do
 
     API.create(handle_resp)
 
-    file_contents =
-      File.read!(@file_path)
-      |> JSON.decode!()
-
-    assert file_contents == expected_file_contents
+    assert DB.all == expected_file_contents
   end
 
   test "Returns error message when passed {:error, \"Error Message\"}" do
