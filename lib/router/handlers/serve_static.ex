@@ -5,7 +5,7 @@ defmodule HTTPServer.Router.Handlers.ServeStatic do
   @routes Application.compile_env(:http_server, :routes, Routes)
 
   @impl HTTPServer.Handler
-  def handle(req = %Request{path: path}) do
+  def handle(req = %Request{route_path: path}) do
     filepath = @routes.routes[path][:filepath]
 
     case File.read(filepath) do

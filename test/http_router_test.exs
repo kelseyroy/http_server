@@ -10,7 +10,8 @@ defmodule HTTPServerTest.Router do
   test "returns properly formatted successful response to POST request at /test_post" do
     request = %Request{
       method: "POST",
-      path: "/test_post",
+      full_path: ["/test_post"],
+      route_path: "/test_post",
       resource: "HTTP/1.1",
       headers: %{
         "Accept" => "*/*",
@@ -40,7 +41,8 @@ defmodule HTTPServerTest.Router do
   test "returns properly formatted successful response to GET request" do
     request = %Request{
       method: "GET",
-      path: "/test_get",
+      full_path: ["/test_get"],
+      route_path: "/test_get",
       resource: "HTTP/1.1",
       headers: %{
         "Accept" => "*/*",
@@ -68,7 +70,8 @@ defmodule HTTPServerTest.Router do
   test "returns properly formatted successful response to HEAD request at /test_get" do
     request = %Request{
       method: "HEAD",
-      path: "/test_get",
+      full_path: ["/test_get"],
+      route_path: "/test_get",
       resource: "HTTP/1.1",
       headers: %{
         "Accept" => "*/*",
@@ -96,7 +99,8 @@ defmodule HTTPServerTest.Router do
   test "returns a 404 Page Not Found when making a request to a path that doesn't exist" do
     request = %Request{
       method: "GET",
-      path: "/test-not-found",
+      full_path: ["/test-not-found"],
+      route_path: "/test-not-found",
       resource: "HTTP/1.1",
       headers: %{
         "Accept" => "*/*",
@@ -127,7 +131,8 @@ defmodule HTTPServerTest.Router do
   test "returns properly formatted successful response to OPTIONS request at /test_get" do
     request = %Request{
       method: "OPTIONS",
-      path: "/test_get",
+      full_path: ["/test_get"],
+      route_path: "/test_get",
       resource: "HTTP/1.1",
       headers: %{
         "Accept" => "*/*",
@@ -156,7 +161,8 @@ defmodule HTTPServerTest.Router do
   test "returns 301 redirect response to GET request at /old_path" do
     request = %Request{
       method: "GET",
-      path: "/test_redirect",
+      full_path: ["/test_redirect"],
+      route_path: "/test_redirect",
       resource: "HTTP/1.1",
       headers: %{
         "Accept" => "*/*",
@@ -185,7 +191,8 @@ defmodule HTTPServerTest.Router do
   test "returns 405 Method Not Found Response to GET request at /test_post" do
     request = %Request{
       method: "GET",
-      path: "/test_post",
+      full_path: ["/test_post"],
+      route_path: "/test_post",
       resource: "HTTP/1.1",
       headers: %{
         "Accept" => "*/*",
@@ -218,7 +225,8 @@ defmodule HTTPServerTest.Router do
 
     request = %Request{
       method: "GET",
-      path: "/hello-world.txt",
+      full_path: ["/hello-world.txt"],
+      route_path: "/hello-world.txt",
       resource: "HTTP/1.1",
       headers: %{
         "Accept" => "*/*",
@@ -234,7 +242,8 @@ defmodule HTTPServerTest.Router do
   test "returns properly formatted response from mock_html.html file" do
     request = %Request{
       method: "GET",
-      path: "/mock-html.html",
+      full_path: ["/mock-html.html"],
+      route_path: "/mock-html.html",
       resource: "HTTP/1.1",
       headers: %{
         "Accept" => "*/*",
