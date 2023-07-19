@@ -8,7 +8,7 @@ defmodule HTTPServer.Router do
 
   @routes Application.compile_env(:http_server, :routes, Routes)
 
-  def router(req = %Request{path: path}) do
+  def router(req = %Request{route_path: path}) do
     case Map.fetch(@routes.routes, path) do
       {:ok, path_info} -> route_if_allowed(req, path_info)
       _ -> route_not_found(req)

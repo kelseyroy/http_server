@@ -15,7 +15,8 @@ defmodule HTTPServerTest.Response do
 
     request = %Request{
       method: "GET",
-      path: "/simple_get",
+      full_path: ["/simple_get"],
+      route_path: "/simple_get",
       resource: "HTTP/1.1",
       headers: %{
         "Accept" => "*/*",
@@ -69,7 +70,8 @@ defmodule HTTPServerTest.Response do
   test "a GET request to /test_text should return a text body" do
     request = %Request{
       method: "GET",
-      path: "/test_text",
+      full_path: ["/test_text"],
+      route_path: "/test_text",
       resource: "HTTP/1.1",
       headers: %{
         "Accept" => "*/*",
@@ -97,7 +99,8 @@ defmodule HTTPServerTest.Response do
   test "a GET request to /test_html should return a html body" do
     request = %Request{
       method: "GET",
-      path: "/test_html",
+      full_path: ["/test_html"],
+      route_path: "/test_html",
       resource: "HTTP/1.1",
       headers: %{
         "Accept" => "*/*",
@@ -126,7 +129,8 @@ defmodule HTTPServerTest.Response do
   test "a GET request to /test_xml should return a XML body" do
     request = %Request{
       method: "GET",
-      path: "/test_xml",
+      full_path: ["/test_xml"],
+      route_path: "/test_xml",
       resource: "HTTP/1.1",
       headers: %{
         "Accept" => "*/*",
@@ -154,7 +158,8 @@ defmodule HTTPServerTest.Response do
   test "a GET request to /test_json should return a json body" do
     request = %Request{
       method: "GET",
-      path: "/test_json",
+      full_path: ["/test_json"],
+      route_path: "/test_json",
       resource: "HTTP/1.1",
       headers: %{
         "Accept" => "*/*",
@@ -184,7 +189,8 @@ defmodule HTTPServerTest.Response do
   test "Response.Body.handle/1 should return a 200 status response and decoded json body" do
     request = %Request{
       method: "POST",
-      path: "/",
+      full_path: ["/"],
+      route_path: "/",
       resource: "HTTP/1.1",
       headers: %{
         "Accept" => "*/*",
@@ -201,7 +207,8 @@ defmodule HTTPServerTest.Response do
   test "Response.Body.handle/1 should return a 415 status response when type is not application/json" do
     request = %Request{
       method: "POST",
-      path: "/",
+      full_path: ["/"],
+      route_path: "/",
       resource: "HTTP/1.1",
       headers: %{
         "Accept" => "*/*",
@@ -220,7 +227,8 @@ defmodule HTTPServerTest.Response do
   test "Response.Body.handle/1 should return a 400 Bad Request status response when content-type is application/xml" do
     request = %Request{
       method: "POST",
-      path: "/",
+      full_path: ["/"],
+      route_path: "/",
       resource: "HTTP/1.1",
       headers: %{
         "Accept" => "*/*",
@@ -240,7 +248,8 @@ defmodule HTTPServerTest.Response do
   test "Response.Body.handle/1 should return a 400 Bad Request status response when body is not proper formatted json" do
     request = %Request{
       method: "POST",
-      path: "/",
+      full_path: ["/"],
+      route_path: "/",
       resource: "HTTP/1.1",
       headers: %{
         "Accept" => "*/*",

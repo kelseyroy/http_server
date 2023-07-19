@@ -3,7 +3,7 @@ defmodule HTTPServer.Router.Handlers.NotFound do
   @behaviour HTTPServer.Handler
 
   @impl HTTPServer.Handler
-  def handle(%Request{path: path}) do
+  def handle(%Request{route_path: path}) do
     body =
       "Something went wrong at #{path}. See the README for instructions on how to customize your routes!"
 
