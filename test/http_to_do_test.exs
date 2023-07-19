@@ -1,7 +1,6 @@
 defmodule HTTPServerTest.ToDo do
   alias ToDo.API
-  alias ToDo.DB
-  use ExUnit.Case, async: true
+  use ExUnit.Case
   doctest HTTPServer
 
   @file_path Application.compile_env(
@@ -19,6 +18,7 @@ defmodule HTTPServerTest.ToDo do
 
     File.write(@file_path, act_arrange_test_todo)
     on_exit(fn -> if File.exists?(@file_path), do: File.rm!(@file_path) end)
+    :ok
   end
 
   test "Can write \"{\"todo3\":\"Assert\"}\" to data file without overwriting previous data" do
@@ -33,7 +33,11 @@ defmodule HTTPServerTest.ToDo do
 
     API.create(handle_resp)
 
-    assert DB.all == expected_file_contents
+    file_contents =
+      File.read!(@file_path)
+      |> JSON.decode!()
+
+    assert file_contents == expected_file_contents
   end
 
   test "Returns error message when passed {:error, \"Error Message\"}" do
