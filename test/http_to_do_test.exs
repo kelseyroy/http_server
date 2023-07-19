@@ -9,10 +9,10 @@ defmodule HTTPServerTest.ToDo do
                "lib/http_server_test_fixture/mock_data/test-data.json"
              )
 
-  setup do
+  setup_all do
     act_arrange_test_todo = JSON.encode!(%{"1" => %{"todo1" => "Act"}, "2" => %{"todo2" => "Arrange"}})
-    File.write!(@file_path, act_arrange_test_todo)
-    on_exit(fn -> File.rm!(@file_path) end)
+    File.write(@file_path, act_arrange_test_todo)
+    on_exit(fn -> if File.exists?(@file_path), do: File.rm!(@file_path) end)
   end
 
   test "Can write \"{\"todo3\":\"Assert\"}\" to data file without overwriting previous data" do
