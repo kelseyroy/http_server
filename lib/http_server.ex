@@ -24,7 +24,7 @@ defmodule HTTPServer do
       socket
       |> read_line()
       |> log("Request:")
-      |> Request.parse_request()
+      |> Request.parse()
 
     response =
       request

@@ -1,4 +1,4 @@
-defmodule HTTPServerTest.Request do
+defmodule HTTPServerTest.Request.Parser do
   use ExUnit.Case
   alias HTTPServer.Request
   doctest HTTPServer
@@ -32,7 +32,7 @@ defmodule HTTPServerTest.Request do
       params: nil
     }
 
-    assert Request.parse_request(message) == expected_parsed_request
+    assert Request.Parser.parse(message) == expected_parsed_request
   end
 
   test "returns properly formatted HTTP POST request" do
@@ -62,7 +62,7 @@ defmodule HTTPServerTest.Request do
       params: nil
     }
 
-    assert Request.parse_request(message) == expected_parsed_request
+    assert Request.Parser.parse(message) == expected_parsed_request
   end
 
   test "returns properly formatted path that seperates the path prefix and the subsequent slugs & params" do
@@ -92,6 +92,6 @@ defmodule HTTPServerTest.Request do
       body: "some body"
     }
 
-    assert Request.parse_request(message) == expected_parsed_request
+    assert Request.Parser.parse(message) == expected_parsed_request
   end
 end
