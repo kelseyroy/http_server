@@ -18,7 +18,7 @@ defmodule HTTPServerTest.ToDo do
       })
 
     File.write(@file_path, act_arrange_test_todo)
-    on_exit(fn -> if File.exists?(@file_path), do: File.rm!(@file_path) end)
+    # on_exit(fn -> if File.exists?(@file_path), do: File.rm!(@file_path) end)
   end
 
   test "Can write \"{\"todo3\":\"Assert\"}\" to data file without overwriting previous data" do
