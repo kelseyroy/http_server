@@ -10,7 +10,12 @@ defmodule HTTPServerTest.ToDo do
              )
 
   setup do
-    act_arrange_test_todo = JSON.encode!(%{"1" => %{"todo1" => "Act"}, "2" => %{"todo2" => "Arrange"}})
+    act_arrange_test_todo =
+      JSON.encode!(%{
+        "1" => %{"todo1" => "Act"},
+        "2" => %{"todo2" => "Arrange"}
+      })
+
     File.write!(@file_path, act_arrange_test_todo)
   end
 
@@ -38,5 +43,17 @@ defmodule HTTPServerTest.ToDo do
     handle_resp = {:error, error_message}
 
     assert API.create(handle_resp) == error_message
+  end
+
+  test "Can delete \"{\"todo1\":\"Act\"}\" from data file" do
+    todo_to_be_deleted = "1"
+
+    API.delete(todo_to_be_deleted)
+
+    file_contents =
+      File.read!(@file_path)
+      |> JSON.decode!()
+
+    refute file_contents[todo_to_be_deleted]
   end
 end
