@@ -1,6 +1,6 @@
 defmodule HTTPServerTest.ToDo do
   alias ToDo.API
-  use ExUnit.Case
+  use ExUnit.Case, async: false
   doctest HTTPServer
 
   @file_path Application.compile_env(
@@ -11,7 +11,7 @@ defmodule HTTPServerTest.ToDo do
 
   setup do
     act_arrange_test_todo = JSON.encode!(%{"1" => %{"todo1" => "Act"}, "2" => %{"todo2" => "Arrange"}})
-    File.write!(@file_path, act_arrange_test_todo)
+    File.write(@file_path, act_arrange_test_todo)
     on_exit(fn -> if File.exists?(@file_path), do: File.rm!(@file_path) end)
     :ok
   end
