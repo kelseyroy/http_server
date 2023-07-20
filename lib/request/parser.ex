@@ -8,15 +8,17 @@ defmodule HTTPServer.Request.Parser do
     headers = parse_headers(headers, %{})
     [method, path, resource] = first |> String.split(" ")
     params = parse_params(path)
+    full_path = parse_path(path)
 
     %Request{
       method: method,
-      full_path: parse_path(path),
-      route_path: List.first(parse_path(path)),
+      full_path: full_path,
+      route_path: List.first(full_path),
       resource: resource,
       headers: headers,
       body: body,
-      params: params
+      params: params,
+      id: parse_id_from_path(full_path)
     }
   end
 
@@ -52,5 +54,18 @@ defmodule HTTPServer.Request.Parser do
   defp parse_param(param_str, acc) do
     [param_name, param_value] = String.split(param_str, "=")
     Map.put(acc, param_name, param_value)
+  end
+
+  defp parse_id_from_path(path) do
+    id_path = Enum.at(path, 1)
+
+    case is_binary(id_path) do
+      false ->
+        ""
+
+      true ->
+        [_id, id] = id_path |> String.split("/")
+        id
+    end
   end
 end

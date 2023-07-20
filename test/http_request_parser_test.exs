@@ -89,7 +89,8 @@ defmodule HTTPServerTest.Request.Parser do
         "Host" => "0.0.0.0:4000",
         "User-Agent" => "ExampleBrowser/1.0"
       },
-      body: "some body"
+      body: "some body",
+      id: "user_id"
     }
 
     assert Request.Parser.parse(message) == expected_parsed_request
