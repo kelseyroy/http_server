@@ -10,4 +10,10 @@ defmodule ToDo.API do
   def create({:error, error_message}) do
     error_message
   end
+
+  def delete(id) do
+    DB.all()
+    |> DB.delete_todo(id)
+    |> DB.save()
+  end
 end

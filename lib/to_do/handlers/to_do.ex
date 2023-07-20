@@ -17,4 +17,9 @@ defmodule ToDo.Handlers.ToDo do
       _ -> value
     end
   end
+
+  def handle(%Request{method: "DELETE", id: id} = _req) do
+    API.delete(id)
+    {204, "", :text}
+  end
 end

@@ -1,12 +1,22 @@
 defmodule ToDo.DB do
   @file_path Application.compile_env(:http_server, :file_path, "lib/to_do/data/to_dos.json")
 
-  def all, do: File.read!(@file_path) |> JSON.decode!()
+  def all do
+    case File.exists?(@file_path) do
+      true -> File.read!(@file_path) |> JSON.decode!()
+      false -> %{}
+    end
+  end
 
-  def save(data), do: File.write(@file_path, JSON.encode!(data), [:read, :write])
+  def save(data), do: File.write(@file_path, JSON.encode!(data), [:write])
 
   def add_new_todo(todo_data, new_todo) do
     Map.put(todo_data, get_id(todo_data), new_todo)
+  end
+
+  def delete_todo(data, key) do
+    {_value, new_map} = Map.pop(data, key)
+    new_map
   end
 
   defp get_id(todo_data) do

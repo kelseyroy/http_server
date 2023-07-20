@@ -50,7 +50,7 @@ defmodule HTTPServerFixture.Routes do
       },
       "/todo" => %{
         handler: ToDo.Handlers.ToDo,
-        methods: ["POST"]
+        methods: ["POST", "DELETE"]
       }
     }
     |> ServeStatic.add_static_routes("test/http_server_spec/web")
