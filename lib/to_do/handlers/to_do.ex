@@ -18,9 +18,8 @@ defmodule ToDo.Handlers.ToDo do
     end
   end
 
-  def handle(%Request{method: "DELETE", full_path: [_path, id | _]} = _req) do
-    [key | _] = id |> String.split("/")
-    API.delete(key)
+  def handle(%Request{method: "DELETE", full_path: [_path, id_path | _]} = _req) do
+    API.delete(id_path)
     {204, "", :text}
   end
 end
