@@ -21,7 +21,7 @@ defmodule HTTPServerTest.ToDo do
     :ok
   end
 
-  test "Can write \"{\"todo3\":\"Assert\"}\" to data file without overwriting previous data" do
+  test "Can add valid ToDo \"{\"todo3\":\"Assert\"}\"" do
     todo_to_add = %{"todo3" => "Assert"}
     handle_resp = {:ok, todo_to_add}
 
@@ -41,14 +41,14 @@ defmodule HTTPServerTest.ToDo do
     assert file_contents == expected_file_contents
   end
 
-  test "Returns error message when passed {:error, \"Error Message\"}" do
+  test "Returns error message when ToDo is formatted incorrectly" do
     error_message = "Error Message"
     handle_resp = {:error, error_message}
 
     assert API.create(handle_resp) == error_message
   end
 
-  test "Can delete \"{\"todo1\":\"Act\"}\" from data file" do
+  test "Can delete the first valid ToDo from the ToDo list" do
     todo_to_be_deleted = "1"
 
     API.delete(todo_to_be_deleted)
@@ -60,7 +60,7 @@ defmodule HTTPServerTest.ToDo do
     refute file_contents[todo_to_be_deleted]
   end
 
-  test "Can delete \"{\"todo4\":\"Teardown\"}\" from data file" do
+  test "Can delete the last valid ToDo from the ToDo list" do
     todo_to_be_deleted = "4"
 
     API.delete(todo_to_be_deleted)
@@ -72,40 +72,39 @@ defmodule HTTPServerTest.ToDo do
     refute file_contents[todo_to_be_deleted]
   end
 
-  test "The file will not change when id = 5" do
-    todo_to_be_deleted = "5"
+  test "Cannot delete a ToDo with an id that doesn't exist" do
+    non_existant_todo_id = "5"
 
-    data_before_delete =
+    test_todos =
       File.read!(@file_path)
       |> JSON.decode!()
 
-    API.delete(todo_to_be_deleted)
+    API.delete(non_existant_todo_id)
 
-    data_after_delete =
+    test_todos_after_delete =
       File.read!(@file_path)
       |> JSON.decode!()
 
-    assert data_before_delete == data_after_delete
+    assert test_todos == test_todos_after_delete
   end
 
+  test "Cannot delete a ToDo with an id that is malformed" do
+    malformed_todo_id = "0.5"
 
-  test "The file will not change when id = 0.5" do
-    todo_to_be_deleted = "0.5"
-
-    data_before_delete =
+    test_todos =
       File.read!(@file_path)
       |> JSON.decode!()
 
-    API.delete(todo_to_be_deleted)
+    API.delete(malformed_todo_id)
 
-    data_after_delete =
+    test_todos_after_delete =
       File.read!(@file_path)
       |> JSON.decode!()
 
-    assert data_before_delete == data_after_delete
+    assert test_todos == test_todos_after_delete
   end
 
-  test "Returns an empty map when no todos have been created." do
+  test "Cannot delete from an empty ToDo list." do
     todo_to_be_deleted = "1"
     if File.exists?(@file_path), do: File.rm!(@file_path)
 
