@@ -1,7 +1,12 @@
 defmodule ToDo.DB do
   @file_path Application.compile_env(:http_server, :file_path, "lib/to_do/data/to_dos.json")
 
-  def all, do: File.read!(@file_path) |> JSON.decode!()
+  def all do
+    case File.exists?(@file_path) do
+      true -> File.read!(@file_path) |> JSON.decode!()
+      false -> %{}
+    end
+  end
 
   def save(data), do: File.write(@file_path, JSON.encode!(data), [:write])
 
