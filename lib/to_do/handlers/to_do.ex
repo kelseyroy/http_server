@@ -18,8 +18,20 @@ defmodule ToDo.Handlers.ToDo do
     end
   end
 
-  def handle(%Request{method: "DELETE", id: id} = _req) do
+  def handle(%Request{method: "DELETE", id: id}) do
     API.delete(id)
     {204, "", :text}
+  end
+
+  def handle(%Request{method: "PUT", id: id} = req) do
+    {status, value} = Body.handle(req, :json)
+
+    {status, value}
+    |> API.update(id)
+    |> case do
+      :ok -> {200, value, :json}
+      {:error, _} -> NotFound.handle(req)
+      _ -> value
+    end
   end
 end

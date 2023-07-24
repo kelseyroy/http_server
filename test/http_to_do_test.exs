@@ -117,11 +117,12 @@ defmodule HTTPServerTest.ToDo do
     assert %{} == file_contents
   end
 
-  test "Can update an existing ToDo" do
+  test "Can update valid ToDo" do
     todo_to_update = "1"
     updated_todo_data = %{"task" => "This is a new task"}
+    handle_resp = {:ok, updated_todo_data}
 
-    API.update(todo_to_update, updated_todo_data)
+    API.update(handle_resp, todo_to_update)
 
     file_contents =
       File.read!(@file_path)
