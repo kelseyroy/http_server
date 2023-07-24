@@ -16,4 +16,10 @@ defmodule ToDo.API do
     |> DB.delete_todo(id)
     |> DB.save()
   end
+
+  def update(id, updated_data) do
+    DB.all()
+    |> DB.edit_todo(id, updated_data)
+    |> DB.save()
+  end
 end

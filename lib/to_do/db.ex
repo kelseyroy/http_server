@@ -19,6 +19,10 @@ defmodule ToDo.DB do
     new_map
   end
 
+  def edit_todo(data, key, value) do
+    %{data | key => value}
+  end
+
   defp get_id(todo_data) do
     keys = Map.keys(todo_data) |> Enum.map(&String.to_integer/1)
     n = length(keys) + 1

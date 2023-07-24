@@ -116,4 +116,17 @@ defmodule HTTPServerTest.ToDo do
 
     assert %{} == file_contents
   end
+
+  test "Can update an existing ToDo" do
+    todo_to_update = "1"
+    updated_todo_data = %{"task" => "This is a new task"}
+
+    API.update(todo_to_update, updated_todo_data)
+
+    file_contents =
+      File.read!(@file_path)
+      |> JSON.decode!()
+
+    assert updated_todo_data == file_contents[todo_to_update]
+  end
 end
