@@ -20,7 +20,11 @@ defmodule ToDo.DB do
   end
 
   def edit_todo(data, key, value) do
-    %{data | key => value}
+    # %{data | key => value}
+    case Map.fetch(data, key) do
+      {:ok, _value} ->  {:ok, %{data | key => value}}
+      :error -> :error
+    end
   end
 
   defp get_id(todo_data) do

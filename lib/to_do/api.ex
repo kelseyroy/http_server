@@ -20,7 +20,10 @@ defmodule ToDo.API do
   def update({:ok, data}, id) do
     DB.all()
     |> DB.edit_todo(id, data)
-    |> DB.save()
+    |> case do
+      :error -> {:error, data}
+      {:ok, value} -> DB.save(value)
+    end
   end
 
   def update({:error, error_message}, _id) do
