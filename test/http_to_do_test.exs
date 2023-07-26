@@ -41,7 +41,7 @@ defmodule HTTPServerTest.ToDo do
     assert file_contents == expected_file_contents
   end
 
-  test "Returns error message when ToDo is formatted incorrectly" do
+  test "Returns error message when ToDo is formatted incorrectly for create" do
     error_message = "Error Message"
     handle_resp = {:error, error_message}
 
@@ -115,5 +115,38 @@ defmodule HTTPServerTest.ToDo do
       |> JSON.decode!()
 
     assert %{} == file_contents
+  end
+
+  test "Can update valid ToDo" do
+    todo_to_update = "1"
+    updated_todo_data = %{"task" => "This is a new task"}
+    handle_resp = {:ok, updated_todo_data}
+
+    API.update(handle_resp, todo_to_update)
+
+    file_contents =
+      File.read!(@file_path)
+      |> JSON.decode!()
+
+    assert updated_todo_data == file_contents[todo_to_update]
+  end
+
+  test "Returns error message when ToDo is formatted incorrectly for update" do
+    error_message = "Error Message"
+    handle_resp = {:error, error_message}
+
+    assert API.update(handle_resp, "1") == error_message
+  end
+
+  test "Cannot update a ToDo with an id that doesn't exist" do
+    non_existant_todo_id = "5"
+    updated_todo_data = %{"task" => "This is a new task"}
+    handle_resp = {:ok, updated_todo_data}
+
+    actual_result = API.update(handle_resp, non_existant_todo_id)
+
+    expected_result = {:error, updated_todo_data}
+
+    assert expected_result == actual_result
   end
 end

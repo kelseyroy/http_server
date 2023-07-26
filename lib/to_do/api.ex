@@ -16,4 +16,17 @@ defmodule ToDo.API do
     |> DB.delete_todo(id)
     |> DB.save()
   end
+
+  def update({:ok, data}, id) do
+    DB.all()
+    |> DB.edit_todo(id, data)
+    |> case do
+      :error -> {:error, data}
+      {:ok, value} -> DB.save(value)
+    end
+  end
+
+  def update({:error, error_message}, _id) do
+    error_message
+  end
 end
